@@ -1,7 +1,7 @@
 clear all;
 
 
-load('B.mat');
+load('A.mat');
 
 %initialize by grabbing first data point
 x(1)=rawStarData(1,1);
@@ -280,7 +280,7 @@ for i=n:size(rawStarData)
 end
 
 
-plot(128-realx,96-realy,'k.');
+plot(realx,realy,'k.');
 title('Location of Robot');
 axis([0 128 0 96]);
 xlabel('X-Position');
