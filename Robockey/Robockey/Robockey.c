@@ -14,6 +14,7 @@
 #include "m_rf.h"
 #include "m_port.h"
 #include "m_wii.h"
+#include "m_wireless_variables.h" //define CHANNEL, ADDRESS, PACKET_LENGTH in this header (# of variables to send = (PACKET_LENGTH-1))
 
 void rotate(int dir) {
 	OCR1B = OCR1A;
@@ -147,8 +148,34 @@ int main(void)
 	set(ADCSRA, ADIF);	//Enable reading results
 	
 	
+	//wireless debugging stuff
+	m_bus_init();
+	m_rf_open(CHANNEL, ADDRESS, PACKET_LENGTH);
+
+	int i=0;
+	char yes;
+	int counter = 0;
+
+	
     while(1)
     {
-        //TODO:: Please write your application code 
+		//wireless stuffs
+		
+        //manually say what each buffer[i] will be (corresponds to a state, variable output, etc.)
+
+        //e.g.
+        buffer[0] = 50;
+        buffer[1] = 2;
+        
+        if (counter > 30000) {
+	        yes = m_rf_send(ADDRESS,buffer,PACKET_LENGTH);
+	        m_green(TOGGLE);
+
+	        counter = 0;
+        }
+        
+        counter++;
+        
+        
     }
 }

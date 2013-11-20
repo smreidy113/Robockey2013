@@ -108,6 +108,9 @@
     <Compile Include="m_wii.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="m_wireless_variables.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Robockey.c">
       <SubType>compile</SubType>
     </Compile>
