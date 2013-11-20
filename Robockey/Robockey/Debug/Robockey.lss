@@ -3,33 +3,33 @@ Robockey.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000008  00800100  000008c6  0000095a  2**0
+  0 .data         00000008  00800100  0000095a  000009ee  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000008c6  00000000  00000000  00000094  2**1
+  1 .text         0000095a  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000005  00800108  00800108  00000962  2**0
+  2 .bss          00000005  00800108  00800108  000009f6  2**0
                   ALLOC
-  3 .stab         00000804  00000000  00000000  00000964  2**2
+  3 .stab         00000804  00000000  00000000  000009f8  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      000002ed  00000000  00000000  00001168  2**0
+  4 .stabstr      000002ed  00000000  00000000  000011fc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .comment      0000002f  00000000  00000000  00001455  2**0
+  5 .comment      0000002f  00000000  00000000  000014e9  2**0
                   CONTENTS, READONLY
-  6 .debug_aranges 00000230  00000000  00000000  00001484  2**0
+  6 .debug_aranges 00000248  00000000  00000000  00001518  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   00001d70  00000000  00000000  000016b4  2**0
+  7 .debug_info   00001dd5  00000000  00000000  00001760  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 000007bf  00000000  00000000  00003424  2**0
+  8 .debug_abbrev 000007b0  00000000  00000000  00003535  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00000da1  00000000  00000000  00003be3  2**0
+  9 .debug_line   00000de4  00000000  00000000  00003ce5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  000005e0  00000000  00000000  00004984  2**2
+ 10 .debug_frame  00000610  00000000  00000000  00004acc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00000680  00000000  00000000  00004f64  2**0
+ 11 .debug_str    000006a6  00000000  00000000  000050dc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    0000254d  00000000  00000000  000055e4  2**0
+ 12 .debug_loc    0000254d  00000000  00000000  00005782  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000220  00000000  00000000  00007b31  2**0
+ 13 .debug_ranges 00000238  00000000  00000000  00007ccf  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -129,8 +129,8 @@ Disassembly of section .text:
  16c:	11 e0       	ldi	r17, 0x01	; 1
  16e:	a0 e0       	ldi	r26, 0x00	; 0
  170:	b1 e0       	ldi	r27, 0x01	; 1
- 172:	e6 ec       	ldi	r30, 0xC6	; 198
- 174:	f8 e0       	ldi	r31, 0x08	; 8
+ 172:	ea e5       	ldi	r30, 0x5A	; 90
+ 174:	f9 e0       	ldi	r31, 0x09	; 9
  176:	02 c0       	rjmp	.+4      	; 0x17c <__do_copy_data+0x10>
  178:	05 90       	lpm	r0, Z+
  17a:	0d 92       	st	X+, r0
@@ -151,8 +151,8 @@ Disassembly of section .text:
  18c:	ad 30       	cpi	r26, 0x0D	; 13
  18e:	b2 07       	cpc	r27, r18
  190:	e1 f7       	brne	.-8      	; 0x18a <.do_clear_bss_loop>
- 192:	0e 94 52 03 	call	0x6a4	; 0x6a4 <main>
- 196:	0c 94 61 04 	jmp	0x8c2	; 0x8c2 <_exit>
+ 192:	0e 94 66 03 	call	0x6cc	; 0x6cc <main>
+ 196:	0c 94 ab 04 	jmp	0x956	; 0x956 <_exit>
 
 0000019a <__bad_interrupt>:
  19a:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -749,428 +749,539 @@ Disassembly of section .text:
  6a0:	1f 90       	pop	r1
  6a2:	18 95       	reti
 
-000006a4 <main>:
+000006a4 <rotate>:
+#include "m_port.h"
+#include "m_wii.h"
+#include "m_wireless_variables.h" //define CHANNEL, ADDRESS, PACKET_LENGTH in this header (# of variables to send = (PACKET_LENGTH-1))
+
+void rotate(int dir) {
+	OCR1B = OCR1A;
+ 6a4:	20 91 88 00 	lds	r18, 0x0088
+ 6a8:	30 91 89 00 	lds	r19, 0x0089
+ 6ac:	30 93 8b 00 	sts	0x008B, r19
+ 6b0:	20 93 8a 00 	sts	0x008A, r18
+	OCR0B = OCR0A;
+ 6b4:	27 b5       	in	r18, 0x27	; 39
+ 6b6:	28 bd       	out	0x28, r18	; 40
+	if (dir == LEFT) {
+ 6b8:	00 97       	sbiw	r24, 0x00	; 0
+ 6ba:	19 f4       	brne	.+6      	; 0x6c2 <rotate+0x1e>
+		set(DDRB,2);
+ 6bc:	22 9a       	sbi	0x04, 2	; 4
+		clear(DDRB,3);
+ 6be:	23 98       	cbi	0x04, 3	; 4
+ 6c0:	08 95       	ret
+	}
+	else if (dir == RIGHT) {
+ 6c2:	01 97       	sbiw	r24, 0x01	; 1
+ 6c4:	11 f4       	brne	.+4      	; 0x6ca <rotate+0x26>
+		clear(DDRB,2);
+ 6c6:	22 98       	cbi	0x04, 2	; 4
+		set(DDRB,6);
+ 6c8:	26 9a       	sbi	0x04, 6	; 4
+ 6ca:	08 95       	ret
+
+000006cc <main>:
 }
 
 int main(void)
 {
+	//wireless stuffs
+	m_bus_init();
+ 6cc:	0e 94 cf 00 	call	0x19e	; 0x19e <m_bus_init>
+	m_rf_open(CHANNEL, ADDRESS, PACKET_LENGTH);
+ 6d0:	42 e0       	ldi	r20, 0x02	; 2
+ 6d2:	60 e0       	ldi	r22, 0x00	; 0
+ 6d4:	82 e0       	ldi	r24, 0x02	; 2
+ 6d6:	0e 94 e0 00 	call	0x1c0	; 0x1c0 <m_rf_open>
+	int counter = 0;
+	//
 	
 	m_clockdivide(0);
- 6a4:	e1 e6       	ldi	r30, 0x61	; 97
- 6a6:	f0 e0       	ldi	r31, 0x00	; 0
- 6a8:	80 e8       	ldi	r24, 0x80	; 128
- 6aa:	80 83       	st	Z, r24
- 6ac:	10 82       	st	Z, r1
+ 6da:	e1 e6       	ldi	r30, 0x61	; 97
+ 6dc:	f0 e0       	ldi	r31, 0x00	; 0
+ 6de:	80 e8       	ldi	r24, 0x80	; 128
+ 6e0:	80 83       	st	Z, r24
+ 6e2:	10 82       	st	Z, r1
 	
-	//TIMER 0: For Controlling the left wheel
+	//TIMER 0: For Controlling the solenoid
 	
 	set(TCCR0B, WGM02);
- 6ae:	85 b5       	in	r24, 0x25	; 37
- 6b0:	88 60       	ori	r24, 0x08	; 8
- 6b2:	85 bd       	out	0x25, r24	; 37
+ 6e4:	85 b5       	in	r24, 0x25	; 37
+ 6e6:	88 60       	ori	r24, 0x08	; 8
+ 6e8:	85 bd       	out	0x25, r24	; 37
 	set(TCCR0A, WGM01);
- 6b4:	84 b5       	in	r24, 0x24	; 36
- 6b6:	82 60       	ori	r24, 0x02	; 2
- 6b8:	84 bd       	out	0x24, r24	; 36
+ 6ea:	84 b5       	in	r24, 0x24	; 36
+ 6ec:	82 60       	ori	r24, 0x02	; 2
+ 6ee:	84 bd       	out	0x24, r24	; 36
 	set(TCCR0A, WGM01);
- 6ba:	84 b5       	in	r24, 0x24	; 36
- 6bc:	82 60       	ori	r24, 0x02	; 2
- 6be:	84 bd       	out	0x24, r24	; 36
+ 6f0:	84 b5       	in	r24, 0x24	; 36
+ 6f2:	82 60       	ori	r24, 0x02	; 2
+ 6f4:	84 bd       	out	0x24, r24	; 36
 	
 	set(TCCR0A, COM0B1);
- 6c0:	84 b5       	in	r24, 0x24	; 36
- 6c2:	80 62       	ori	r24, 0x20	; 32
- 6c4:	84 bd       	out	0x24, r24	; 36
+ 6f6:	84 b5       	in	r24, 0x24	; 36
+ 6f8:	80 62       	ori	r24, 0x20	; 32
+ 6fa:	84 bd       	out	0x24, r24	; 36
 	clear(TCCR0A, COM0B0);
- 6c6:	84 b5       	in	r24, 0x24	; 36
- 6c8:	8f 7e       	andi	r24, 0xEF	; 239
- 6ca:	84 bd       	out	0x24, r24	; 36
+ 6fc:	84 b5       	in	r24, 0x24	; 36
+ 6fe:	8f 7e       	andi	r24, 0xEF	; 239
+ 700:	84 bd       	out	0x24, r24	; 36
 	
 	set(TCCR0B, CS02);
- 6cc:	85 b5       	in	r24, 0x25	; 37
- 6ce:	84 60       	ori	r24, 0x04	; 4
- 6d0:	85 bd       	out	0x25, r24	; 37
+ 702:	85 b5       	in	r24, 0x25	; 37
+ 704:	84 60       	ori	r24, 0x04	; 4
+ 706:	85 bd       	out	0x25, r24	; 37
 	set(TCCR0B, CS01);
- 6d2:	85 b5       	in	r24, 0x25	; 37
- 6d4:	82 60       	ori	r24, 0x02	; 2
- 6d6:	85 bd       	out	0x25, r24	; 37
+ 708:	85 b5       	in	r24, 0x25	; 37
+ 70a:	82 60       	ori	r24, 0x02	; 2
+ 70c:	85 bd       	out	0x25, r24	; 37
 	set(TCCR0B, CS00);
- 6d8:	85 b5       	in	r24, 0x25	; 37
- 6da:	81 60       	ori	r24, 0x01	; 1
- 6dc:	85 bd       	out	0x25, r24	; 37
+ 70e:	85 b5       	in	r24, 0x25	; 37
+ 710:	81 60       	ori	r24, 0x01	; 1
+ 712:	85 bd       	out	0x25, r24	; 37
 	
 	OCR1A = 0xFF;
- 6de:	88 e8       	ldi	r24, 0x88	; 136
- 6e0:	90 e0       	ldi	r25, 0x00	; 0
- 6e2:	2f ef       	ldi	r18, 0xFF	; 255
- 6e4:	30 e0       	ldi	r19, 0x00	; 0
- 6e6:	fc 01       	movw	r30, r24
- 6e8:	31 83       	std	Z+1, r19	; 0x01
- 6ea:	20 83       	st	Z, r18
+ 714:	c8 e8       	ldi	r28, 0x88	; 136
+ 716:	d0 e0       	ldi	r29, 0x00	; 0
+ 718:	8f ef       	ldi	r24, 0xFF	; 255
+ 71a:	90 e0       	ldi	r25, 0x00	; 0
+ 71c:	99 83       	std	Y+1, r25	; 0x01
+ 71e:	88 83       	st	Y, r24
 	OCR1B = 0;
- 6ec:	ca e8       	ldi	r28, 0x8A	; 138
- 6ee:	d0 e0       	ldi	r29, 0x00	; 0
- 6f0:	19 82       	std	Y+1, r1	; 0x01
- 6f2:	18 82       	st	Y, r1
+ 720:	2a e8       	ldi	r18, 0x8A	; 138
+ 722:	30 e0       	ldi	r19, 0x00	; 0
+ 724:	f9 01       	movw	r30, r18
+ 726:	11 82       	std	Z+1, r1	; 0x01
+ 728:	10 82       	st	Z, r1
 	
-	//TIMER 1: For Controlling the right wheel
+	//TIMER 1: For Controlling the left wheel
 	
 	set(TCCR1B, WGM13);
- 6f4:	e1 e8       	ldi	r30, 0x81	; 129
- 6f6:	f0 e0       	ldi	r31, 0x00	; 0
- 6f8:	20 81       	ld	r18, Z
- 6fa:	20 61       	ori	r18, 0x10	; 16
- 6fc:	20 83       	st	Z, r18
+ 72a:	e1 e8       	ldi	r30, 0x81	; 129
+ 72c:	f0 e0       	ldi	r31, 0x00	; 0
+ 72e:	80 81       	ld	r24, Z
+ 730:	80 61       	ori	r24, 0x10	; 16
+ 732:	80 83       	st	Z, r24
 	set(TCCR1B, WGM12);
- 6fe:	20 81       	ld	r18, Z
- 700:	28 60       	ori	r18, 0x08	; 8
- 702:	20 83       	st	Z, r18
+ 734:	80 81       	ld	r24, Z
+ 736:	88 60       	ori	r24, 0x08	; 8
+ 738:	80 83       	st	Z, r24
 	set(TCCR1A, WGM11);
- 704:	a0 e8       	ldi	r26, 0x80	; 128
- 706:	b0 e0       	ldi	r27, 0x00	; 0
- 708:	2c 91       	ld	r18, X
- 70a:	22 60       	ori	r18, 0x02	; 2
- 70c:	2c 93       	st	X, r18
+ 73a:	a0 e8       	ldi	r26, 0x80	; 128
+ 73c:	b0 e0       	ldi	r27, 0x00	; 0
+ 73e:	8c 91       	ld	r24, X
+ 740:	82 60       	ori	r24, 0x02	; 2
+ 742:	8c 93       	st	X, r24
 	set(TCCR1A, WGM10);
- 70e:	2c 91       	ld	r18, X
- 710:	21 60       	ori	r18, 0x01	; 1
- 712:	2c 93       	st	X, r18
+ 744:	8c 91       	ld	r24, X
+ 746:	81 60       	ori	r24, 0x01	; 1
+ 748:	8c 93       	st	X, r24
 	
 	set(TCCR1A, COM1B1);
- 714:	2c 91       	ld	r18, X
- 716:	20 62       	ori	r18, 0x20	; 32
- 718:	2c 93       	st	X, r18
+ 74a:	8c 91       	ld	r24, X
+ 74c:	80 62       	ori	r24, 0x20	; 32
+ 74e:	8c 93       	st	X, r24
 	clear(TCCR1A, COM1B0);
- 71a:	2c 91       	ld	r18, X
- 71c:	2f 7e       	andi	r18, 0xEF	; 239
- 71e:	2c 93       	st	X, r18
+ 750:	8c 91       	ld	r24, X
+ 752:	8f 7e       	andi	r24, 0xEF	; 239
+ 754:	8c 93       	st	X, r24
 	
 	clear(TCCR1B, CS12);
- 720:	20 81       	ld	r18, Z
- 722:	2b 7f       	andi	r18, 0xFB	; 251
- 724:	20 83       	st	Z, r18
+ 756:	80 81       	ld	r24, Z
+ 758:	8b 7f       	andi	r24, 0xFB	; 251
+ 75a:	80 83       	st	Z, r24
 	clear(TCCR1B, CS11);
- 726:	20 81       	ld	r18, Z
- 728:	2d 7f       	andi	r18, 0xFD	; 253
- 72a:	20 83       	st	Z, r18
+ 75c:	80 81       	ld	r24, Z
+ 75e:	8d 7f       	andi	r24, 0xFD	; 253
+ 760:	80 83       	st	Z, r24
 	set(TCCR1B, CS10);
- 72c:	20 81       	ld	r18, Z
- 72e:	21 60       	ori	r18, 0x01	; 1
- 730:	20 83       	st	Z, r18
+ 762:	80 81       	ld	r24, Z
+ 764:	81 60       	ori	r24, 0x01	; 1
+ 766:	80 83       	st	Z, r24
 	
 	OCR1A = 0xFFFF;
- 732:	2f ef       	ldi	r18, 0xFF	; 255
- 734:	3f ef       	ldi	r19, 0xFF	; 255
- 736:	fc 01       	movw	r30, r24
- 738:	31 83       	std	Z+1, r19	; 0x01
- 73a:	20 83       	st	Z, r18
+ 768:	8f ef       	ldi	r24, 0xFF	; 255
+ 76a:	9f ef       	ldi	r25, 0xFF	; 255
+ 76c:	99 83       	std	Y+1, r25	; 0x01
+ 76e:	88 83       	st	Y, r24
 	OCR1B = 0;
- 73c:	19 82       	std	Y+1, r1	; 0x01
- 73e:	18 82       	st	Y, r1
+ 770:	f9 01       	movw	r30, r18
+ 772:	11 82       	std	Z+1, r1	; 0x01
+ 774:	10 82       	st	Z, r1
+	
+	//TIMER 3: For Controlling the right wheel
+	
+	set(TCCR3B, WGM33);
+ 776:	e1 e9       	ldi	r30, 0x91	; 145
+ 778:	f0 e0       	ldi	r31, 0x00	; 0
+ 77a:	20 81       	ld	r18, Z
+ 77c:	20 61       	ori	r18, 0x10	; 16
+ 77e:	20 83       	st	Z, r18
+	set(TCCR3B, WGM32);
+ 780:	20 81       	ld	r18, Z
+ 782:	28 60       	ori	r18, 0x08	; 8
+ 784:	20 83       	st	Z, r18
+	set(TCCR3A, WGM31);
+ 786:	a0 e9       	ldi	r26, 0x90	; 144
+ 788:	b0 e0       	ldi	r27, 0x00	; 0
+ 78a:	2c 91       	ld	r18, X
+ 78c:	22 60       	ori	r18, 0x02	; 2
+ 78e:	2c 93       	st	X, r18
+	clear(TCCR3A, WGM30);
+ 790:	2c 91       	ld	r18, X
+ 792:	2e 7f       	andi	r18, 0xFE	; 254
+ 794:	2c 93       	st	X, r18
+	
+	set(TCCR3A, COM3A1);
+ 796:	2c 91       	ld	r18, X
+ 798:	20 68       	ori	r18, 0x80	; 128
+ 79a:	2c 93       	st	X, r18
+	clear(TCCR3A, COM3A0);
+ 79c:	2c 91       	ld	r18, X
+ 79e:	2f 7b       	andi	r18, 0xBF	; 191
+ 7a0:	2c 93       	st	X, r18
+	
+	clear(TCCR3B, CS32);
+ 7a2:	20 81       	ld	r18, Z
+ 7a4:	2b 7f       	andi	r18, 0xFB	; 251
+ 7a6:	20 83       	st	Z, r18
+	clear(TCCR3B, CS31);
+ 7a8:	20 81       	ld	r18, Z
+ 7aa:	2d 7f       	andi	r18, 0xFD	; 253
+ 7ac:	20 83       	st	Z, r18
+	set(TCCR3B, CS30);
+ 7ae:	20 81       	ld	r18, Z
+ 7b0:	21 60       	ori	r18, 0x01	; 1
+ 7b2:	20 83       	st	Z, r18
+	
+	ICR3 = 0xFFFF;
+ 7b4:	90 93 97 00 	sts	0x0097, r25
+ 7b8:	80 93 96 00 	sts	0x0096, r24
+	OCR1A = 0;
+ 7bc:	19 82       	std	Y+1, r1	; 0x01
+ 7be:	18 82       	st	Y, r1
 	
 	//Pins for controlling speed of left and right wheel
-	set(DDRB,7);
- 740:	27 9a       	sbi	0x04, 7	; 4
 	set(DDRB,6);
- 742:	26 9a       	sbi	0x04, 6	; 4
+ 7c0:	26 9a       	sbi	0x04, 6	; 4
+	set(DDRC,6);
+ 7c2:	3e 9a       	sbi	0x07, 6	; 7
 	
 	//Pins for determining direction of wheels
-	set(DDRD,5);
- 744:	55 9a       	sbi	0x0a, 5	; 10
-	set(DDRD,6);
- 746:	56 9a       	sbi	0x0a, 6	; 10
+	set(DDRB,2);
+ 7c4:	22 9a       	sbi	0x04, 2	; 4
+	set(DDRB,3);
+ 7c6:	23 9a       	sbi	0x04, 3	; 4
 	
 	//ADC's
 	sei();					//Set up interrupts
- 748:	78 94       	sei
+ 7c8:	78 94       	sei
 	
 	clear(ADMUX, REFS1);	//Voltage reference is AR pin (5V)
- 74a:	ec e7       	ldi	r30, 0x7C	; 124
- 74c:	f0 e0       	ldi	r31, 0x00	; 0
- 74e:	80 81       	ld	r24, Z
- 750:	8f 77       	andi	r24, 0x7F	; 127
- 752:	80 83       	st	Z, r24
+ 7ca:	ec e7       	ldi	r30, 0x7C	; 124
+ 7cc:	f0 e0       	ldi	r31, 0x00	; 0
+ 7ce:	80 81       	ld	r24, Z
+ 7d0:	8f 77       	andi	r24, 0x7F	; 127
+ 7d2:	80 83       	st	Z, r24
 	clear(ADMUX, REFS0);	//^
- 754:	80 81       	ld	r24, Z
- 756:	8f 7b       	andi	r24, 0xBF	; 191
- 758:	80 83       	st	Z, r24
+ 7d4:	80 81       	ld	r24, Z
+ 7d6:	8f 7b       	andi	r24, 0xBF	; 191
+ 7d8:	80 83       	st	Z, r24
 	
 	set(ADCSRA, ADPS2);	//Set scale to /128
- 75a:	aa e7       	ldi	r26, 0x7A	; 122
- 75c:	b0 e0       	ldi	r27, 0x00	; 0
- 75e:	8c 91       	ld	r24, X
- 760:	84 60       	ori	r24, 0x04	; 4
- 762:	8c 93       	st	X, r24
+ 7da:	aa e7       	ldi	r26, 0x7A	; 122
+ 7dc:	b0 e0       	ldi	r27, 0x00	; 0
+ 7de:	8c 91       	ld	r24, X
+ 7e0:	84 60       	ori	r24, 0x04	; 4
+ 7e2:	8c 93       	st	X, r24
 	set(ADCSRA, ADPS1);	//^
- 764:	8c 91       	ld	r24, X
- 766:	82 60       	ori	r24, 0x02	; 2
- 768:	8c 93       	st	X, r24
+ 7e4:	8c 91       	ld	r24, X
+ 7e6:	82 60       	ori	r24, 0x02	; 2
+ 7e8:	8c 93       	st	X, r24
 	set(ADCSRA, ADPS0);	//^
- 76a:	8c 91       	ld	r24, X
- 76c:	81 60       	ori	r24, 0x01	; 1
- 76e:	8c 93       	st	X, r24
+ 7ea:	8c 91       	ld	r24, X
+ 7ec:	81 60       	ori	r24, 0x01	; 1
+ 7ee:	8c 93       	st	X, r24
 	
 	set(DIDR0, ADC0D);	//Disable digital input for F0
- 770:	ce e7       	ldi	r28, 0x7E	; 126
- 772:	d0 e0       	ldi	r29, 0x00	; 0
- 774:	88 81       	ld	r24, Y
- 776:	81 60       	ori	r24, 0x01	; 1
- 778:	88 83       	st	Y, r24
+ 7f0:	ce e7       	ldi	r28, 0x7E	; 126
+ 7f2:	d0 e0       	ldi	r29, 0x00	; 0
+ 7f4:	88 81       	ld	r24, Y
+ 7f6:	81 60       	ori	r24, 0x01	; 1
+ 7f8:	88 83       	st	Y, r24
 	set(DIDR0, ADC1D);	//Disable digital input for F1
- 77a:	88 81       	ld	r24, Y
- 77c:	82 60       	ori	r24, 0x02	; 2
- 77e:	88 83       	st	Y, r24
+ 7fa:	88 81       	ld	r24, Y
+ 7fc:	82 60       	ori	r24, 0x02	; 2
+ 7fe:	88 83       	st	Y, r24
 	set(DIDR0, ADC4D);	//Disable digital input for F4
- 780:	88 81       	ld	r24, Y
- 782:	80 61       	ori	r24, 0x10	; 16
- 784:	88 83       	st	Y, r24
+ 800:	88 81       	ld	r24, Y
+ 802:	80 61       	ori	r24, 0x10	; 16
+ 804:	88 83       	st	Y, r24
 	set(DIDR0, ADC5D);	//Disable digital input for F5
- 786:	88 81       	ld	r24, Y
- 788:	80 62       	ori	r24, 0x20	; 32
- 78a:	88 83       	st	Y, r24
+ 806:	88 81       	ld	r24, Y
+ 808:	80 62       	ori	r24, 0x20	; 32
+ 80a:	88 83       	st	Y, r24
 	set(DIDR0, ADC6D);	//Disable digital input for F6
- 78c:	88 81       	ld	r24, Y
- 78e:	80 64       	ori	r24, 0x40	; 64
- 790:	88 83       	st	Y, r24
-	set(DIDR0, ADC7D);	//Disable digital input for F7
- 792:	88 81       	ld	r24, Y
- 794:	80 68       	ori	r24, 0x80	; 128
- 796:	88 83       	st	Y, r24
+ 80c:	88 81       	ld	r24, Y
+ 80e:	80 64       	ori	r24, 0x40	; 64
+ 810:	88 83       	st	Y, r24
 	set(DIDR2, ADC8D);	//Disable digital input for D4
- 798:	cd e7       	ldi	r28, 0x7D	; 125
- 79a:	d0 e0       	ldi	r29, 0x00	; 0
- 79c:	88 81       	ld	r24, Y
- 79e:	81 60       	ori	r24, 0x01	; 1
- 7a0:	88 83       	st	Y, r24
-	
+ 812:	cd e7       	ldi	r28, 0x7D	; 125
+ 814:	d0 e0       	ldi	r29, 0x00	; 0
+ 816:	88 81       	ld	r24, Y
+ 818:	81 60       	ori	r24, 0x01	; 1
+ 81a:	88 83       	st	Y, r24
+	set(DIDR2, ADC9D);	//Disable digital input for D6
+ 81c:	88 81       	ld	r24, Y
+ 81e:	82 60       	ori	r24, 0x02	; 2
+ 820:	88 83       	st	Y, r24
+		
 	set(ADCSRA, ADATE);	//Set trigger to free-running mode
- 7a2:	8c 91       	ld	r24, X
- 7a4:	80 62       	ori	r24, 0x20	; 32
- 7a6:	8c 93       	st	X, r24
+ 822:	8c 91       	ld	r24, X
+ 824:	80 62       	ori	r24, 0x20	; 32
+ 826:	8c 93       	st	X, r24
 	
 	clear(ADCSRB, MUX5);//Set analog input (F0)
- 7a8:	cb e7       	ldi	r28, 0x7B	; 123
- 7aa:	d0 e0       	ldi	r29, 0x00	; 0
- 7ac:	88 81       	ld	r24, Y
- 7ae:	8f 7d       	andi	r24, 0xDF	; 223
- 7b0:	88 83       	st	Y, r24
+ 828:	cb e7       	ldi	r28, 0x7B	; 123
+ 82a:	d0 e0       	ldi	r29, 0x00	; 0
+ 82c:	88 81       	ld	r24, Y
+ 82e:	8f 7d       	andi	r24, 0xDF	; 223
+ 830:	88 83       	st	Y, r24
 	clear(ADMUX, MUX2);	//^
- 7b2:	80 81       	ld	r24, Z
- 7b4:	8b 7f       	andi	r24, 0xFB	; 251
- 7b6:	80 83       	st	Z, r24
+ 832:	80 81       	ld	r24, Z
+ 834:	8b 7f       	andi	r24, 0xFB	; 251
+ 836:	80 83       	st	Z, r24
 	clear(ADMUX, MUX1);	//^
- 7b8:	80 81       	ld	r24, Z
- 7ba:	8d 7f       	andi	r24, 0xFD	; 253
- 7bc:	80 83       	st	Z, r24
+ 838:	80 81       	ld	r24, Z
+ 83a:	8d 7f       	andi	r24, 0xFD	; 253
+ 83c:	80 83       	st	Z, r24
 	clear(ADMUX, MUX0);	//^
- 7be:	80 81       	ld	r24, Z
- 7c0:	8e 7f       	andi	r24, 0xFE	; 254
- 7c2:	80 83       	st	Z, r24
+ 83e:	80 81       	ld	r24, Z
+ 840:	8e 7f       	andi	r24, 0xFE	; 254
+ 842:	80 83       	st	Z, r24
 	
 	clear(ADCSRB, MUX5);//Set analog input (F1)
- 7c4:	88 81       	ld	r24, Y
- 7c6:	8f 7d       	andi	r24, 0xDF	; 223
- 7c8:	88 83       	st	Y, r24
+ 844:	88 81       	ld	r24, Y
+ 846:	8f 7d       	andi	r24, 0xDF	; 223
+ 848:	88 83       	st	Y, r24
 	clear(ADMUX, MUX2);	//^
- 7ca:	80 81       	ld	r24, Z
- 7cc:	8b 7f       	andi	r24, 0xFB	; 251
- 7ce:	80 83       	st	Z, r24
+ 84a:	80 81       	ld	r24, Z
+ 84c:	8b 7f       	andi	r24, 0xFB	; 251
+ 84e:	80 83       	st	Z, r24
 	clear(ADMUX, MUX1);	//^
- 7d0:	80 81       	ld	r24, Z
- 7d2:	8d 7f       	andi	r24, 0xFD	; 253
- 7d4:	80 83       	st	Z, r24
+ 850:	80 81       	ld	r24, Z
+ 852:	8d 7f       	andi	r24, 0xFD	; 253
+ 854:	80 83       	st	Z, r24
 	set(ADMUX, MUX0);	//^
- 7d6:	80 81       	ld	r24, Z
- 7d8:	81 60       	ori	r24, 0x01	; 1
- 7da:	80 83       	st	Z, r24
+ 856:	80 81       	ld	r24, Z
+ 858:	81 60       	ori	r24, 0x01	; 1
+ 85a:	80 83       	st	Z, r24
 	
 	clear(ADCSRB, MUX5);//Set analog input (F4)
- 7dc:	88 81       	ld	r24, Y
- 7de:	8f 7d       	andi	r24, 0xDF	; 223
- 7e0:	88 83       	st	Y, r24
+ 85c:	88 81       	ld	r24, Y
+ 85e:	8f 7d       	andi	r24, 0xDF	; 223
+ 860:	88 83       	st	Y, r24
 	set(ADMUX, MUX2);	//^
- 7e2:	80 81       	ld	r24, Z
- 7e4:	84 60       	ori	r24, 0x04	; 4
- 7e6:	80 83       	st	Z, r24
+ 862:	80 81       	ld	r24, Z
+ 864:	84 60       	ori	r24, 0x04	; 4
+ 866:	80 83       	st	Z, r24
 	clear(ADMUX, MUX1);	//^
- 7e8:	80 81       	ld	r24, Z
- 7ea:	8d 7f       	andi	r24, 0xFD	; 253
- 7ec:	80 83       	st	Z, r24
+ 868:	80 81       	ld	r24, Z
+ 86a:	8d 7f       	andi	r24, 0xFD	; 253
+ 86c:	80 83       	st	Z, r24
 	clear(ADMUX, MUX0);	//^
- 7ee:	80 81       	ld	r24, Z
- 7f0:	8e 7f       	andi	r24, 0xFE	; 254
- 7f2:	80 83       	st	Z, r24
+ 86e:	80 81       	ld	r24, Z
+ 870:	8e 7f       	andi	r24, 0xFE	; 254
+ 872:	80 83       	st	Z, r24
 	
 	clear(ADCSRB, MUX5);//Set analog input (F5)
- 7f4:	88 81       	ld	r24, Y
- 7f6:	8f 7d       	andi	r24, 0xDF	; 223
- 7f8:	88 83       	st	Y, r24
+ 874:	88 81       	ld	r24, Y
+ 876:	8f 7d       	andi	r24, 0xDF	; 223
+ 878:	88 83       	st	Y, r24
 	set(ADMUX, MUX2);	//^
- 7fa:	80 81       	ld	r24, Z
- 7fc:	84 60       	ori	r24, 0x04	; 4
- 7fe:	80 83       	st	Z, r24
+ 87a:	80 81       	ld	r24, Z
+ 87c:	84 60       	ori	r24, 0x04	; 4
+ 87e:	80 83       	st	Z, r24
 	clear(ADMUX, MUX1);	//^
- 800:	80 81       	ld	r24, Z
- 802:	8d 7f       	andi	r24, 0xFD	; 253
- 804:	80 83       	st	Z, r24
+ 880:	80 81       	ld	r24, Z
+ 882:	8d 7f       	andi	r24, 0xFD	; 253
+ 884:	80 83       	st	Z, r24
 	set(ADMUX, MUX0);	//^
- 806:	80 81       	ld	r24, Z
- 808:	81 60       	ori	r24, 0x01	; 1
- 80a:	80 83       	st	Z, r24
+ 886:	80 81       	ld	r24, Z
+ 888:	81 60       	ori	r24, 0x01	; 1
+ 88a:	80 83       	st	Z, r24
 	
 	clear(ADCSRB, MUX5);//Set analog input (F6)
- 80c:	88 81       	ld	r24, Y
- 80e:	8f 7d       	andi	r24, 0xDF	; 223
- 810:	88 83       	st	Y, r24
+ 88c:	88 81       	ld	r24, Y
+ 88e:	8f 7d       	andi	r24, 0xDF	; 223
+ 890:	88 83       	st	Y, r24
 	set(ADMUX, MUX2);	//^
- 812:	80 81       	ld	r24, Z
- 814:	84 60       	ori	r24, 0x04	; 4
- 816:	80 83       	st	Z, r24
+ 892:	80 81       	ld	r24, Z
+ 894:	84 60       	ori	r24, 0x04	; 4
+ 896:	80 83       	st	Z, r24
 	set(ADMUX, MUX1);	//^
- 818:	80 81       	ld	r24, Z
- 81a:	82 60       	ori	r24, 0x02	; 2
- 81c:	80 83       	st	Z, r24
+ 898:	80 81       	ld	r24, Z
+ 89a:	82 60       	ori	r24, 0x02	; 2
+ 89c:	80 83       	st	Z, r24
 	clear(ADMUX, MUX0);	//^
- 81e:	80 81       	ld	r24, Z
- 820:	8e 7f       	andi	r24, 0xFE	; 254
- 822:	80 83       	st	Z, r24
-	
-	clear(ADCSRB, MUX5);//Set analog input (F7)
- 824:	88 81       	ld	r24, Y
- 826:	8f 7d       	andi	r24, 0xDF	; 223
- 828:	88 83       	st	Y, r24
-	set(ADMUX, MUX2);	//^
- 82a:	80 81       	ld	r24, Z
- 82c:	84 60       	ori	r24, 0x04	; 4
- 82e:	80 83       	st	Z, r24
-	set(ADMUX, MUX1);	//^
- 830:	80 81       	ld	r24, Z
- 832:	82 60       	ori	r24, 0x02	; 2
- 834:	80 83       	st	Z, r24
-	set(ADMUX, MUX0);	//^
- 836:	80 81       	ld	r24, Z
- 838:	81 60       	ori	r24, 0x01	; 1
- 83a:	80 83       	st	Z, r24
+ 89e:	80 81       	ld	r24, Z
+ 8a0:	8e 7f       	andi	r24, 0xFE	; 254
+ 8a2:	80 83       	st	Z, r24
 	
 	set(ADCSRB, MUX5);//Set analog input (D4)
- 83c:	88 81       	ld	r24, Y
- 83e:	80 62       	ori	r24, 0x20	; 32
- 840:	88 83       	st	Y, r24
+ 8a4:	88 81       	ld	r24, Y
+ 8a6:	80 62       	ori	r24, 0x20	; 32
+ 8a8:	88 83       	st	Y, r24
 	clear(ADMUX, MUX2);	//^
- 842:	80 81       	ld	r24, Z
- 844:	8b 7f       	andi	r24, 0xFB	; 251
- 846:	80 83       	st	Z, r24
+ 8aa:	80 81       	ld	r24, Z
+ 8ac:	8b 7f       	andi	r24, 0xFB	; 251
+ 8ae:	80 83       	st	Z, r24
 	clear(ADMUX, MUX1);	//^
- 848:	80 81       	ld	r24, Z
- 84a:	8d 7f       	andi	r24, 0xFD	; 253
- 84c:	80 83       	st	Z, r24
+ 8b0:	80 81       	ld	r24, Z
+ 8b2:	8d 7f       	andi	r24, 0xFD	; 253
+ 8b4:	80 83       	st	Z, r24
 	clear(ADMUX, MUX0);	//^
- 84e:	80 81       	ld	r24, Z
- 850:	8e 7f       	andi	r24, 0xFE	; 254
- 852:	80 83       	st	Z, r24
+ 8b6:	80 81       	ld	r24, Z
+ 8b8:	8e 7f       	andi	r24, 0xFE	; 254
+ 8ba:	80 83       	st	Z, r24
+		
+	set(ADCSRB, MUX5);//Set analog input (D6)
+ 8bc:	88 81       	ld	r24, Y
+ 8be:	80 62       	ori	r24, 0x20	; 32
+ 8c0:	88 83       	st	Y, r24
+	clear(ADMUX, MUX2);	//^
+ 8c2:	80 81       	ld	r24, Z
+ 8c4:	8b 7f       	andi	r24, 0xFB	; 251
+ 8c6:	80 83       	st	Z, r24
+	clear(ADMUX, MUX1);	//^
+ 8c8:	80 81       	ld	r24, Z
+ 8ca:	8d 7f       	andi	r24, 0xFD	; 253
+ 8cc:	80 83       	st	Z, r24
+	set(ADMUX, MUX0);	//^
+ 8ce:	80 81       	ld	r24, Z
+ 8d0:	81 60       	ori	r24, 0x01	; 1
+ 8d2:	80 83       	st	Z, r24
 	
 	set(ADCSRA, ADEN);	//Enable/Start conversion
- 854:	8c 91       	ld	r24, X
- 856:	80 68       	ori	r24, 0x80	; 128
- 858:	8c 93       	st	X, r24
+ 8d4:	8c 91       	ld	r24, X
+ 8d6:	80 68       	ori	r24, 0x80	; 128
+ 8d8:	8c 93       	st	X, r24
 	set(ADCSRA, ADSC);	//^
- 85a:	8c 91       	ld	r24, X
- 85c:	80 64       	ori	r24, 0x40	; 64
- 85e:	8c 93       	st	X, r24
+ 8da:	8c 91       	ld	r24, X
+ 8dc:	80 64       	ori	r24, 0x40	; 64
+ 8de:	8c 93       	st	X, r24
 	
 	set(ADCSRA, ADIF);	//Enable reading results
- 860:	8c 91       	ld	r24, X
- 862:	80 61       	ori	r24, 0x10	; 16
- 864:	8c 93       	st	X, r24
-	
-	
-	//wireless debugging stuff
-	m_bus_init();
- 866:	0e 94 cf 00 	call	0x19e	; 0x19e <m_bus_init>
-	m_rf_open(CHANNEL, ADDRESS, PACKET_LENGTH);
- 86a:	42 e0       	ldi	r20, 0x02	; 2
- 86c:	60 e0       	ldi	r22, 0x00	; 0
- 86e:	82 e0       	ldi	r24, 0x02	; 2
- 870:	0e 94 e0 00 	call	0x1c0	; 0x1c0 <m_rf_open>
-
-	int i=0;
-	char yes;
-	int counter = 0;
- 874:	80 e0       	ldi	r24, 0x00	; 0
- 876:	90 e0       	ldi	r25, 0x00	; 0
-    while(1)
-    {
+ 8e0:	8c 91       	ld	r24, X
+ 8e2:	80 61       	ori	r24, 0x10	; 16
+ 8e4:	8c 93       	st	X, r24
+		//wireless stuffs
+		
         //manually say what each buffer[i] will be (corresponds to a state, variable output, etc.)
 
         //e.g.
         buffer[0] = 50;
- 878:	cb e0       	ldi	r28, 0x0B	; 11
- 87a:	d1 e0       	ldi	r29, 0x01	; 1
- 87c:	0f 2e       	mov	r0, r31
- 87e:	f2 e3       	ldi	r31, 0x32	; 50
- 880:	cf 2e       	mov	r12, r31
- 882:	f0 2d       	mov	r31, r0
+ 8e6:	82 e3       	ldi	r24, 0x32	; 50
+ 8e8:	80 93 0b 01 	sts	0x010B, r24
         buffer[1] = 2;
- 884:	0c e0       	ldi	r16, 0x0C	; 12
- 886:	11 e0       	ldi	r17, 0x01	; 1
- 888:	68 94       	set
- 88a:	bb 24       	eor	r11, r11
- 88c:	b1 f8       	bld	r11, 1
- 88e:	db 2c       	mov	r13, r11
+ 8ec:	82 e0       	ldi	r24, 0x02	; 2
+ 8ee:	80 93 0c 01 	sts	0x010C, r24
+int main(void)
+{
+	//wireless stuffs
+	m_bus_init();
+	m_rf_open(CHANNEL, ADDRESS, PACKET_LENGTH);
+	int counter = 0;
+ 8f2:	c0 e0       	ldi	r28, 0x00	; 0
+ 8f4:	d0 e0       	ldi	r29, 0x00	; 0
+		//wireless stuffs
+		
+        //manually say what each buffer[i] will be (corresponds to a state, variable output, etc.)
+
+        //e.g.
+        buffer[0] = 50;
+ 8f6:	0b e0       	ldi	r16, 0x0B	; 11
+ 8f8:	11 e0       	ldi	r17, 0x01	; 1
+ 8fa:	0f 2e       	mov	r0, r31
+ 8fc:	f2 e3       	ldi	r31, 0x32	; 50
+ 8fe:	cf 2e       	mov	r12, r31
+ 900:	f0 2d       	mov	r31, r0
+        buffer[1] = 2;
+ 902:	0f 2e       	mov	r0, r31
+ 904:	fc e0       	ldi	r31, 0x0C	; 12
+ 906:	ef 2e       	mov	r14, r31
+ 908:	f1 e0       	ldi	r31, 0x01	; 1
+ 90a:	ff 2e       	mov	r15, r31
+ 90c:	f0 2d       	mov	r31, r0
+ 90e:	68 94       	set
+ 910:	dd 24       	eor	r13, r13
+ 912:	d1 f8       	bld	r13, 1
         
         if (counter > 30000) {
-	        yes = m_rf_send(ADDRESS,buffer,PACKET_LENGTH);
+	        m_rf_send(ADDRESS,buffer,PACKET_LENGTH);
 	        m_green(TOGGLE);
- 890:	68 94       	set
- 892:	aa 24       	eor	r10, r10
- 894:	a2 f8       	bld	r10, 2
-
-	        counter = 0;
- 896:	e1 2c       	mov	r14, r1
- 898:	f1 2c       	mov	r15, r1
- 89a:	0a c0       	rjmp	.+20     	; 0x8b0 <main+0x20c>
+ 914:	68 94       	set
+ 916:	bb 24       	eor	r11, r11
+ 918:	b2 f8       	bld	r11, 2
+ 91a:	0b c0       	rjmp	.+22     	; 0x932 <main+0x266>
         //e.g.
         buffer[0] = 50;
         buffer[1] = 2;
         
         if (counter > 30000) {
-	        yes = m_rf_send(ADDRESS,buffer,PACKET_LENGTH);
- 89c:	4b 2d       	mov	r20, r11
- 89e:	be 01       	movw	r22, r28
- 8a0:	80 e0       	ldi	r24, 0x00	; 0
- 8a2:	0e 94 36 01 	call	0x26c	; 0x26c <m_rf_send>
+	        m_rf_send(ADDRESS,buffer,PACKET_LENGTH);
+ 91c:	4d 2d       	mov	r20, r13
+ 91e:	b8 01       	movw	r22, r16
+ 920:	80 e0       	ldi	r24, 0x00	; 0
+ 922:	0e 94 36 01 	call	0x26c	; 0x26c <m_rf_send>
 	        m_green(TOGGLE);
- 8a6:	6a 9a       	sbi	0x0d, 2	; 13
- 8a8:	8e b1       	in	r24, 0x0e	; 14
- 8aa:	8a 25       	eor	r24, r10
- 8ac:	8e b9       	out	0x0e, r24	; 14
+ 926:	6a 9a       	sbi	0x0d, 2	; 13
+ 928:	8e b1       	in	r24, 0x0e	; 14
+ 92a:	8b 25       	eor	r24, r11
+ 92c:	8e b9       	out	0x0e, r24	; 14
 
 	        counter = 0;
- 8ae:	c7 01       	movw	r24, r14
+ 92e:	c0 e0       	ldi	r28, 0x00	; 0
+ 930:	d0 e0       	ldi	r29, 0x00	; 0
         }
         
         counter++;
- 8b0:	01 96       	adiw	r24, 0x01	; 1
-    while(1)
-    {
+ 932:	21 96       	adiw	r28, 0x01	; 1
+		
+		
+		//switch states
+        switch (state) {
+			case 0:
+			rotate(LEFT);
+ 934:	80 e0       	ldi	r24, 0x00	; 0
+ 936:	90 e0       	ldi	r25, 0x00	; 0
+ 938:	0e 94 52 03 	call	0x6a4	; 0x6a4 <rotate>
+			rotate(RIGHT);
+ 93c:	81 e0       	ldi	r24, 0x01	; 1
+ 93e:	90 e0       	ldi	r25, 0x00	; 0
+ 940:	0e 94 52 03 	call	0x6a4	; 0x6a4 <rotate>
+		//wireless stuffs
+		
         //manually say what each buffer[i] will be (corresponds to a state, variable output, etc.)
 
         //e.g.
         buffer[0] = 50;
- 8b2:	c8 82       	st	Y, r12
+ 944:	f8 01       	movw	r30, r16
+ 946:	c0 82       	st	Z, r12
         buffer[1] = 2;
- 8b4:	f8 01       	movw	r30, r16
- 8b6:	d0 82       	st	Z, r13
+ 948:	f7 01       	movw	r30, r14
+ 94a:	d0 82       	st	Z, r13
         
         if (counter > 30000) {
- 8b8:	81 33       	cpi	r24, 0x31	; 49
- 8ba:	f5 e7       	ldi	r31, 0x75	; 117
- 8bc:	9f 07       	cpc	r25, r31
- 8be:	c4 f3       	brlt	.-16     	; 0x8b0 <main+0x20c>
- 8c0:	ed cf       	rjmp	.-38     	; 0x89c <main+0x1f8>
+ 94c:	c1 33       	cpi	r28, 0x31	; 49
+ 94e:	f5 e7       	ldi	r31, 0x75	; 117
+ 950:	df 07       	cpc	r29, r31
+ 952:	7c f3       	brlt	.-34     	; 0x932 <main+0x266>
+ 954:	e3 cf       	rjmp	.-58     	; 0x91c <main+0x250>
 
-000008c2 <_exit>:
- 8c2:	f8 94       	cli
+00000956 <_exit>:
+ 956:	f8 94       	cli
 
-000008c4 <__stop_program>:
- 8c4:	ff cf       	rjmp	.-2      	; 0x8c4 <__stop_program>
+00000958 <__stop_program>:
+ 958:	ff cf       	rjmp	.-2      	; 0x958 <__stop_program>

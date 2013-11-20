@@ -20,12 +20,12 @@ void rotate(int dir) {
 	OCR1B = OCR1A;
 	OCR0B = OCR0A;
 	if (dir == LEFT) {
-		set(DDRD,5);
-		clear(DDRD,6);
+		set(DDRB,2);
+		clear(DDRB,3);
 	}
 	else if (dir == RIGHT) {
-		clear(DDRD,5);
-		set(DDRD,6);
+		clear(DDRB,2);
+		set(DDRB,6);
 	}
 }
 
@@ -37,16 +37,33 @@ void findPuck() {
 	//TODO: Implement code
 }
 
+void drive_to_puck() {
+	//TODO: Implement code
+}
+
+void drive_to_goal() {
+	//TODO: Implement code
+}
+
 void shoot() {
+	//TODO: Implement code
+}
+
+void game_stop() {
 	//TODO: Implement code
 }
 
 int main(void)
 {
+	//wireless stuffs
+	m_bus_init();
+	m_rf_open(CHANNEL, ADDRESS, PACKET_LENGTH);
+	int counter = 0;
+	//
 	
 	m_clockdivide(0);
 	
-	//TIMER 0: For Controlling the left wheel
+	//TIMER 0: For Controlling the solenoid
 	
 	set(TCCR0B, WGM02);
 	set(TCCR0A, WGM01);
@@ -62,7 +79,7 @@ int main(void)
 	OCR1A = 0xFF;
 	OCR1B = 0;
 	
-	//TIMER 1: For Controlling the right wheel
+	//TIMER 1: For Controlling the left wheel
 	
 	set(TCCR1B, WGM13);
 	set(TCCR1B, WGM12);
@@ -79,13 +96,30 @@ int main(void)
 	OCR1A = 0xFFFF;
 	OCR1B = 0;
 	
+	//TIMER 3: For Controlling the right wheel
+	
+	set(TCCR3B, WGM33);
+	set(TCCR3B, WGM32);
+	set(TCCR3A, WGM31);
+	clear(TCCR3A, WGM30);
+	
+	set(TCCR3A, COM3A1);
+	clear(TCCR3A, COM3A0);
+	
+	clear(TCCR3B, CS32);
+	clear(TCCR3B, CS31);
+	set(TCCR3B, CS30);
+	
+	ICR3 = 0xFFFF;
+	OCR1A = 0;
+	
 	//Pins for controlling speed of left and right wheel
-	set(DDRB,7);
 	set(DDRB,6);
+	set(DDRC,6);
 	
 	//Pins for determining direction of wheels
-	set(DDRD,5);
-	set(DDRD,6);
+	set(DDRB,2);
+	set(DDRB,3);
 	
 	//ADC's
 	sei();					//Set up interrupts
@@ -102,9 +136,9 @@ int main(void)
 	set(DIDR0, ADC4D);	//Disable digital input for F4
 	set(DIDR0, ADC5D);	//Disable digital input for F5
 	set(DIDR0, ADC6D);	//Disable digital input for F6
-	set(DIDR0, ADC7D);	//Disable digital input for F7
 	set(DIDR2, ADC8D);	//Disable digital input for D4
-	
+	set(DIDR2, ADC9D);	//Disable digital input for D6
+		
 	set(ADCSRA, ADATE);	//Set trigger to free-running mode
 	
 	clear(ADCSRB, MUX5);//Set analog input (F0)
@@ -132,15 +166,15 @@ int main(void)
 	set(ADMUX, MUX1);	//^
 	clear(ADMUX, MUX0);	//^
 	
-	clear(ADCSRB, MUX5);//Set analog input (F7)
-	set(ADMUX, MUX2);	//^
-	set(ADMUX, MUX1);	//^
-	set(ADMUX, MUX0);	//^
-	
 	set(ADCSRB, MUX5);//Set analog input (D4)
 	clear(ADMUX, MUX2);	//^
 	clear(ADMUX, MUX1);	//^
 	clear(ADMUX, MUX0);	//^
+		
+	set(ADCSRB, MUX5);//Set analog input (D6)
+	clear(ADMUX, MUX2);	//^
+	clear(ADMUX, MUX1);	//^
+	set(ADMUX, MUX0);	//^
 	
 	set(ADCSRA, ADEN);	//Enable/Start conversion
 	set(ADCSRA, ADSC);	//^
@@ -148,14 +182,8 @@ int main(void)
 	set(ADCSRA, ADIF);	//Enable reading results
 	
 	
-	//wireless debugging stuff
-	m_bus_init();
-	m_rf_open(CHANNEL, ADDRESS, PACKET_LENGTH);
 
-	int i=0;
-	char yes;
-	int counter = 0;
-
+	int state; //state variable
 	
     while(1)
     {
@@ -168,14 +196,46 @@ int main(void)
         buffer[1] = 2;
         
         if (counter > 30000) {
-	        yes = m_rf_send(ADDRESS,buffer,PACKET_LENGTH);
+	        m_rf_send(ADDRESS,buffer,PACKET_LENGTH);
 	        m_green(TOGGLE);
 
 	        counter = 0;
         }
         
         counter++;
-        
+		
+		
+		//switch states
+        switch (state) {
+			case 0:
+			rotate(LEFT);
+			rotate(RIGHT);
+			break;
+			
+			case 1:
+			findPuck();
+			break;
+			
+			case 2:
+			drive_to_puck();
+			break;
+			
+			case 3:
+			drive_to_goal();
+			break;
+			
+			case 4:
+			shoot();
+			break;
+			
+			case 5:
+			game_stop();
+			break;
+			
+			default:
+			rotate(LEFT);
+			break;
+		}
         
     }
 }

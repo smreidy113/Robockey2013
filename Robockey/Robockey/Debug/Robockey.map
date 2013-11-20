@@ -127,11 +127,16 @@ Discarded input sections
                 0x00000000      0x206 m_wii.o
  .text          0x00000000        0x0 Robockey.o
  .bss           0x00000000        0x0 Robockey.o
- .text.rotate   0x00000000       0x28 Robockey.o
  .text.turn     0x00000000        0x2 Robockey.o
  .text.findPuck
                 0x00000000        0x2 Robockey.o
+ .text.drive_to_puck
+                0x00000000        0x2 Robockey.o
+ .text.drive_to_goal
+                0x00000000        0x2 Robockey.o
  .text.shoot    0x00000000        0x2 Robockey.o
+ .text.game_stop
+                0x00000000        0x2 Robockey.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  .text.libgcc.mul
@@ -350,7 +355,7 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x8c6
+.text           0x00000000      0x95a
  *(.vectors)
  .vectors       0x00000000       0xac c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
                 0x00000000                __vector_default
@@ -481,13 +486,15 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  .text.__vector_11
                 0x00000394      0x310 m_usb.o
                 0x00000394                __vector_11
- .text.main     0x000006a4      0x21e Robockey.o
-                0x000006a4                main
-                0x000008c2                . = ALIGN (0x2)
+ .text.rotate   0x000006a4       0x28 Robockey.o
+                0x000006a4                rotate
+ .text.main     0x000006cc      0x28a Robockey.o
+                0x000006cc                main
+                0x00000956                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000008c2        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
-                0x000008c2                _exit
-                0x000008c2                exit
+ .fini9         0x00000956        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
+                0x00000956                _exit
+                0x00000956                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -506,11 +513,11 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000008c2        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000956        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000008c6                _etext = .
+                0x0000095a                _etext = .
 
-.data           0x00800100        0x8 load address 0x000008c6
+.data           0x00800100        0x8 load address 0x0000095a
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
@@ -556,8 +563,8 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  COMMON         0x0080010b        0x2 Robockey.o
                 0x0080010b                buffer
                 0x0080010d                PROVIDE (__bss_end, .)
-                0x000008c6                __data_load_start = LOADADDR (.data)
-                0x000008ce                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000095a                __data_load_start = LOADADDR (.data)
+                0x00000962                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0080010d        0x0
                 0x0080010d                PROVIDE (__noinit_start, .)
@@ -637,7 +644,7 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x230
+.debug_aranges  0x00000000      0x248
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x58 m_bus.o
@@ -650,49 +657,49 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  .debug_aranges
                 0x000001a0       0x50 m_wii.o
  .debug_aranges
-                0x000001f0       0x40 Robockey.o
+                0x000001f0       0x58 Robockey.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1d70
+.debug_info     0x00000000     0x1dd5
  *(.debug_info)
  .debug_info    0x00000000      0x2de m_bus.o
  .debug_info    0x000002de      0x295 m_port.o
  .debug_info    0x00000573      0x18e m_rf.o
  .debug_info    0x00000701      0xd4c m_usb.o
  .debug_info    0x0000144d      0x71a m_wii.o
- .debug_info    0x00001b67      0x209 Robockey.o
+ .debug_info    0x00001b67      0x26e Robockey.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x7bf
+.debug_abbrev   0x00000000      0x7b0
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x10e m_bus.o
  .debug_abbrev  0x0000010e       0xe4 m_port.o
  .debug_abbrev  0x000001f2       0xb6 m_rf.o
  .debug_abbrev  0x000002a8      0x23a m_usb.o
  .debug_abbrev  0x000004e2      0x196 m_wii.o
- .debug_abbrev  0x00000678      0x147 Robockey.o
+ .debug_abbrev  0x00000678      0x138 Robockey.o
 
-.debug_line     0x00000000      0xda1
+.debug_line     0x00000000      0xde4
  *(.debug_line)
  .debug_line    0x00000000      0x18e m_bus.o
  .debug_line    0x0000018e       0x88 m_port.o
  .debug_line    0x00000216      0x1c1 m_rf.o
  .debug_line    0x000003d7      0x53f m_usb.o
  .debug_line    0x00000916      0x2ed m_wii.o
- .debug_line    0x00000c03      0x19e Robockey.o
+ .debug_line    0x00000c03      0x1e1 Robockey.o
 
-.debug_frame    0x00000000      0x5e0
+.debug_frame    0x00000000      0x610
  *(.debug_frame)
  .debug_frame   0x00000000       0xb8 m_bus.o
  .debug_frame   0x000000b8       0x7c m_port.o
  .debug_frame   0x00000134       0x6c m_rf.o
  .debug_frame   0x000001a0      0x324 m_usb.o
  .debug_frame   0x000004c4       0xb8 m_wii.o
- .debug_frame   0x0000057c       0x64 Robockey.o
+ .debug_frame   0x0000057c       0x94 Robockey.o
 
-.debug_str      0x00000000      0x680
+.debug_str      0x00000000      0x6a6
  *(.debug_str)
  .debug_str     0x00000000      0x10a m_bus.o
                                 0x155 (size before relaxing)
@@ -704,8 +711,8 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
                                 0x491 (size before relaxing)
  .debug_str     0x0000054f       0xb4 m_wii.o
                                 0x1a7 (size before relaxing)
- .debug_str     0x00000603       0x7d Robockey.o
-                                0x135 (size before relaxing)
+ .debug_str     0x00000603       0xa3 Robockey.o
+                                0x161 (size before relaxing)
 
 .debug_loc      0x00000000     0x254d
  *(.debug_loc)
@@ -722,14 +729,14 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x220
+.debug_ranges   0x00000000      0x238
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x48 m_bus.o
  .debug_ranges  0x00000048       0x28 m_port.o
  .debug_ranges  0x00000070       0x20 m_rf.o
  .debug_ranges  0x00000090      0x120 m_usb.o
  .debug_ranges  0x000001b0       0x40 m_wii.o
- .debug_ranges  0x000001f0       0x30 Robockey.o
+ .debug_ranges  0x000001f0       0x48 Robockey.o
 
 .debug_macro
  *(.debug_macro)
