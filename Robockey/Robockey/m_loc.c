@@ -127,8 +127,8 @@ unsigned char localize (float* data) {
 		
 		r = sqrt((posx*posx + posy*posy));
 		
-		data[0] = rcenterx - r * cos(angle - phi);
-		data[1] = rcentery + r * sin(angle - phi);
+		data[0] = 128 - rcenterx - r * cos(angle - phi);
+		data[1] = 96 - rcentery + r * sin(angle - phi);
 		data[2] = angle;
 		return 1;
 	}
@@ -147,8 +147,8 @@ unsigned char localize (float* data) {
 		
 		r = sqrt((posx*posx)+(posy*posy));
 		
-		data[0] = rcenterx - r * cos(angle-phi);
-		data[1] = rcentery - r * sin(angle-phi);
+		data[0] = 128 - rcenterx - r * cos(angle-phi);
+		data[1] = 96 - rcentery - r * sin(angle-phi);
 		data[2] = angle;
 		return 1;
 	}
@@ -164,8 +164,8 @@ unsigned char localize (float* data) {
 		
 		r = sqrt((posx*posx)+(posy*posy));
 		
-		data[0] = rcenterx - r * cos(angle - phi);
-		data[1] = rcentery - r * sin(angle - phi);
+		data[0] = 128 - rcenterx - r * cos(angle - phi);
+		data[1] = 96 - rcentery - r * sin(angle - phi);
 		data[2] = angle;
 		return 1;
 	}
@@ -181,8 +181,8 @@ unsigned char localize (float* data) {
 		
 		r = sqrt((posx*posx)+(posy*posy));
 		
-		data[0] = rcenterx - r * cos(angle - phi);
-		data[1] = rcentery - r * sin(angle - phi);
+		data[0] = 128 - rcenterx - r * cos(angle - phi);
+		data[1] = 96 - rcentery - r * sin(angle - phi);
 		data[2] = angle;
 		return 1;
 	}
@@ -198,8 +198,8 @@ unsigned char localize (float* data) {
 		
 		r = sqrt((posx*posx)+(posy*posy));
 		
-		data[0] = rcenterx - r * cos(angle - phi);
-		data[1] = rcentery - r * sin(angle - phi);
+		data[0] = 128 - rcenterx - r * cos(angle - phi);
+		data[1] = 96 - rcentery - r * sin(angle - phi);
 		data[2] = angle;
 		return 1;
 	}
