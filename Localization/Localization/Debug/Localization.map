@@ -132,6 +132,36 @@ Discarded input sections
                 0x00000000       0x3e m_bus.o
  .text.m_read_register
                 0x00000000       0x42 m_bus.o
+ .text          0x00000000        0x0 m_loc.o
+ .bss           0x00000000        0x0 m_loc.o
+ .text.getData  0x00000000       0x82 m_loc.o
+ .text.determine_blobs
+                0x00000000      0x426 m_loc.o
+ .text.local_init
+                0x00000000       0x14 m_loc.o
+ .text.localize
+                0x00000000      0xe74 m_loc.o
+ .bss.close2    0x00000000        0x2 m_loc.o
+ .bss.close1    0x00000000        0x2 m_loc.o
+ .bss.far2      0x00000000        0x2 m_loc.o
+ .bss.far1      0x00000000        0x2 m_loc.o
+ .bss.dcenter   0x00000000        0x4 m_loc.o
+ .data.distmin  0x00000000        0x4 m_loc.o
+ .bss.distmax   0x00000000        0x4 m_loc.o
+ .bss.dist      0x00000000        0x4 m_loc.o
+ .bss.y         0x00000000        0x8 m_loc.o
+ .bss.x         0x00000000        0x8 m_loc.o
+ .data.rcentery
+                0x00000000        0x2 m_loc.o
+ .data.rcenterx
+                0x00000000        0x2 m_loc.o
+ .bss.theta     0x00000000        0x4 m_loc.o
+ .bss.beta      0x00000000        0x4 m_loc.o
+ .bss.right     0x00000000        0x2 m_loc.o
+ .bss.left      0x00000000        0x2 m_loc.o
+ .bss.bottom    0x00000000        0x2 m_loc.o
+ .bss.top       0x00000000        0x2 m_loc.o
+ .bss.blobs     0x00000000       0x18 m_loc.o
  .text          0x00000000        0x0 m_port.o
  .bss           0x00000000        0x0 m_port.o
  .text.m_port_init
@@ -443,6 +473,7 @@ Address of section .data set to 0x800100
 LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
 LOAD Localization.o
 LOAD m_bus.o
+LOAD m_loc.o
 LOAD m_port.o
 LOAD m_usb.o
 LOAD m_wii.o
@@ -698,6 +729,7 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
  .data          0x00800100        0x0 Localization.o
  .data          0x00800100        0x0 m_bus.o
+ .data          0x00800100        0x0 m_loc.o
  .data          0x00800100        0x0 m_port.o
  .data          0x00800100        0x0 m_usb.o
  .data          0x00800100        0x0 m_wii.o
@@ -886,6 +918,7 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  .comment       0x00000000       0x2f Localization.o
                                  0x30 (size before relaxing)
  .comment       0x00000000       0x30 m_bus.o
+ .comment       0x00000000       0x30 m_loc.o
  .comment       0x00000000       0x30 m_port.o
  .comment       0x00000000       0x30 m_usb.o
  .comment       0x00000000       0x30 m_wii.o
@@ -902,75 +935,84 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x1f8
+.debug_aranges  0x00000000      0x230
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x38 Localization.o
  .debug_aranges
                 0x00000038       0x58 m_bus.o
  .debug_aranges
-                0x00000090       0x38 m_port.o
+                0x00000090       0x38 m_loc.o
  .debug_aranges
-                0x000000c8       0xe0 m_usb.o
+                0x000000c8       0x38 m_port.o
  .debug_aranges
-                0x000001a8       0x50 m_wii.o
+                0x00000100       0xe0 m_usb.o
+ .debug_aranges
+                0x000001e0       0x50 m_wii.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1fcb
+.debug_info     0x00000000     0x25bd
  *(.debug_info)
  .debug_info    0x00000000      0x5f2 Localization.o
  .debug_info    0x000005f2      0x2de m_bus.o
- .debug_info    0x000008d0      0x295 m_port.o
- .debug_info    0x00000b65      0xd4c m_usb.o
- .debug_info    0x000018b1      0x71a m_wii.o
+ .debug_info    0x000008d0      0x5f2 m_loc.o
+ .debug_info    0x00000ec2      0x295 m_port.o
+ .debug_info    0x00001157      0xd4c m_usb.o
+ .debug_info    0x00001ea3      0x71a m_wii.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x780
+.debug_abbrev   0x00000000      0x93e
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x1be Localization.o
  .debug_abbrev  0x000001be      0x10e m_bus.o
- .debug_abbrev  0x000002cc       0xe4 m_port.o
- .debug_abbrev  0x000003b0      0x23a m_usb.o
- .debug_abbrev  0x000005ea      0x196 m_wii.o
+ .debug_abbrev  0x000002cc      0x1be m_loc.o
+ .debug_abbrev  0x0000048a       0xe4 m_port.o
+ .debug_abbrev  0x0000056e      0x23a m_usb.o
+ .debug_abbrev  0x000007a8      0x196 m_wii.o
 
-.debug_line     0x00000000      0xc35
+.debug_line     0x00000000      0xe21
  *(.debug_line)
  .debug_line    0x00000000      0x1f3 Localization.o
  .debug_line    0x000001f3      0x18e m_bus.o
- .debug_line    0x00000381       0x88 m_port.o
- .debug_line    0x00000409      0x53f m_usb.o
- .debug_line    0x00000948      0x2ed m_wii.o
+ .debug_line    0x00000381      0x1ec m_loc.o
+ .debug_line    0x0000056d       0x88 m_port.o
+ .debug_line    0x000005f5      0x53f m_usb.o
+ .debug_line    0x00000b34      0x2ed m_wii.o
 
-.debug_frame    0x00000000      0x638
+.debug_frame    0x00000000      0x760
  *(.debug_frame)
  .debug_frame   0x00000000      0x128 Localization.o
  .debug_frame   0x00000128       0xb8 m_bus.o
- .debug_frame   0x000001e0       0x7c m_port.o
- .debug_frame   0x0000025c      0x324 m_usb.o
- .debug_frame   0x00000580       0xb8 m_wii.o
+ .debug_frame   0x000001e0      0x128 m_loc.o
+ .debug_frame   0x00000308       0x7c m_port.o
+ .debug_frame   0x00000384      0x324 m_usb.o
+ .debug_frame   0x000006a8       0xb8 m_wii.o
 
-.debug_str      0x00000000      0x694
+.debug_str      0x00000000      0x6ee
  *(.debug_str)
- .debug_str     0x00000000      0x17b Localization.o
-                                0x1bf (size before relaxing)
- .debug_str     0x0000017b       0xa0 m_bus.o
+ .debug_str     0x00000000      0x17c Localization.o
+                                0x1c0 (size before relaxing)
+ .debug_str     0x0000017c       0xec m_bus.o
                                 0x16e (size before relaxing)
- .debug_str     0x0000021b       0x3f m_port.o
+ .debug_str     0x00000268        0xd m_loc.o
+                                0x1b9 (size before relaxing)
+ .debug_str     0x00000275       0x3f m_port.o
                                 0x12d (size before relaxing)
- .debug_str     0x0000025a      0x3a3 m_usb.o
+ .debug_str     0x000002b4      0x3a3 m_usb.o
                                 0x4aa (size before relaxing)
- .debug_str     0x000005fd       0x97 m_wii.o
+ .debug_str     0x00000657       0x97 m_wii.o
                                 0x1c0 (size before relaxing)
 
-.debug_loc      0x00000000     0x2d8e
+.debug_loc      0x00000000     0x38b9
  *(.debug_loc)
  .debug_loc     0x00000000      0xb2b Localization.o
  .debug_loc     0x00000b2b      0x23b m_bus.o
- .debug_loc     0x00000d66      0x2af m_port.o
- .debug_loc     0x00001015     0x18c9 m_usb.o
- .debug_loc     0x000028de      0x4b0 m_wii.o
+ .debug_loc     0x00000d66      0xb2b m_loc.o
+ .debug_loc     0x00001891      0x2af m_port.o
+ .debug_loc     0x00001b40     0x18c9 m_usb.o
+ .debug_loc     0x00003409      0x4b0 m_wii.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -978,13 +1020,14 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x210
+.debug_ranges   0x00000000      0x250
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x40 Localization.o
  .debug_ranges  0x00000040       0x48 m_bus.o
- .debug_ranges  0x00000088       0x28 m_port.o
- .debug_ranges  0x000000b0      0x120 m_usb.o
- .debug_ranges  0x000001d0       0x40 m_wii.o
+ .debug_ranges  0x00000088       0x40 m_loc.o
+ .debug_ranges  0x000000c8       0x28 m_port.o
+ .debug_ranges  0x000000f0      0x120 m_usb.o
+ .debug_ranges  0x00000210       0x40 m_wii.o
 
 .debug_macro
  *(.debug_macro)

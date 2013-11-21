@@ -38,6 +38,7 @@ SUBDIRS :=
 C_SRCS +=  \
 ../Localization.c \
 ../m_bus.c \
+../m_loc.c \
 ../m_port.c \
 ../m_usb.c \
 ../m_wii.c
@@ -52,6 +53,7 @@ ASM_SRCS +=
 OBJS +=  \
 Localization.o \
 m_bus.o \
+m_loc.o \
 m_port.o \
 m_usb.o \
 m_wii.o
@@ -59,6 +61,7 @@ m_wii.o
 OBJS_AS_ARGS +=  \
 Localization.o \
 m_bus.o \
+m_loc.o \
 m_port.o \
 m_usb.o \
 m_wii.o
@@ -66,6 +69,7 @@ m_wii.o
 C_DEPS +=  \
 Localization.d \
 m_bus.d \
+m_loc.d \
 m_port.d \
 m_usb.d \
 m_wii.d
@@ -73,6 +77,7 @@ m_wii.d
 C_DEPS_AS_ARGS +=  \
 Localization.d \
 m_bus.d \
+m_loc.d \
 m_port.d \
 m_usb.d \
 m_wii.d
@@ -88,6 +93,8 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 LIB_DEP+= 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

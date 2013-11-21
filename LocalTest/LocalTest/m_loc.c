@@ -22,8 +22,8 @@ int right = 0;
 float beta = 0;
 float theta = 0;
 
-int rcenterx = 128/2;
-int rcentery = 96/2;
+float rcenterx = 128/2;
+float rcentery = 96/2;
 
 unsigned int x[4] = {0, 0, 0, 0};
 unsigned int y[4] = {0, 0, 0, 0};
@@ -102,6 +102,7 @@ unsigned char local_init() {
 	m_wii_open();
 	
 	m_wii_read(blobs);
+	
 
 	//Determine indices of all top, bottom, left, right points
 	determine_blobs();
@@ -116,92 +117,101 @@ unsigned char localize (float* data) {
 	float posy = 0;
 	float r = 0;
 	float phi = 0, beta = 0, angle = 0;
+	
+	float theta_top_left= (float) atan2((double) (14.5-2.483), (double) 10.563);
+	float theta_top_right = (float) atan2((double) 11.655, (double) (14.5+8.741));
+	float theta_bottom_left = (float) atan2((double)10.563, (double) (14.5+2.483));
+	float theta_bottom_right = (float) atan2((double) 11.655, (double) (14.5-8.741));
+
+	
 	if (x[top] < 1023 && x[bottom] < 1023) {
 		//calculate and store pixel-space position and orientation
-		posx = ((128.0/1023.0)*(x[top]+x[bottom])/2-rcenterx);
-		posy = ((96.0/1023.0)*(y[top]+y[bottom])/2-rcentery);
+		posx = (float) ((128.0/1023.0)*((float)(x[top]+x[bottom]))/2.0-rcenterx);
+		posy = (float) ((96.0/1023.0)*((float)(y[top]+y[bottom]))/2.0-rcentery);
 		
 		//calculate and store angle
-		angle = atan2(x[top]-x[bottom],y[top]-y[bottom]);
-		phi = -1 * atan2(posy, posx);
+		angle = (float) atan2(((double) (x[top]-x[bottom])),((double) (y[top]-y[bottom])));
+		phi = -1.0 * ((float) atan2((double) posy, (double) posx));
 		
-		r = sqrt((posx*posx + posy*posy));
+		r = (float) sqrt((double)(posx*posx + posy*posy));
 		
-		data[0] = rcenterx - r * cos(angle - phi);
-		data[1] = rcentery + r * sin(angle - phi);
+		
+		data[0] = rcenterx - r * (float) cos((double) (angle - phi));
+		data[1] = rcentery + r * (float) sin((double) (angle - phi));
 		data[2] = angle;
 		return 1;
 	}
 	
+	/*
 	else if (x[top] < 1023 && x[left] < 1023) {
-		beta = atan2(x[top]-x[left], y[top]-y[left]);
+		beta = (float) atan2(((double) (x[top]-x[left])), ((double) (y[top]-y[left])));
 		
 		//this theta is constant, considering defining it as such
 		//to save calculation time
-		theta=atan2(14.5-2.483,10.563);
-		posx = rcenterx - (128.0/1023.0)*(x[top]-dcenter*sin(theta-beta));
-		posy = rcentery - (96.0/1023.0)*(y[top]+0.5*dcenter*cos(theta-beta));
+		posx = rcenterx - (128.0/1023.0)*((float)x[top]-dcenter * (float)sin((double) (theta_top_left-beta)));
+		posy = rcentery - (96.0/1023.0)*((float)y[top]+0.5*dcenter * (float)cos((double) (theta_top_left-beta)));
 		
-		angle = theta + beta;
-		phi = -1 * atan2(posy, posx);
+		angle = theta_top_left + beta;
+		phi = -1.0 * (float) atan2((double)posy, (double)posx);
 		
-		r = sqrt((posx*posx)+(posy*posy));
+		r = (float) sqrt((double)((posx*posx)+(posy*posy)));
 		
-		data[0] = rcenterx - r * cos(angle-phi);
-		data[1] = rcentery - r * sin(angle-phi);
+		data[0] = rcenterx - r * (float)cos((double) (angle-phi));
+		data[1] = rcentery - r * (float)sin((double) (angle-phi));
 		data[2] = angle;
 		return 1;
 	}
 	
 	else if (x[top] < 1023 && x[right] < 1023) {
-		beta = atan2(x[top]-x[right],y[top]-y[right]);
-		theta = atan2(11.655,14.5+8.741);
-		posx = rcenterx - (128.0/1023.0)*(x[top]+0.5*dcenter*sin(theta-beta));
-		posy = rcentery - (96.0/1023.0)*(y[top]-0.5*dcenter*cos(theta-beta));
+		beta = (float)atan2((double) (x[top]-x[right]),(double) (y[top]-y[right]));
+
+		posx = rcenterx - (128.0/1023.0)*((float)x[top]+0.5*dcenter * (float)sin((double) (theta_top_right-beta)));
+		posy = rcentery - (96.0/1023.0)*((float)y[top]-0.5*dcenter * (float)cos((double)  (theta_top_right-beta)));
 		
-		angle = -1 * theta - beta;
-		phi = -1 * atan2(posy,posx);
+		angle = -1.0 * theta_top_right - beta;
+		phi = -1.0 * (float) atan2((double)posy,(double)posx);
 		
-		r = sqrt((posx*posx)+(posy*posy));
+		r = (float) sqrt((double) ((posx*posx)+(posy*posy)));
 		
-		data[0] = rcenterx - r * cos(angle - phi);
-		data[1] = rcentery - r * sin(angle - phi);
+		data[0] = rcenterx - r * (float)cos((double) (angle - phi));
+		data[1] = rcentery - r * (float)sin((double) (angle - phi));
 		data[2] = angle;
 		return 1;
 	}
 	
 	else if (x[bottom] < 1023 && x[left] < 1023) {
-		beta = atan2(x[bottom]-x[left],y[bottom]-y[left]);
-		theta = atan2(10.563,14.5+2.483);
-		posx = rcenterx - (128.0/1023.0)*(x[bottom]+dcenter*sin(theta-beta));
-		posy = rcentery - (96.0/1023.0)*(y[bottom]-dcenter*cos(theta-beta));
+		beta = (float)atan2((double) (x[bottom]-x[left]),(double) (y[bottom]-y[left]));
+
+		posx = rcenterx - (128.0/1023.0)*((float)x[bottom]+dcenter*(float)sin((double) (theta_bottom_left-beta)));
+		posy = rcentery - (96.0/1023.0)*((float)y[bottom]-dcenter*(float)cos((double) (theta_bottom_left-beta)));
 		
-		angle = -1 *3.14/2 + theta - beta;
-		phi = -1 * atan2(posy,posx);
+		angle = -1.0 *3.14/2.0 + theta_bottom_left - beta;
+		phi = -1.0 * (float)atan2((double)posy,(double)posx);
 		
-		r = sqrt((posx*posx)+(posy*posy));
+		r = (float)sqrt((double) ((posx*posx)+(posy*posy)));
 		
-		data[0] = rcenterx - r * cos(angle - phi);
-		data[1] = rcentery - r * sin(angle - phi);
+		data[0] = rcenterx - r * (float)cos((double) (angle - phi));
+		data[1] = rcentery - r * (float)sin((double) (angle - phi));
 		data[2] = angle;
 		return 1;
 	}
 	
 	else if (x[bottom] < 1023 && x[right] < 1023) {
-		beta = atan2(x[bottom]-x[right],y[bottom]-y[right]);
-		theta = atan2(11.655,14.5-8.741);
-		posx = rcenterx - (128.0/1023.0)*(x[bottom]+0.5*dcenter*sin(theta-beta));
-		posy = rcentery - (96.0/1023.0)*(y[bottom]-0.5*dcenter*cos(theta-beta));
+		beta = (float)atan2((double) (x[bottom]-x[right]), (double) (y[bottom]-y[right]));
+
+		posx = rcenterx - (128.0/1023.0)*((float)x[bottom]+0.5*dcenter*(float)sin((double) (theta_bottom_right-beta)));
+		posy = rcentery - (96.0/1023.0)*(y[bottom]-0.5*dcenter*(float)cos((double) (theta_bottom_right-beta)));
 		
-		angle = theta - beta;
-		phi = -1 * atan2(posy,posx);
+		angle = theta_bottom_right - beta;
+		phi = -1.0 * (float)atan2((double)posy,(double)posx);
 		
-		r = sqrt((posx*posx)+(posy*posy));
+		r = (float)sqrt((double) ((posx*posx)+(posy*posy)));
 		
-		data[0] = rcenterx - r * cos(angle - phi);
-		data[1] = rcentery - r * sin(angle - phi);
+		data[0] = rcenterx - r * (float)cos((double)(angle - phi));
+		data[1] = rcentery - r * (float)sin((double)(angle - phi));
 		data[2] = angle;
 		return 1;
 	}
+	*/
 	return 0;
 }

@@ -109,7 +109,7 @@ unsigned char local_init() {
 	return 1;
 }
 
-unsigend char localize (float* data) {
+unsigned char localize (float* data) {
 	m_wii_read(blobs);
 	determine_blobs();
 	float posx = 0;

@@ -12,4 +12,8 @@ unsigned char local_init();
 
 unsigned char localize (float* data);
 
+unsigned int blobs[12];
+
+float data[3];
+
 #endif

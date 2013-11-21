@@ -6,6 +6,8 @@ Localization.c
 
 m_bus.c
 
+m_loc.c
+
 m_port.c
 
 m_usb.c

@@ -86,7 +86,7 @@ while 1
 % RealinputGyr = str2num(RealinputGyr);
 % Angle_Actual = str2num(Angle_Actual);
 %For general use
-     [m2_x, remain] = str2num(strtok(m2_buffer));
+     [m2_x, remain] = strtok(m2_buffer);
     [m2_y, remain2] = strtok(remain);
     [m2_a] = strtok(remain2);
     m2_buffer;
