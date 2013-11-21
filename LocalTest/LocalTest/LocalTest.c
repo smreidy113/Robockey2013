@@ -20,14 +20,17 @@
  // global variables
  #define DEBUG 1
  #define CLOCK 0
-
+ 
+ //long count = 0;
 
 
  int main(void){
 	 
 	 //MATLAB PLOTTING STUFFS*****************************************************************
-
+	m_clockdivide(0);
 		 
+	long count = 0;
+	
 	m_red(ON);
 	m_green(ON);
 
@@ -54,20 +57,21 @@
 	*/
 	
 	while(1){
-		
+		m_wait(250);
 		m_red(ON);
 		m_green(OFF);
 		localize(data);
 		m_red(OFF);
 		m_green(ON);
+		//m_usb_tx_string("hi");
 
-		while(!m_usb_rx_available());  	//wait for an indication from the computer
+		/*while(!m_usb_rx_available());  	//wait for an indication from the computer
 		rx_buffer = m_usb_rx_char();  	//grab the computer packet
 
-		m_usb_rx_flush();  				//clear buffer
+		m_usb_rx_flush();  				//clear buffer*/
 
-		if(rx_buffer == 1) {  			//computer wants ir data
-			//write ir data as concatenated hex:  i.e. f0f1f4f5		
+		if(1) {//rx_buffer == 1) {  			//computer wants ir buffer
+			//write ir buffer as concatenated hex:  i.e. f0f1f4f5		
 				//debugging -- should see some line show up in MATLAB live plotting
 				
 				/*
@@ -78,20 +82,21 @@
 
 			}
 			*/
-			
-			data[0] = 50;
-			data[1] = 50;
-			for (i = 0 ; i < 3 ; i++){
-			m_usb_tx_int(data[i]);
+			//m_wii_read(blobs);
+			/*data[0] = 50;
+			data[1] = 50;*/
+			//m_usb_tx_string("hi");
+			for (i = 0 ; i < 7 ; i++){
+			m_usb_tx_int((int)data[i]);
 			m_usb_tx_char('\t');
 
 			}
-			
-			
+			//m_usb_tx_int((int)(data[2]));
+			m_usb_tx_string("\n");
 			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
 			
 			
-			m_usb_tx_string("\tx[top]: ");
+			/*m_usb_tx_string("\tx[top]: ");
 			m_usb_tx_int(data[3]);
 			m_usb_tx_string("\tx[bottom]: ");
 			m_usb_tx_int(data[4]);
@@ -101,7 +106,7 @@
 			m_usb_tx_int(data[6]);
 			m_usb_tx_string("\tangle: ");
 			m_usb_tx_int((int) (((float) atan2(((double) (data[3]-data[4])),((double) (data[5]-data[6])))) * 180.0 / 3.14));
-			m_usb_tx_string("\n");
+			m_usb_tx_string("\n");*/
 		}
 	}	 
 	 //***************************************************************************************

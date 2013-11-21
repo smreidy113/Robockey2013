@@ -110,13 +110,20 @@ unsigned char local_init() {
 	return 1;
 }
 
+unsigned char test (float* data) {
+	determine_blobs();
+	data[0] = blobs[0];
+	data[1] = blobs[1];
+	data[2] = 1.0;
+}
+
 unsigned char localize (float* data) {
-	m_wii_read(blobs);
+	//m_wii_read(blobs);
 	determine_blobs();
 	float posx = 0;
 	float posy = 0;
 	float r = 0;
-	float phi = 0, beta = 0, angle = 0;
+	float phi = 0, beta = 0, angle = 0.0;
 	
 	float theta_top_left= (float) atan2((double) (14.5-2.483), (double) 10.563);
 	float theta_top_right = (float) atan2((double) 11.655, (double) (14.5+8.741));
@@ -130,7 +137,7 @@ unsigned char localize (float* data) {
 		posy = (float) ((96.0/1023.0)*((float)(y[top]+y[bottom]))/2.0-rcentery);
 		
 		//calculate and store angle
-		angle = (float) atan2(((double) (x[top]-x[bottom])),((double) (y[top]-y[bottom])));
+		angle = (float) atan2(((double) ((int)x[top]-(int)x[bottom])),((double) ((int)y[top]-(int)y[bottom])));
 		phi = -1.0 * ((float) atan2((double) posy, (double) posx));
 		
 		r = (float) sqrt((double)(posx*posx + posy*posy));
@@ -138,7 +145,7 @@ unsigned char localize (float* data) {
 		
 		data[0] = rcenterx - r * (float) cos((double) (angle - phi));
 		data[1] = rcentery + r * (float) sin((double) (angle - phi));
-		data[2] = angle;
+		data[2] = angle * 180.0 / 3.14;
 		data[3] = x[top];
 		data[4] = x[bottom];
 		data[5] = y[top];
