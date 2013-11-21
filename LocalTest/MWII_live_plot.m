@@ -34,10 +34,10 @@ clear all;
 close all;
 
 %VARIABLES
-maxPoints = 20; %display only 20 points at a time
-Wii_m2_x = zeros(1, maxPoints);
-Wii_m2_y = zeros(1, maxPoints);
-Wii_m2_a = zeros(1, maxPoints);
+%maxPoints = 20; %display only 20 points at a time
+%Wii_m2_x = zeros(1, maxPoints);
+%Wii_m2_y = zeros(1, maxPoints);
+%Wii_m2_a = zeros(1, maxPoints);
 
 %% SERIAL
 %----> for ***WINDOZE***
@@ -72,19 +72,19 @@ try
         [m2_a] = strtok(remain2);
         m2_buffer;
         
-        Wii_m2_x = [str2double(m2_x) Wii_m2_x(1:maxPoints-1)];
-        Wii_m2_y = [str2double(m2_y) Wii_m2_y(1:maxPoints-1)];
-        Wii_m2_a = [str2double(m2_a) Wii_m2_a(1:maxPoints-1)];
+        Wii_m2_x = str2double(m2_x); %Wii_m2_x(1:maxPoints-1)];
+        Wii_m2_y = str2double(m2_y); %Wii_m2_y(1:maxPoints-1)];
+        Wii_m2_a = str2double(m2_a); %Wii_m2_a(1:maxPoints-1)];
 
         %% Plotting
         figure(1);
         clf;
         hold on
         
-        plot(Wii_m2_x,Wii_m2_y,'.');
+        plot(Wii_m2_x,Wii_m2_y,'o');
         
-        %axis([0 128 0 96]); 
-        axis([0 1000 0 1000]);
+        axis([0 128 0 96]); 
+        
         
         grid on
         pause(.04);

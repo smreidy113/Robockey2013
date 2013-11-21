@@ -26,7 +26,7 @@
  int main(void){
 	 
 	 //MATLAB PLOTTING STUFFS*****************************************************************
-	 unsigned int blobs[12]={0};
+
 		 
 	m_red(ON);
 	m_green(ON);
@@ -43,18 +43,21 @@
 	
 	int i;
 	
+	/*
 	//just testing random blob values
 	for (i = 0; i < 12; i++) {
 		blobs[i] = i+1;
 	}
 	
+	
 	i = 0;
+	*/
 	
 	while(1){
 		
 		m_red(ON);
 		m_green(OFF);
-		//localize(data);
+		localize(data);
 		m_red(OFF);
 		m_green(ON);
 
@@ -66,22 +69,39 @@
 		if(rx_buffer == 1) {  			//computer wants ir data
 			//write ir data as concatenated hex:  i.e. f0f1f4f5		
 				//debugging -- should see some line show up in MATLAB live plotting
+				
+				/*
 			for (i = 0 ; i < 12 ; i++){
 				blobs[i] = 2* blobs[i];
 				m_usb_tx_int(blobs[i]);
 				m_usb_tx_char('\t');
 
 			}
+			*/
 			
-			/*
+			data[0] = 50;
+			data[1] = 50;
 			for (i = 0 ; i < 3 ; i++){
 			m_usb_tx_int(data[i]);
 			m_usb_tx_char('\t');
 
 			}
-			*/
+			
 			
 			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
+			
+			
+			m_usb_tx_string("\tx[top]: ");
+			m_usb_tx_int(data[3]);
+			m_usb_tx_string("\tx[bottom]: ");
+			m_usb_tx_int(data[4]);
+			m_usb_tx_string("\ty[top]: ");
+			m_usb_tx_int(data[5]);
+			m_usb_tx_string("\ty[bottom]: ");
+			m_usb_tx_int(data[6]);
+			m_usb_tx_string("\tangle: ");
+			m_usb_tx_int((int) (((float) atan2(((double) (data[3]-data[4])),((double) (data[5]-data[6])))) * 180.0 / 3.14));
+			m_usb_tx_string("\n");
 		}
 	}	 
 	 //***************************************************************************************
