@@ -14,6 +14,6 @@ unsigned char localize (float* data);
 
 unsigned int blobs[12];
 
-float data[3];
+float data[7];
 
 #endif

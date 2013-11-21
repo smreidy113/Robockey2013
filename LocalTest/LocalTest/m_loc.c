@@ -139,6 +139,10 @@ unsigned char localize (float* data) {
 		data[0] = rcenterx - r * (float) cos((double) (angle - phi));
 		data[1] = rcentery + r * (float) sin((double) (angle - phi));
 		data[2] = angle;
+		data[3] = x[top];
+		data[4] = x[bottom];
+		data[5] = y[top];
+		data[6] = y[bottom];
 		return 1;
 	}
 	

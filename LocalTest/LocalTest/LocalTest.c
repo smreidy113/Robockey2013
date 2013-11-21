@@ -79,7 +79,17 @@
 				 }
 
 			 }
+
+			 m_usb_tx_string("\tx[top]: ");
+			 m_usb_tx_int(data[3]);
+			 m_usb_tx_string("\tx[bottom]: ");
+			 m_usb_tx_int(data[4]);
 			 m_usb_tx_string("\n");
+			 			 m_usb_tx_string("\ty[top]: ");
+			 			 m_usb_tx_int(data[5]);
+			 			 m_usb_tx_string("\ty[bottom]: ");
+			 			 m_usb_tx_int(data[6]);
+			 			 m_usb_tx_string("\n");
 			 m_green(TOGGLE);
 			 
 			 counter = 0;
