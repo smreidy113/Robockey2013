@@ -33,6 +33,9 @@ float distmax = 0, distmin = 1023;
 float dcenter = 0;
 int far1 = 0, far2 = 0, close1 = 0, close2 = 0;
 
+int numlost = 0;
+int recalibrate = 0;
+
 unsigned char getData(unsigned int* x, unsigned int* y) {
 	m_wii_read(blobs);
 	x[0] = blobs[0];
@@ -48,6 +51,8 @@ unsigned char getData(unsigned int* x, unsigned int* y) {
 
 unsigned char determine_blobs() {
 	int exit = 0;
+	distmax = 0;
+	distmin = 1023;
 	while (exit == 0) {
 		getData(x, y);
 		if (x[0] < 1023 && x[1] < 1023 && x[2] < 1023 && x[3] < 1023) {
@@ -119,7 +124,15 @@ unsigned char test (float* data) {
 
 unsigned char localize (float* data) {
 	//m_wii_read(blobs);
-	determine_blobs();
+	//determine_blobs();
+	getData(x,y);
+	numlost = 0;
+	
+	if (recalibrate == 1) {
+		determine_blobs();
+		recalibrate = 0;
+	}
+	
 	float posx = 0;
 	float posy = 0;
 	float r = 0;
@@ -130,6 +143,14 @@ unsigned char localize (float* data) {
 	float theta_bottom_left = (float) atan2((double)10.563, (double) (14.5+2.483));
 	float theta_bottom_right = (float) atan2((double) 11.655, (double) (14.5-8.741));
 
+	for (int i = 0; i < 4; i++) {
+		if (x[i] >= 1023) numlost++;
+	}
+	
+	if (numlost >= 2) {
+		recalibrate = 1;
+		return 0;
+	}
 	
 	if (x[top] < 1023 && x[bottom] < 1023) {
 		//calculate and store pixel-space position and orientation
@@ -153,7 +174,6 @@ unsigned char localize (float* data) {
 		return 1;
 	}
 	
-	/*
 	else if (x[top] < 1023 && x[left] < 1023) {
 		beta = (float) atan2(((double) (x[top]-x[left])), ((double) (y[top]-y[left])));
 		
@@ -223,6 +243,6 @@ unsigned char localize (float* data) {
 		data[2] = angle;
 		return 1;
 	}
-	*/
+	
 	return 0;
 }

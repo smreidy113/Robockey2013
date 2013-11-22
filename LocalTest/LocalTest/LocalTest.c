@@ -38,6 +38,8 @@
 	m_wii_open();
 	m_usb_init(); // connect usb
 	while(!m_usb_isconnected()){};  //wait for connection
+		
+	local_init();
 
 	m_red(OFF);
 	m_green(OFF);
@@ -59,10 +61,10 @@
 	while(1){
 		m_wait(250);
 		m_red(ON);
-		m_green(OFF);
+		//m_green(OFF);
 		localize(data);
 		m_red(OFF);
-		m_green(ON);
+		//m_green(ON);
 		//m_usb_tx_string("hi");
 
 		/*while(!m_usb_rx_available());  	//wait for an indication from the computer
