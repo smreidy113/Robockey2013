@@ -22,8 +22,8 @@ int right = 0;
 float beta = 0;
 float theta = 0;
 
-float rcenterx = 128/2;
-float rcentery = 96/2;
+float rcenterx = 512;
+float rcentery = 512;
 
 unsigned int x[4] = {0, 0, 0, 0};
 unsigned int y[4] = {0, 0, 0, 0};
@@ -52,14 +52,15 @@ unsigned char getData(unsigned int* x, unsigned int* y) {
 unsigned char determine_blobs() {
 	int exit = 0;
 	distmax = 0;
-	distmin = 1023;
+	distmin = 30000;
 	while (exit == 0) {
 		getData(x, y);
 		if (x[0] < 1023 && x[1] < 1023 && x[2] < 1023 && x[3] < 1023) {
 			exit = 1;
 			for (int i = 0; i < 4; i++) {
 				for (int j = i; j < 4; j++) {
-					dist = sqrt((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]));
+					if (i == j) continue;
+					dist = sqrt(((float)x[i]-(float)x[j])*((float)x[i]-(float)x[j])+((float)y[i]-(float)y[j])*((float)y[i]-(float)y[j]));
 					if (dist > distmax) {
 						distmax = dist;
 						far1 = i;
@@ -78,25 +79,25 @@ unsigned char determine_blobs() {
 				bottom = far2;
 				right = close2;
 				//left + top + bottom + right = 1 + 2 + 3 + 4 = 10
-				left = 10 - top - bottom - right;
+				left = 9 - top - bottom - right;
 			}
 			else if (far1 == close2) {
 				top = far1;
 				bottom = far2;
 				right = close1;
-				left = 10 - top - bottom - right;
+				left = 9 - top - bottom - right;
 			}
 			else if (far2 == close1) {
 				top = far2;
 				bottom = far1;
 				right = close2;
-				left = 10 - top - bottom - right;
+				left = 9 - top - bottom - right;
 			}
 			else {
 				top = far2;
 				bottom = far1;
 				right = close1;
-				left = 10 - top - bottom - right;
+				left = 9 - top - bottom - right;
 			}
 		}
 	}
@@ -154,28 +155,33 @@ unsigned char localize (float* data) {
 	
 	if (x[top] < 1023 && x[bottom] < 1023) {
 		//calculate and store pixel-space position and orientation
-		posx = (float) ((128.0/1023.0)*((float)(x[top]+x[bottom]))/2.0-rcenterx);
-		posy = (float) ((96.0/1023.0)*((float)(y[top]+y[bottom]))/2.0-rcentery);
+		posx = (float) (float)(x[top]+x[bottom])/2.0 - rcenterx;
+		posy = (float) (float)(y[top]+y[bottom])/2.0 - rcentery;
+		
 		
 		//calculate and store angle
-		angle = (float) atan2(((double) ((int)x[top]-(int)x[bottom])),((double) ((int)y[top]-(int)y[bottom])));
-		phi = -1.0 * ((float) atan2((double) posy, (double) posx));
+		angle = (float) atan2(((double) ((float)x[top]-(float)x[bottom])),((double) ((float)y[top]-(float)y[bottom])));
+		phi = ((float) atan2((double) posy, (double) posx));
 		
 		r = (float) sqrt((double)(posx*posx + posy*posy));
 		
 		
-		data[0] = rcenterx - r * (float) cos((double) (angle - phi));
-		data[1] = rcentery + r * (float) sin((double) (angle - phi));
+		
+		data[0] = rcenterx + r * (float) cos((double) (((3 * 3.14)/2) - angle - phi));
+		data[1] = rcentery + r * (float) sin((double) (((3 * 3.14)/2) - angle - phi));
 		data[2] = angle * 180.0 / 3.14;
 		data[3] = x[top];
 		data[4] = x[bottom];
 		data[5] = y[top];
 		data[6] = y[bottom];
+		data[7] = phi * 180.0 / 3.14;
+		data[8] = posx;
+		data[9] = posy;
 		return 1;
 	}
 	
 	else if (x[top] < 1023 && x[left] < 1023) {
-		beta = (float) atan2(((double) (x[top]-x[left])), ((double) (y[top]-y[left])));
+		beta = (float) atan2(((double) ((float)x[top]-(float)x[left])), ((double) ((float)y[top]-(float)y[left])));
 		
 		//this theta is constant, considering defining it as such
 		//to save calculation time
@@ -194,7 +200,7 @@ unsigned char localize (float* data) {
 	}
 	
 	else if (x[top] < 1023 && x[right] < 1023) {
-		beta = (float)atan2((double) (x[top]-x[right]),(double) (y[top]-y[right]));
+		beta = (float)atan2((double) ((float)x[top]-(float)x[right]),((double) (float)y[top]-(float)y[right]));
 
 		posx = rcenterx - (128.0/1023.0)*((float)x[top]+0.5*dcenter * (float)sin((double) (theta_top_right-beta)));
 		posy = rcentery - (96.0/1023.0)*((float)y[top]-0.5*dcenter * (float)cos((double)  (theta_top_right-beta)));
@@ -211,7 +217,7 @@ unsigned char localize (float* data) {
 	}
 	
 	else if (x[bottom] < 1023 && x[left] < 1023) {
-		beta = (float)atan2((double) (x[bottom]-x[left]),(double) (y[bottom]-y[left]));
+		beta = (float)atan2((double) ((float)x[bottom]-(float)x[left]),(double) ((float)y[bottom]-(float)y[left]));
 
 		posx = rcenterx - (128.0/1023.0)*((float)x[bottom]+dcenter*(float)sin((double) (theta_bottom_left-beta)));
 		posy = rcentery - (96.0/1023.0)*((float)y[bottom]-dcenter*(float)cos((double) (theta_bottom_left-beta)));
@@ -228,7 +234,7 @@ unsigned char localize (float* data) {
 	}
 	
 	else if (x[bottom] < 1023 && x[right] < 1023) {
-		beta = (float)atan2((double) (x[bottom]-x[right]), (double) (y[bottom]-y[right]));
+		beta = (float)atan2((double) ((float)x[bottom]-(float)x[right]), (double) ((float)y[bottom]-(float)y[right]));
 
 		posx = rcenterx - (128.0/1023.0)*((float)x[bottom]+0.5*dcenter*(float)sin((double) (theta_bottom_right-beta)));
 		posy = rcentery - (96.0/1023.0)*(y[bottom]-0.5*dcenter*(float)cos((double) (theta_bottom_right-beta)));

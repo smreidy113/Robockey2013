@@ -41,7 +41,7 @@ close all;
 
 %% SERIAL
 %----> for ***WINDOZE***
-M2USB = serial('COM4','Baudrate', 9600);
+M2USB = serial('COM6','Baudrate', 9600);
 % *** Use the device manager to check where the microcontroller is plugged
 % into.
 
@@ -58,6 +58,9 @@ fwrite(M2USB,1);
 [m2_y, remain2] = strtok(remain);
 [m2_a] = strtok(remain2);
 m2_buffer;
+
+figure;
+
 
 %% Run program forever
 try
@@ -77,13 +80,13 @@ try
         Wii_m2_a = str2double(m2_a); %Wii_m2_a(1:maxPoints-1)];
 
         %% Plotting
-        figure(1);
-        clf;
-        hold on
+        % figure(1);
+        % clf;
+        % hold on
         
         plot(Wii_m2_x,Wii_m2_y,'o');
         
-        axis([0 128 0 96]); 
+        axis([0 1023 0 1023]); 
         
         
         grid on

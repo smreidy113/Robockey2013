@@ -88,11 +88,12 @@
 			/*data[0] = 50;
 			data[1] = 50;*/
 			//m_usb_tx_string("hi");
-			for (i = 0 ; i < 7 ; i++){
+			for (i = 0 ; i < 8 ; i++){
 			m_usb_tx_int((int)data[i]);
 			m_usb_tx_char('\t');
 
 			}
+			//m_usb_tx_int((int)(data[7]-data[2]));
 			//m_usb_tx_int((int)(data[2]));
 			m_usb_tx_string("\n");
 			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
