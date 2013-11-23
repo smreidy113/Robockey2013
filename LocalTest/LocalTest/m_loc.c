@@ -107,7 +107,7 @@ unsigned char determine_blobs() {
 unsigned char local_init() {
 	m_wii_open();
 	
-	m_wii_read(blobs);
+	getData(x,y);
 	
 
 	//Determine indices of all top, bottom, left, right points
@@ -115,24 +115,22 @@ unsigned char local_init() {
 	
 	return 1;
 }
-
+/*
 unsigned char test (float* data) {
 	determine_blobs();
 	data[0] = blobs[0];
 	data[1] = blobs[1];
 	data[2] = 1.0;
 }
+*/
 
 unsigned char localize (float* data) {
-	//m_wii_read(blobs);
-	//determine_blobs();
-	getData(x,y);
 	numlost = 0;
 	
-	if (recalibrate == 1) {
+	//if (recalibrate == 1) {
 		determine_blobs();
-		recalibrate = 0;
-	}
+		//recalibrate = 0;
+	//}
 	
 	float posx = 0;
 	float posy = 0;
@@ -144,42 +142,47 @@ unsigned char localize (float* data) {
 	float theta_bottom_left = (float) atan2((double)10.563, (double) (14.5+2.483));
 	float theta_bottom_right = (float) atan2((double) 11.655, (double) (14.5-8.741));
 
-	for (int i = 0; i < 4; i++) {
-		if (x[i] >= 1023) numlost++;
-	}
+	//for (int i = 0; i < 4; i++) {
+		//if (x[i] >= 1023) numlost++;
+	//}
 	
-	if (numlost >= 2) {
-		recalibrate = 1;
-		return 0;
-	}
+	//if (numlost >= 2) {
+		//recalibrate = 1;
+		//return 0;
+	//}
 	
 	if (x[top] < 1023 && x[bottom] < 1023) {
 		//calculate and store pixel-space position and orientation
-		posx = (float) (float)(x[top]+x[bottom])/2.0 - rcenterx;
-		posy = (float) (float)(y[top]+y[bottom])/2.0 - rcentery;
+		posx = (float) ((float)(x[top]+x[bottom]))/2.0;
+		posy = (float) ((float)(y[top]+y[bottom]))/2.0;
 		
 		
 		//calculate and store angle
-		angle = (float) atan2(((double) ((float)x[top]-(float)x[bottom])),((double) ((float)y[top]-(float)y[bottom])));
+		angle = (float) atan2(((double) ((float)y[top]-(float)y[bottom])),((double) ((float)x[top]-(float)x[bottom])));
 		phi = ((float) atan2((double) posy, (double) posx));
 		
-		r = (float) sqrt((double)(posx*posx + posy*posy));
+		r = (float) sqrt((double)((posx-rcenterx)*(posx-rcenterx) + (posy-rcentery)*(posy-rcentery)));
 		
 		
-		
-		data[0] = rcenterx + r * (float) cos((double) (((3 * 3.14)/2) - angle - phi));
-		data[1] = rcentery + r * (float) sin((double) (((3 * 3.14)/2) - angle - phi));
+
+		//data[0] = rcenterx + r * (float) cos((double) (((3 * 3.14)/2) - angle - phi));
+		//data[1] = rcentery + r * (float) sin((double) (((3 * 3.14)/2) - angle - phi));
+		data[0] = posx- r*phi;
+		data[1] = posy- r*phi;
 		data[2] = angle * 180.0 / 3.14;
 		data[3] = x[top];
-		data[4] = x[bottom];
-		data[5] = y[top];
+		data[4] = y[top];
+		data[5] = x[bottom];
 		data[6] = y[bottom];
-		data[7] = phi * 180.0 / 3.14;
-		data[8] = posx;
-		data[9] = posy;
+		data[7] = x[right];
+		data[8] = y[right];
+		data[9] = x[left];
+		data[10] = y[left];
+		
 		return 1;
 	}
 	
+	/*
 	else if (x[top] < 1023 && x[left] < 1023) {
 		beta = (float) atan2(((double) ((float)x[top]-(float)x[left])), ((double) ((float)y[top]-(float)y[left])));
 		
@@ -251,4 +254,5 @@ unsigned char localize (float* data) {
 	}
 	
 	return 0;
+	*/
 }

@@ -61,7 +61,7 @@ fwrite(M2USB,1);
 [m2_x_top, remain4] = strtok(remain3);
 [m2_y_top, remain5] = strtok(remain4);
 [m2_x_bottom, remain6] = strtok(remain5);
-[m2_y_bottom, remain7] = strtok(remain6);
+[m2_y_bottom] = strtok(remain6);
 [m2_x_right, remain8] = strtok(remain7);
 [m2_y_right, remain9] = strtok(remain8);
 [m2_x_left, remain10] = strtok(remain9);
@@ -108,8 +108,7 @@ try
         % clf;
         % hold on
         
-        plot(Wii_m2_x, Wii_m2_y, '.', Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b');
-        disp(m2_buffer);
+        plot(Wii_m2_x, Wii_m2_y, '.', Wii_m2_x_top,Wii_m2_y_top,'o', Wii_m2_x_bottom,Wii_m2_y_bottom,'o', Wii_m2_x_right,Wii_m2_y_right,'o', Wii_m2_x_left,Wii_m2_y_left,'o');
         
         axis([0 1023 0 1023]);
         
