@@ -36,6 +36,7 @@
 
 	m_bus_init();
 	m_wii_open();
+	calibrate();
 	m_usb_init(); // connect usb
 	while(!m_usb_isconnected()){};  //wait for connection
 
@@ -61,7 +62,7 @@
 		if(rx_buffer == 1) {  			//computer wants ir buffer
 			//write ir buffer as concatenated hex:  i.e. f0f1f4f5		
 
-			for (i = 0 ; i < 11 ; i++){
+			for (i = 0 ; i < 14 ; i++){
 			m_usb_tx_int((int)data[i]);
 			m_usb_tx_char('\t');
 

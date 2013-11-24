@@ -55,18 +55,21 @@ fwrite(M2USB,1);% Send a packet to the M2.
 m2_buffer = fgetl(M2USB);   % Load buffer
 fwrite(M2USB,1);
 
-[m2_x, remain] = strtok(m2_buffer);
-[m2_y, remain2] = strtok(remain);
-[m2_a, remain3] = strtok(remain2);
-[m2_x_top, remain4] = strtok(remain3);
-[m2_y_top, remain5] = strtok(remain4);
-[m2_x_bottom, remain6] = strtok(remain5);
-[m2_y_bottom, remain7] = strtok(remain6);
-[m2_x_right, remain8] = strtok(remain7);
-[m2_y_right, remain9] = strtok(remain8);
-[m2_x_left, remain10] = strtok(remain9);
-[m2_y_left] = strtok(remain10);
-m2_buffer;
+        [m2_x, remain] = strtok(m2_buffer);
+        [m2_y, remain2] = strtok(remain);
+        [m2_a, remain3] = strtok(remain2);
+        [m2_x_top, remain4] = strtok(remain3);
+        [m2_y_top, remain5] = strtok(remain4);
+        [m2_x_bottom, remain6] = strtok(remain5);
+        [m2_y_bottom, remain7] = strtok(remain6);
+        [m2_x_right, remain8] = strtok(remain7);
+        [m2_y_right, remain9] = strtok(remain8);
+        [m2_x_left, remain10] = strtok(remain9);
+        [m2_y_left, remain11] = strtok(remain10);
+        [m2_phi, remain12] = strtok(remain11);
+        [m2_posx, remain13] = strtok(remain12);
+        [m2_posy] = strtok(remain13);
+        m2_buffer;
 
 figure;
 
@@ -89,26 +92,31 @@ try
         [m2_x_right, remain8] = strtok(remain7);
         [m2_y_right, remain9] = strtok(remain8);
         [m2_x_left, remain10] = strtok(remain9);
-        [m2_y_left] = strtok(remain10);
+        [m2_y_left, remain11] = strtok(remain10);
+        [m2_phi, remain12] = strtok(remain11);
+        [m2_posx, remain13] = strtok(remain12);
+        [m2_posy] = strtok(remain13);
         m2_buffer;
         
         Wii_m2_x = str2double(m2_x);
         Wii_m2_y = str2double(m2_y);
-        Wii_m2_x_top = str2double(m2_x_top); 
-        Wii_m2_y_top = str2double(m2_y_top); 
-        Wii_m2_x_bottom = str2double(m2_x_bottom); 
+        Wii_m2_x_top = str2double(m2_x_top);
+        Wii_m2_y_top = str2double(m2_y_top);
+        Wii_m2_x_bottom = str2double(m2_x_bottom);
         Wii_m2_y_bottom = str2double(m2_y_bottom);
-        Wii_m2_x_right = str2double(m2_x_right); 
+        Wii_m2_x_right = str2double(m2_x_right);
         Wii_m2_y_right = str2double(m2_y_right);
-        Wii_m2_x_left = str2double(m2_x_left); 
+        Wii_m2_x_left = str2double(m2_x_left);
         Wii_m2_y_left = str2double(m2_y_left);
+        Wii_m2_posx = str2double(m2_posx);
+        Wii_m2_posy = str2double(m2_posy);
         
         %% Plotting
         % figure(1);
         % clf;
         % hold on
         
-        plot(Wii_m2_x, Wii_m2_y, '.', Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b');
+        plot(Wii_m2_x, Wii_m2_y, '.', Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b', Wii_m2_posx, Wii_m2_posy, 'p');
         disp(m2_buffer);
         
         axis([0 1023 0 1023]);

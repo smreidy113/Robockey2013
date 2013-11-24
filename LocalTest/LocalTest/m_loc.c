@@ -22,8 +22,8 @@ int right = 0;
 float beta = 0;
 float theta = 0;
 
-float rcenterx = 512;
-float rcentery = 512;
+float rcenterx;
+float rcentery;
 
 unsigned int x[4] = {0, 0, 0, 0};
 unsigned int y[4] = {0, 0, 0, 0};
@@ -104,6 +104,15 @@ unsigned char determine_blobs() {
 	return 1;
 }
 
+unsigned char calibrate() {
+	m_wii_open();
+	determine_blobs();
+	rcenterx = (float) ((float)(x[top]+x[bottom]))/2.0;
+	rcentery = (float) ((float)(y[top]+y[bottom]))/2.0;
+	
+	return 1;
+}
+
 unsigned char local_init() {
 	m_wii_open();
 	
@@ -153,22 +162,22 @@ unsigned char localize (float* data) {
 	
 	if (x[top] < 1023 && x[bottom] < 1023) {
 		//calculate and store pixel-space position and orientation
-		posx = (float) ((float)(x[top]+x[bottom]))/2.0;
-		posy = (float) ((float)(y[top]+y[bottom]))/2.0;
+		posx = (float) ((float)(x[top]+x[bottom]))/2.0 - rcenterx;
+		posy = (float) ((float)(y[top]+y[bottom]))/2.0 - rcentery;
 		
 		
 		//calculate and store angle
-		angle = (float) atan2(((double) ((float)y[top]-(float)y[bottom])),((double) ((float)x[top]-(float)x[bottom])));
+		angle = -1.0*(float) atan2(((double) ((float)y[top]-(float)y[bottom])),((double) ((float)x[top]-(float)x[bottom])));
 		phi = ((float) atan2((double) posy, (double) posx));
 		
-		r = (float) sqrt((double)((posx-rcenterx)*(posx-rcenterx) + (posy-rcentery)*(posy-rcentery)));
+		r = (float) sqrt((double)((posx)*(posx) + (posy)*(posy)));
 		
 		
 
-		//data[0] = rcenterx + r * (float) cos((double) (((3 * 3.14)/2) - angle - phi));
-		//data[1] = rcentery + r * (float) sin((double) (((3 * 3.14)/2) - angle - phi));
-		data[0] = posx- r*phi;
-		data[1] = posy- r*phi;
+		data[0] = (rcenterx + r * (float) cos((double) (((3 * 3.14)/2) - angle - phi)));
+		data[1] = rcentery + r * (float) sin((double) (((3 * 3.14)/2) - angle - phi));
+		//data[0] = posx- r*(float)cos((double)phi);
+		//data[1] = posy- r*(float)sin((double)phi);
 		data[2] = angle * 180.0 / 3.14;
 		data[3] = x[top];
 		data[4] = y[top];
@@ -178,6 +187,9 @@ unsigned char localize (float* data) {
 		data[8] = y[right];
 		data[9] = x[left];
 		data[10] = y[left];
+		data[11] = phi * 180.0 / 3.14;
+		data[12] = posx;
+		data[13] = posy;
 		
 		return 1;
 	}
