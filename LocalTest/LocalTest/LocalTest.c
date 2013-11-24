@@ -36,7 +36,8 @@
 
 	m_bus_init();
 	m_wii_open();
-	calibrate();
+	//first place mWii in center of rink to calibrate!!!
+	//calibrate();
 	m_usb_init(); // connect usb
 	while(!m_usb_isconnected()){};  //wait for connection
 
