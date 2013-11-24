@@ -28,7 +28,7 @@
 %
 
 %% If the above initialization does not work, please run the following commands manually and disconnect and reconnect USB.
-fclose(serial('COM4','Baudrate', 9600));
+fclose(serial('COM7','Baudrate', 9600));
 fclose(instrfindall);
 clear all;
 close all;
@@ -41,7 +41,7 @@ close all;
 
 %% SERIAL
 %----> for ***WINDOZE***
-M2USB = serial('COM4','Baudrate', 9600);
+M2USB = serial('COM7','Baudrate', 9600);
 % *** Use the device manager to check where the microcontroller is plugged
 % into.
 
@@ -68,7 +68,8 @@ fwrite(M2USB,1);
         [m2_y_left, remain11] = strtok(remain10);
         [m2_phi, remain12] = strtok(remain11);
         [m2_posx, remain13] = strtok(remain12);
-        [m2_posy] = strtok(remain13);
+        [m2_posy, remain14] = strtok(remain13);
+        [m2_r] = strtok(remain14);
         m2_buffer;
 
 figure;
@@ -95,7 +96,8 @@ try
         [m2_y_left, remain11] = strtok(remain10);
         [m2_phi, remain12] = strtok(remain11);
         [m2_posx, remain13] = strtok(remain12);
-        [m2_posy] = strtok(remain13);
+        [m2_posy, remain14] = strtok(remain13);
+        [m2_r] = strtok(remain14);
         m2_buffer;
         
         Wii_m2_x = str2double(m2_x);
@@ -110,6 +112,7 @@ try
         Wii_m2_y_left = str2double(m2_y_left);
         Wii_m2_posx = str2double(m2_posx);
         Wii_m2_posy = str2double(m2_posy);
+        Wii_m2_r = str2double(m2_r);
         
         %% Plotting
         % figure(1);
@@ -118,8 +121,8 @@ try
         
         plot(Wii_m2_x, Wii_m2_y, '.', Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b', Wii_m2_posx, Wii_m2_posy, 'p');
         disp(m2_buffer);
-        
-        axis([0 1023 0 1023]);
+        disp(Wii_m2_r);
+        axis([0 1023 0 768]);
         
         
         grid on

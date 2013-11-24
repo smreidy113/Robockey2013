@@ -22,8 +22,8 @@ int right = 0;
 float beta = 0;
 float theta = 0;
 
-float rcenterx;
-float rcentery;
+float rcenterx = 512;
+float rcentery = 384;
 
 unsigned int x[4] = {0, 0, 0, 0};
 unsigned int y[4] = {0, 0, 0, 0};
@@ -167,15 +167,15 @@ unsigned char localize (float* data) {
 		
 		
 		//calculate and store angle
-		angle = -1.0*(float) atan2(((double) ((float)y[top]-(float)y[bottom])),((double) ((float)x[top]-(float)x[bottom])));
+		angle = (float) atan2(((double) ((float)x[top]-(float)x[bottom])),((double) ((float)y[top]-(float)y[bottom])));
 		phi = ((float) atan2((double) posy, (double) posx));
 		
 		r = (float) sqrt((double)((posx)*(posx) + (posy)*(posy)));
 		
 		
 
-		data[0] = (rcenterx + r * (float) cos((double) (((3 * 3.14)/2) - angle - phi)));
-		data[1] = rcentery + r * (float) sin((double) (((3 * 3.14)/2) - angle - phi));
+		data[0] = (rcenterx + r * (float) sin((double) (((3 * 3.14)/2) - angle - phi)));
+		data[1] = rcentery + r * (float) cos((double) (((3 * 3.14)/2) - angle - phi));
 		//data[0] = posx- r*(float)cos((double)phi);
 		//data[1] = posy- r*(float)sin((double)phi);
 		data[2] = angle * 180.0 / 3.14;
@@ -190,7 +190,7 @@ unsigned char localize (float* data) {
 		data[11] = phi * 180.0 / 3.14;
 		data[12] = posx;
 		data[13] = posy;
-		
+		data[14] = r;
 		return 1;
 	}
 	
