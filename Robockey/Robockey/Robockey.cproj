@@ -96,6 +96,9 @@
     <Compile Include="m_bus.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="m_num.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="m_port.c">
       <SubType>compile</SubType>
     </Compile>

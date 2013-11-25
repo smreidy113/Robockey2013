@@ -37,6 +37,7 @@ SUBDIRS :=
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../m_bus.c \
+../m_num.c \
 ../m_port.c \
 ../m_rf.c \
 ../m_usb.c \
@@ -52,6 +53,7 @@ ASM_SRCS +=
 
 OBJS +=  \
 m_bus.o \
+m_num.o \
 m_port.o \
 m_rf.o \
 m_usb.o \
@@ -60,6 +62,7 @@ Robockey.o
 
 OBJS_AS_ARGS +=  \
 m_bus.o \
+m_num.o \
 m_port.o \
 m_rf.o \
 m_usb.o \
@@ -68,6 +71,7 @@ Robockey.o
 
 C_DEPS +=  \
 m_bus.d \
+m_num.d \
 m_port.d \
 m_rf.d \
 m_usb.d \
@@ -76,6 +80,7 @@ Robockey.d
 
 C_DEPS_AS_ARGS +=  \
 m_bus.d \
+m_num.d \
 m_port.d \
 m_rf.d \
 m_usb.d \
@@ -93,6 +98,8 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 LIB_DEP+= 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

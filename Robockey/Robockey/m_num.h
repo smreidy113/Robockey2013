@@ -5,6 +5,6 @@
 
 void disp(int num);
 
-unsigned char num_init();
+unsigned char m_num_init();
 
 #endif

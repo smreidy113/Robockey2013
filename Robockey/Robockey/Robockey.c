@@ -13,6 +13,7 @@
 #include "m_general.h"
 #include "m_rf.h"
 #include "m_port.h"
+#include "m_num.h"
 #include "m_wii.h"
 #include "m_wireless_variables.h" //define CHANNEL, ADDRESS, PACKET_LENGTH in this header (# of variables to send = (PACKET_LENGTH-1))
 
@@ -57,6 +58,7 @@ int main(void)
 {
 	//wireless stuffs
 	m_bus_init();
+	m_num_init();
 	m_rf_open(CHANNEL, ADDRESS, PACKET_LENGTH);
 	int counter = 0;
 	//
@@ -183,7 +185,8 @@ int main(void)
 	
 	
 
-	int state; //state variable
+	int state = -1; //state variable
+	int count = 0;
 	
     while(1)
     {
@@ -207,6 +210,13 @@ int main(void)
 		
 		//switch states
         switch (state) {
+			
+			case -1:
+				m_wait(500);
+				disp(count % 10);
+				count++;
+			break;
+			
 			case 0:
 			rotate(LEFT);
 			rotate(RIGHT);

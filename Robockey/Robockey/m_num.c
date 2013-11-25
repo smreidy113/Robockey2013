@@ -6,125 +6,129 @@
  */ 
 
 #define F_CPU 16000000UL
-#define LOWERLEFT1 PORTE
-#define LOWERLEFT2 6
-#define MIDDLE1 PORTB
-#define MIDDLE2 4
-#define LOWERRIGHT1 PORTC
-#define LOWERRIGHT2 7
-#define BOTTOM1 PORTF
-#define BOTTOM2 1
-#define UPPERLEFT1 PORTB
-#define UPPERLEFT2 5
-#define TOP1 PORTB
-#define TOP2 6
-#define UPPERRIGHT1 PORTC
-#define UPPERRIGHT2 6
+#define LOWERLEFT1 PORTG
+#define LOWERLEFT2 4
+#define MIDDLE1 PORTG
+#define MIDDLE2 0
+#define LOWERRIGHT1 PORTG
+#define LOWERRIGHT2 6
+#define BOTTOM1 PORTG
+#define BOTTOM2 5
+#define UPPERLEFT1 PORTG
+#define UPPERLEFT2 1
+#define TOP1 PORTG
+#define TOP2 2
+#define UPPERRIGHT1 PORTG
+#define UPPERRIGHT2 3
 
 #include <avr/io.h>
 #include "m_general.h"
+#include "m_port.h"
+
+#define ADDR 0x20
 
 void disp(int num) {
 	switch (num) {
 		case 1:
-			set(LOWERRIGHT1,LOWERRIGHT2);
-			set(UPPERRIGHT1,UPPERRIGHT2);
-			clear(TOP1,TOP2);
-			clear(UPPERLEFT1,UPPERLEFT2);
-			clear(LOWERLEFT1,LOWERLEFT2);
-			clear(BOTTOM1,BOTTOM2);
-			clear(MIDDLE1,MIDDLE2);
+			m_port_set(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_set(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_clear(ADDR,TOP1,TOP2);
+			m_port_clear(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_clear(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_clear(ADDR,BOTTOM1,BOTTOM2);
+			m_port_clear(ADDR,MIDDLE1,MIDDLE2);
 			break;
 		case 2:
-			clear(LOWERRIGHT1,LOWERRIGHT2);
-			set(UPPERRIGHT1,UPPERRIGHT2);
-			set(TOP1,TOP2);
-			clear(UPPERLEFT1,UPPERLEFT2);
-			set(LOWERLEFT1,LOWERLEFT2);
-			set(BOTTOM1,BOTTOM2);
-			set(MIDDLE1,MIDDLE2);
+			m_port_clear(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_set(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_set(ADDR,TOP1,TOP2);
+			m_port_clear(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_set(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_set(ADDR,BOTTOM1,BOTTOM2);
+			m_port_set(ADDR,MIDDLE1,MIDDLE2);
 			break;
 		case 3:
-			set(LOWERRIGHT1,LOWERRIGHT2);
-			set(UPPERRIGHT1,UPPERRIGHT2);
-			set(TOP1,TOP2);
-			clear(UPPERLEFT1,UPPERLEFT2);
-			clear(LOWERLEFT1,LOWERLEFT2);
-			set(BOTTOM1,BOTTOM2);
-			set(MIDDLE1,MIDDLE2);
+			m_port_set(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_set(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_set(ADDR,TOP1,TOP2);
+			m_port_clear(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_clear(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_set(ADDR,BOTTOM1,BOTTOM2);
+			m_port_set(ADDR,MIDDLE1,MIDDLE2);
 			break;
 		case 4:
-			set(LOWERRIGHT1,LOWERRIGHT2);
-			set(UPPERRIGHT1,UPPERRIGHT2);
-			clear(TOP1,TOP2);
-			set(UPPERLEFT1,UPPERLEFT2);
-			clear(LOWERLEFT1,LOWERLEFT2);
-			clear(BOTTOM1,BOTTOM2);
-			set(MIDDLE1,MIDDLE2);
+			m_port_set(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_set(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_clear(ADDR,TOP1,TOP2);
+			m_port_set(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_clear(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_clear(ADDR,BOTTOM1,BOTTOM2);
+			m_port_set(ADDR,MIDDLE1,MIDDLE2);
 			break;
 		case 5:
-			set(LOWERRIGHT1,LOWERRIGHT2);
-			clear(UPPERRIGHT1,UPPERRIGHT2);
-			set(TOP1,TOP2);
-			set(UPPERLEFT1,UPPERLEFT2);
-			clear(LOWERLEFT1,LOWERLEFT2);
-			set(BOTTOM1,BOTTOM2);
-			set(MIDDLE1,MIDDLE2);
+			m_port_set(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_clear(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_set(ADDR,TOP1,TOP2);
+			m_port_set(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_clear(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_set(ADDR,BOTTOM1,BOTTOM2);
+			m_port_set(ADDR,MIDDLE1,MIDDLE2);
 		break;
 		case 6:
-			set(LOWERRIGHT1,LOWERRIGHT2);
-			clear(UPPERRIGHT1,UPPERRIGHT2);
-			set(TOP1,TOP2);
-			set(UPPERLEFT1,UPPERLEFT2);
-			set(LOWERLEFT1,LOWERLEFT2);
-			set(BOTTOM1,BOTTOM2);
-			set(MIDDLE1,MIDDLE2);
+			m_port_set(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_clear(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_set(ADDR,TOP1,TOP2);
+			m_port_set(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_set(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_set(ADDR,BOTTOM1,BOTTOM2);
+			m_port_set(ADDR,MIDDLE1,MIDDLE2);
 			break;
 		case 7:
-			set(LOWERRIGHT1,LOWERRIGHT2);
-			set(UPPERRIGHT1,UPPERRIGHT2);
-			set(TOP1,TOP2);
-			clear(UPPERLEFT1,UPPERLEFT2);
-			clear(LOWERLEFT1,LOWERLEFT2);
-			clear(BOTTOM1,BOTTOM2);
-			clear(MIDDLE1,MIDDLE2);
+			m_port_set(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_set(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_set(ADDR,TOP1,TOP2);
+			m_port_clear(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_clear(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_clear(ADDR,BOTTOM1,BOTTOM2);
+			m_port_clear(ADDR,MIDDLE1,MIDDLE2);
 			break;
 		case 8:
-			set(LOWERRIGHT1,LOWERRIGHT2);
-			set(UPPERRIGHT1,UPPERRIGHT2);
-			set(TOP1,TOP2);
-			set(UPPERLEFT1,UPPERLEFT2);
-			set(LOWERLEFT1,LOWERLEFT2);
-			set(BOTTOM1,BOTTOM2);
-			set(MIDDLE1,MIDDLE2);
+			m_port_set(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_set(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_set(ADDR,TOP1,TOP2);
+			m_port_set(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_set(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_set(ADDR,BOTTOM1,BOTTOM2);
+			m_port_set(ADDR,MIDDLE1,MIDDLE2);
 			break;
 		case 9:
-			set(LOWERRIGHT1,LOWERRIGHT2);
-			set(UPPERRIGHT1,UPPERRIGHT2);
-			set(TOP1,TOP2);
-			set(UPPERLEFT1,UPPERLEFT2);
-			clear(LOWERLEFT1,LOWERLEFT2);
-			set(BOTTOM1,BOTTOM2);
-			set(MIDDLE1,MIDDLE2);
+			m_port_set(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_set(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_set(ADDR,TOP1,TOP2);
+			m_port_set(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_clear(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_set(ADDR,BOTTOM1,BOTTOM2);
+			m_port_set(ADDR,MIDDLE1,MIDDLE2);
 			break;
 		case 0:
-			set(LOWERRIGHT1,LOWERRIGHT2);
-			set(UPPERRIGHT1,UPPERRIGHT2);
-			set(TOP1,TOP2);
-			set(UPPERLEFT1,UPPERLEFT2);
-			set(LOWERLEFT1,LOWERLEFT2);
-			set(BOTTOM1,BOTTOM2);
-			clear(MIDDLE1,MIDDLE2);
+			m_port_set(ADDR,LOWERRIGHT1,LOWERRIGHT2);
+			m_port_set(ADDR,UPPERRIGHT1,UPPERRIGHT2);
+			m_port_set(ADDR,TOP1,TOP2);
+			m_port_set(ADDR,UPPERLEFT1,UPPERLEFT2);
+			m_port_set(ADDR,LOWERLEFT1,LOWERLEFT2);
+			m_port_set(ADDR,BOTTOM1,BOTTOM2);
+			m_port_clear(ADDR,MIDDLE1,MIDDLE2);
 			break;
 	}
 }
 
-unsigned char num_init() {
-	set(DDRB,4);
-	set(DDRB,5);
-	set(DDRB,6);
-	set(DDRC,6);
-	set(DDRC,7);
-	set(DDRE,6);
-	set(DDRF,1);
+void m_num_init() {
+	m_port_init(ADDR);
+	m_port_set(ADDR,DDRG,0);
+	m_port_set(ADDR,DDRG,1);
+	m_port_set(ADDR,DDRG,2);
+	m_port_set(ADDR,DDRG,3);
+	m_port_set(ADDR,DDRG,4);
+	m_port_set(ADDR,DDRG,5);
+	m_port_set(ADDR,DDRG,6);
 }

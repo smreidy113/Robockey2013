@@ -6,23 +6,25 @@
  */ 
 
 #define F_CPU 16000000UL
-#define LOWERLEFT1 PORTE
-#define LOWERLEFT2 6
-#define MIDDLE1 PORTB
-#define MIDDLE2 4
-#define LOWERRIGHT1 PORTC
-#define LOWERRIGHT2 7
-#define BOTTOM1 PORTF
-#define BOTTOM2 1
-#define UPPERLEFT1 PORTB
-#define UPPERLEFT2 5
-#define TOP1 PORTB
-#define TOP2 6
-#define UPPERRIGHT1 PORTC
-#define UPPERRIGHT2 6
 
 #include <avr/io.h>
 #include "m_general.h"
+#include "m_port.h"
+
+#define LOWERLEFT1 PORTG
+#define LOWERLEFT2 5
+#define MIDDLE1 PORTG
+#define MIDDLE2 3
+#define LOWERRIGHT1 PORTG
+#define LOWERRIGHT2 6
+#define BOTTOM1 PORTG
+#define BOTTOM2 4
+#define UPPERLEFT1 PORTG
+#define UPPERLEFT2 2
+#define TOP1 PORTG
+#define TOP2 1
+#define UPPERRIGHT1 PORTG
+#define UPPERRIGHT2 0
 
 void disp(int num) {
 	switch (num) {
@@ -119,51 +121,12 @@ void disp(int num) {
 	}
 }
 
-int main(void)
-{
-	m_clockdivide(0);	
-	
-	sei();					//Set up interrupts
-	set(TIMSK1, OCIE1A);	//Set up timer interrupt
-	
-	clear(ADMUX, REFS1);	//Voltage reference is AR pin (5V)
-	clear(ADMUX, REFS0);	//^
-	
-	set(ADCSRA, ADPS2);	//Set scale to /128
-	set(ADCSRA, ADPS1);	//^
-	set(ADCSRA, ADPS0);	//^
-	
-	set(DIDR0, ADC0D);	//Disable digital input for F0
-	
-	set(ADCSRA, ADATE);	//Set trigger to free-running mode
-	
-	clear(ADCSRB, MUX5);//Set analog input (F0)
-	clear(ADMUX, MUX2);	//^
-	clear(ADMUX, MUX1);	//^
-	clear(ADMUX, MUX0);	//^
-	
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	set(ADCSRA, ADIF);	//Enable reading results
-	
-	set(DDRB,4);
-	set(DDRB,5);
-	set(DDRB,6);
-	set(DDRC,6);
-	set(DDRC,7);
-	set(DDRE,6);
-	set(DDRF,1);
-	
-	int n = 0;
-	
-    while(1)
-    {
-        /*for (int i = 0; i < 10; i++) {
-			disp(i);
-			m_wait(500);
-		}*/
-		n = ADC / 102;
-		disp(n);
-    }
+void m_num_init() {
+	set(DDRG,0);
+	set(DDRG,1);
+	set(DDRG,2);
+	set(DDRG,3);
+	set(DDRG,4);
+	set(DDRG,5);
+	set(DDRG,6);
 }
