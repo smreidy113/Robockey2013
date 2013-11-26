@@ -116,20 +116,7 @@ int main(void)
 
 	while(1){
 		
-		if (flag) {
-			if (i < 7 && i >= 0) {
-				ADCarr[i] = ADC;
-			}
-			i++;
-			clear(ADCSRA, ADEN);	//Enable/Start conversion
-			clear(ADCSRA, ADSC);	//^
-			chooseInput(i);
-			set(ADCSRA, ADEN);	//Enable/Start conversion
-			set(ADCSRA, ADSC);	//^
-			flag = 0;
-			m_red(TOGGLE);
-			m_green(TOGGLE);
-		}
+
 		
 
 		while(!m_usb_rx_available());  	//wait for an indication from the computer
@@ -171,5 +158,21 @@ int main(void)
 }
 
 ISR(ADC_vect) {
-	flag = 1;
+			if (i < 7 && i >= 0) {
+				ADCarr[i] = (int) ADC;
+			}
+			i++;
+			clear(ADCSRA, ADEN);	//Enable/Start conversion
+			clear(ADCSRA, ADSC);	//^
+			chooseInput(i);
+			set(ADCSRA, ADATE);	//Set trigger to free-running mode
+			set(ADCSRA, ADEN);	//Enable/Start conversion
+			set(ADCSRA, ADSC);	//^
+			
+			set(ADCSRA, ADIF);	//Enable reading results
+			
+			flag = 0;
+			m_wait(500);
+			m_red(TOGGLE);
+			m_green(TOGGLE);
 }

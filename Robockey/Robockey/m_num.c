@@ -123,6 +123,7 @@ void disp(int num) {
 }
 
 void m_num_init() {
+	m_bus_init();
 	m_port_init(ADDR);
 	m_port_set(ADDR,DDRG,0);
 	m_port_set(ADDR,DDRG,1);
