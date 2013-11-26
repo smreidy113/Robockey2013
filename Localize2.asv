@@ -279,24 +279,24 @@ for i=n:size(rawStarData)
     
 end
 
-for i=1:length(realx)
-    subplot(2,1,1)
-    plot(realx(1:i),realy(1:i),'k.');
+for i=1:lrngt(realx)
+    plot(realx(i),realy(i),'k.');
     title('Location of Robot');
     axis([0 1024 0 768]);
     xlabel('X-Position');
     ylabel('Y-position');
-
-    subplot(2,1,2)
-    plot(1:i,angle(1:i));
-    title('Orientation of Robot');
-    xlabel('Sample Number');
-    ylabel('Angle (Radians)');
-    axis([0 length(realx) -4 4]);
     pause(0.01);
-    
 end
 
+
+
+figure;
+f=1:(p-1);
+plot(f,angle);
+title('Orientation of Robot');
+xlabel('Sample Number');
+ylabel('Angle (Radians)');
+ylim([-4 4]);
 
 
 
