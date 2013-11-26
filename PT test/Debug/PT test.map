@@ -28,12 +28,6 @@ Discarded input sections
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
  .text          0x00000000        0x0 m_usb.o
  .bss           0x00000000        0x0 m_usb.o
- .text.m_usb_rx_char
-                0x00000000       0x3c m_usb.o
- .text.m_usb_rx_available
-                0x00000000       0x1e m_usb.o
- .text.m_usb_rx_flush
-                0x00000000       0x2c m_usb.o
  .text.usb_serial_putchar_nowait
                 0x00000000       0x42 m_usb.o
  .text.usb_serial_write
@@ -52,6 +46,7 @@ Discarded input sections
                 0x00000000        0x6 m_usb.o
  .text.usb_serial_set_control
                 0x00000000       0x50 m_usb.o
+ .text.print_P  0x00000000       0x34 m_usb.o
  .text.phex1    0x00000000       0x12 m_usb.o
  .text.phex     0x00000000       0x18 m_usb.o
  .text.m_usb_tx_hex
@@ -66,7 +61,6 @@ Discarded input sections
                 0x00000000       0x6a m_usb.o
  .text          0x00000000        0x0 PT test.o
  .bss           0x00000000        0x0 PT test.o
- .bss.flag      0x00000000        0x2 PT test.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  .text.libgcc.mul
@@ -275,7 +269,7 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0xa34
+.text           0x00000000      0xa4c
  *(.vectors)
  .vectors       0x00000000       0xac c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
                 0x00000000                __vector_default
@@ -299,48 +293,41 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
                 0x0000014d        0x8 m_usb.o
  .progmem.data.string3
                 0x00000155        0xa m_usb.o
- .progmem.data.__c.1821
-                0x0000015f        0x4 PT test.o
- .progmem.data.__c.1823
-                0x00000163        0x3 PT test.o
- .progmem.data.__c.1825
-                0x00000166        0x2 PT test.o
- .progmem.data.__c.1830
-                0x00000168        0x2 PT test.o
-                0x0000016a                . = ALIGN (0x2)
-                0x0000016a                __trampolines_start = .
+                0x00000160                . = ALIGN (0x2)
+ *fill*         0x0000015f        0x1 
+                0x00000160                __trampolines_start = .
  *(.trampolines)
- .trampolines   0x0000016a        0x0 linker stubs
+ .trampolines   0x00000160        0x0 linker stubs
  *(.trampolines*)
-                0x0000016a                __trampolines_end = .
+                0x00000160                __trampolines_end = .
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x0000016a                __ctors_start = .
+                0x00000160                __ctors_start = .
  *(.ctors)
-                0x0000016a                __ctors_end = .
-                0x0000016a                __dtors_start = .
+                0x00000160                __ctors_end = .
+                0x00000160                __dtors_start = .
  *(.dtors)
-                0x0000016a                __dtors_end = .
+                0x00000160                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x0000016a        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
-                0x0000016a                __init
+ .init0         0x00000160        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
+                0x00000160                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x0000016a        0xc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
+ .init2         0x00000160        0xc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x00000176       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_copy_data.o)
-                0x00000176                __do_copy_data
- .init4         0x0000018c       0x10 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_clear_bss.o)
-                0x0000018c                __do_clear_bss
+ .init4         0x0000016c       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_copy_data.o)
+                0x0000016c                __do_copy_data
+ .init4         0x00000182       0x10 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_clear_bss.o)
+                0x00000182                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -351,94 +338,101 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x0000019c        0x8 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
+ .init9         0x00000192        0x8 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
  *(.init9)
  *(.text)
- .text          0x000001a4        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
-                0x000001a4                __vector_38
-                0x000001a4                __vector_22
-                0x000001a4                __vector_28
-                0x000001a4                __vector_1
-                0x000001a4                __vector_32
-                0x000001a4                __vector_34
-                0x000001a4                __vector_24
-                0x000001a4                __vector_12
-                0x000001a4                __bad_interrupt
-                0x000001a4                __vector_6
-                0x000001a4                __vector_31
-                0x000001a4                __vector_35
-                0x000001a4                __vector_39
-                0x000001a4                __vector_3
-                0x000001a4                __vector_23
-                0x000001a4                __vector_30
-                0x000001a4                __vector_25
-                0x000001a4                __vector_13
-                0x000001a4                __vector_17
-                0x000001a4                __vector_19
-                0x000001a4                __vector_7
-                0x000001a4                __vector_41
-                0x000001a4                __vector_27
-                0x000001a4                __vector_5
-                0x000001a4                __vector_33
-                0x000001a4                __vector_37
-                0x000001a4                __vector_4
-                0x000001a4                __vector_9
-                0x000001a4                __vector_2
-                0x000001a4                __vector_21
-                0x000001a4                __vector_15
-                0x000001a4                __vector_36
-                0x000001a4                __vector_40
-                0x000001a4                __vector_8
-                0x000001a4                __vector_26
-                0x000001a4                __vector_14
-                0x000001a4                __vector_16
-                0x000001a4                __vector_18
-                0x000001a4                __vector_20
-                0x000001a4                __vector_42
-                0x000001a8                . = ALIGN (0x2)
+ .text          0x0000019a        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
+                0x0000019a                __vector_38
+                0x0000019a                __vector_22
+                0x0000019a                __vector_28
+                0x0000019a                __vector_1
+                0x0000019a                __vector_32
+                0x0000019a                __vector_34
+                0x0000019a                __vector_24
+                0x0000019a                __vector_12
+                0x0000019a                __bad_interrupt
+                0x0000019a                __vector_6
+                0x0000019a                __vector_31
+                0x0000019a                __vector_35
+                0x0000019a                __vector_39
+                0x0000019a                __vector_3
+                0x0000019a                __vector_23
+                0x0000019a                __vector_30
+                0x0000019a                __vector_25
+                0x0000019a                __vector_13
+                0x0000019a                __vector_17
+                0x0000019a                __vector_19
+                0x0000019a                __vector_7
+                0x0000019a                __vector_41
+                0x0000019a                __vector_27
+                0x0000019a                __vector_5
+                0x0000019a                __vector_33
+                0x0000019a                __vector_37
+                0x0000019a                __vector_4
+                0x0000019a                __vector_9
+                0x0000019a                __vector_2
+                0x0000019a                __vector_21
+                0x0000019a                __vector_15
+                0x0000019a                __vector_36
+                0x0000019a                __vector_40
+                0x0000019a                __vector_8
+                0x0000019a                __vector_26
+                0x0000019a                __vector_14
+                0x0000019a                __vector_16
+                0x0000019a                __vector_18
+                0x0000019a                __vector_20
+                0x0000019a                __vector_42
+                0x0000019e                . = ALIGN (0x2)
  *(.text.*)
  .text.m_usb_init
-                0x000001a8       0x32 m_usb.o
-                0x000001a8                m_usb_init
+                0x0000019e       0x32 m_usb.o
+                0x0000019e                m_usb_init
  .text.m_usb_isconnected
-                0x000001da        0x6 m_usb.o
-                0x000001da                m_usb_isconnected
+                0x000001d0        0x6 m_usb.o
+                0x000001d0                m_usb_isconnected
+ .text.m_usb_rx_char
+                0x000001d6       0x3c m_usb.o
+                0x000001d6                m_usb_rx_char
+ .text.m_usb_rx_available
+                0x00000212       0x1e m_usb.o
+                0x00000212                m_usb_rx_available
+ .text.m_usb_rx_flush
+                0x00000230       0x2c m_usb.o
+                0x00000230                m_usb_rx_flush
  .text.m_usb_tx_char
-                0x000001e0       0xb8 m_usb.o
-                0x000001e0                m_usb_tx_char
+                0x0000025c       0xb8 m_usb.o
+                0x0000025c                m_usb_tx_char
  .text.__vector_10
-                0x00000298       0x7c m_usb.o
-                0x00000298                __vector_10
+                0x00000314       0x7c m_usb.o
+                0x00000314                __vector_10
  .text.__vector_11
-                0x00000314      0x310 m_usb.o
-                0x00000314                __vector_11
- .text.print_P  0x00000624       0x34 m_usb.o
-                0x00000624                print_P
+                0x00000390      0x310 m_usb.o
+                0x00000390                __vector_11
  .text.m_usb_tx_int
-                0x00000658       0x6a m_usb.o
-                0x00000658                m_usb_tx_int
+                0x000006a0       0x6a m_usb.o
+                0x000006a0                m_usb_tx_int
  .text.chooseInput
-                0x000006c2      0x11a PT test.o
-                0x000006c2                chooseInput
- .text.main     0x000007dc      0x120 PT test.o
-                0x000007dc                main
+                0x0000070a      0x13c PT test.o
+                0x0000070a                chooseInput
+ .text.main     0x00000846      0x150 PT test.o
+                0x00000846                main
  .text.__vector_29
-                0x000008fc       0xaa PT test.o
-                0x000008fc                __vector_29
+                0x00000996       0x28 PT test.o
+                0x00000996                __vector_29
  .text.avr-libc
-                0x000009a6       0x42 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libc.a(itoa.o)
-                0x000009a6                itoa
+                0x000009be       0x42 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+                0x000009be                itoa
  .text.avr-libc
-                0x000009e8       0x20 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libc.a(strrev.o)
-                0x000009e8                strrev
+                0x00000a00       0x20 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libc.a(strrev.o)
+                0x00000a00                strrev
  .text.libgcc.div
-                0x00000a08       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_udivmodhi4.o)
-                0x00000a08                __udivmodhi4
-                0x00000a30                . = ALIGN (0x2)
+                0x00000a20       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_udivmodhi4.o)
+                0x00000a20                __udivmodhi4
+                0x00000a48                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000a30        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
-                0x00000a30                _exit
-                0x00000a30                exit
+ .fini9         0x00000a48        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
+                0x00000a48                _exit
+                0x00000a48                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -457,11 +451,11 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000a30        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000a48        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000a34                _etext = .
+                0x00000a4c                _etext = .
 
-.data           0x00800100        0x8 load address 0x00000a34
+.data           0x00800100        0x8 load address 0x00000a4c
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
@@ -489,7 +483,7 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
                 0x00800108                _edata = .
                 0x00800108                PROVIDE (__data_end, .)
 
-.bss            0x00800108       0x14
+.bss            0x00800108       0x16
                 0x00800108                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -505,17 +499,19 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
                 0x0080010c                ADCarr
  .bss.i         0x0080011a        0x2 PT test.o
                 0x0080011a                i
+ .bss.flag      0x0080011c        0x2 PT test.o
+                0x0080011c                flag
  *(COMMON)
-                0x0080011c                PROVIDE (__bss_end, .)
-                0x00000a34                __data_load_start = LOADADDR (.data)
-                0x00000a3c                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0080011e                PROVIDE (__bss_end, .)
+                0x00000a4c                __data_load_start = LOADADDR (.data)
+                0x00000a54                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080011c        0x0
-                0x0080011c                PROVIDE (__noinit_start, .)
+.noinit         0x0080011e        0x0
+                0x0080011e                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x0080011c                PROVIDE (__noinit_end, .)
-                0x0080011c                _end = .
-                0x0080011c                PROVIDE (__heap_start, .)
+                0x0080011e                PROVIDE (__noinit_end, .)
+                0x0080011e                _end = .
+                0x0080011e                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -594,38 +590,38 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xf97
+.debug_info     0x00000000      0xf6f
  *(.debug_info)
  .debug_info    0x00000000      0xd4c m_usb.o
- .debug_info    0x00000d4c      0x24b PT test.o
+ .debug_info    0x00000d4c      0x223 PT test.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x3b3
+.debug_abbrev   0x00000000      0x3b6
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x23a m_usb.o
- .debug_abbrev  0x0000023a      0x179 PT test.o
+ .debug_abbrev  0x0000023a      0x17c PT test.o
 
-.debug_line     0x00000000      0x6ba
+.debug_line     0x00000000      0x6b3
  *(.debug_line)
  .debug_line    0x00000000      0x53f m_usb.o
- .debug_line    0x0000053f      0x17b PT test.o
+ .debug_line    0x0000053f      0x174 PT test.o
 
-.debug_frame    0x00000000      0x3b8
+.debug_frame    0x00000000      0x37c
  *(.debug_frame)
  .debug_frame   0x00000000      0x324 m_usb.o
- .debug_frame   0x00000324       0x94 PT test.o
+ .debug_frame   0x00000324       0x58 PT test.o
 
-.debug_str      0x00000000      0x4a8
+.debug_str      0x00000000      0x471
  *(.debug_str)
- .debug_str     0x00000000      0x42e m_usb.o
+ .debug_str     0x00000000      0x427 m_usb.o
                                 0x499 (size before relaxing)
- .debug_str     0x0000042e       0x7a PT test.o
-                                0x13e (size before relaxing)
+ .debug_str     0x00000427       0x4a PT test.o
+                                0x17f (size before relaxing)
 
-.debug_loc      0x00000000     0x1ad6
+.debug_loc      0x00000000     0x19f8
  *(.debug_loc)
  .debug_loc     0x00000000     0x18c9 m_usb.o
- .debug_loc     0x000018c9      0x20d PT test.o
+ .debug_loc     0x000018c9      0x12f PT test.o
 
 .debug_macinfo
  *(.debug_macinfo)

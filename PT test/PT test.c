@@ -19,48 +19,54 @@ int ADCarr[7] = {0, 0, 0, 0, 0, 0, 0};
 void chooseInput(int i) {
 	switch (i) {
 		case 0:
-			clear(ADCSRB, MUX5);//Set analog input (F0)
-			clear(ADMUX, MUX2);	//^
-			clear(ADMUX, MUX1);	//^
-			clear(ADMUX, MUX0);	//^
-			break;
+		clear(ADCSRB, MUX5);//Set analog input (F6) PHOTOTRANSISTOR 1
+		set(ADMUX, MUX2);	//^
+		set(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX0);	//^
+		break;
 		case 1:
-			set(ADCSRB, MUX5);//Set analog input (D4)
-			clear(ADMUX, MUX2);	//^
-			clear(ADMUX, MUX1);	//^
-			clear(ADMUX, MUX0);	//^
-			break;
+		clear(ADCSRB, MUX5);//Set analog input (F5)
+		set(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		set(ADMUX, MUX0);	//^
+		break;
 		case 2:
-			set(ADCSRB, MUX5);//Set analog input (D6)
-			clear(ADMUX, MUX2);	//^
-			clear(ADMUX, MUX1);	//^
-			set(ADMUX, MUX0);	//^
-			break;
+		clear(ADCSRB, MUX5);//Set analog input (F4)
+		set(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX0);	//^
+		break;
 		case 3:
-			clear(ADCSRB, MUX5);//Set analog input (F6) PHOTOTRANSISTOR 1
-			set(ADMUX, MUX2);	//^
-			set(ADMUX, MUX1);	//^
-			clear(ADMUX, MUX0);	//^
-			break;
+		clear(ADCSRB, MUX5);//Set analog input (F1)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		set(ADMUX, MUX0);	//^
+		break;
 		case 4:
-			clear(ADCSRB, MUX5);//Set analog input (F5)
-			set(ADMUX, MUX2);	//^
-			clear(ADMUX, MUX1);	//^
-			set(ADMUX, MUX0);	//^
-			break;
+		clear(ADCSRB, MUX5);//Set analog input (F0)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX0);	//^
+		break;
 		case 5:
-			clear(ADCSRB, MUX5);//Set analog input (F4)
-			set(ADMUX, MUX2);	//^
-			clear(ADMUX, MUX1);	//^
-			clear(ADMUX, MUX0);	//^
-			break;
+		set(ADCSRB, MUX5);//Set analog input (D4)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX0);	//^
+		break;
 		case 6:
-			clear(ADCSRB, MUX5);//Set analog input (F1)
-			clear(ADMUX, MUX2);	//^
-			clear(ADMUX, MUX1);	//^
-			set(ADMUX, MUX0);	//^
-			i = -1;
-			break;
+		set(ADCSRB, MUX5);//Set analog input (D6)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		set(ADMUX, MUX0);	//^
+		break;
+		default:
+		i = 0;
+		clear(ADCSRB, MUX5);//Set analog input (F0)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX0);	//^
+		break;
 	}
 }
 
@@ -70,7 +76,7 @@ int main(void)
 	
 	m_clockdivide(0);
 	
-		
+	
 	sei();					//Set up interrupts
 	set(ADCSRA, ADIE);
 	
@@ -103,49 +109,67 @@ int main(void)
 	m_red(OFF);
 	m_green(OFF);
 
-	//char rx_buffer; //computer interactions
-	//m_usb_tx_string("FUCK");
+	char rx_buffer; //computer interactions
 	
-	//int i;
 	
 	long counter = 0;
 
 	while(1){
-		m_red(TOGGLE);
-		m_green(TOGGLE);
+		
+		if (flag) {
+			if (i < 7 && i >= 0) {
+				ADCarr[i] = ADC;
+			}
+			i++;
+			clear(ADCSRA, ADEN);	//Enable/Start conversion
+			clear(ADCSRA, ADSC);	//^
+			chooseInput(i);
+			set(ADCSRA, ADEN);	//Enable/Start conversion
+			set(ADCSRA, ADSC);	//^
+			flag = 0;
+			m_red(TOGGLE);
+			m_green(TOGGLE);
+		}
+		
 
-		/*while(!m_usb_rx_available());  	//wait for an indication from the computer
+		while(!m_usb_rx_available());  	//wait for an indication from the computer
 		rx_buffer = m_usb_rx_char();  	//grab the computer packet
 
-		m_usb_rx_flush();  				//clear buffer*/
+		m_usb_rx_flush();  				//clear buffer
 
 		
-			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
-		if (counter == 300000) {
-			for (int j = 0; j < 7; j++) {
-				m_usb_tx_string("ADC");
-				m_usb_tx_int(j);
-				m_usb_tx_string(": ");
-				m_usb_tx_int(ADCarr[j]);
-				m_usb_tx_string("\t");
-			}
-			m_usb_tx_string("\n");
-			counter = 0;
-			m_usb_
+		//write ir buffer as concatenated hex:  i.e. f0f1f4f5
+		/*if (counter == 300000) {
+		for (int j = 0; j < 7; j++) {
+		m_usb_tx_string("ADC");
+		m_usb_tx_int(j);
+		m_usb_tx_string(": ");
+		m_usb_tx_int(ADCarr[j]);
+		m_usb_tx_string("\t");
 		}
-		counter++;
+		m_usb_tx_string("\n");
+		counter = 0;
+		
+		}
+		counter++;*/
+		
+		if(rx_buffer == 1) {  			//computer wants ir buffer
+			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
+
+			for (int j = 0 ; j < 7 ; j++){
+				m_usb_tx_int(ADCarr[i]);
+				m_usb_tx_char('\t');
+
+			}
+
+			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
+		}
+		
+		
 	}
 	
 }
 
 ISR(ADC_vect) {
-	if (i < 7 && i >= 0) {
-		ADCarr[i] = ADC;
-	}
-	clear(ADCSRA, ADEN);	//Enable/Start conversion
-	clear(ADCSRA, ADSC);	//^
-	chooseInput(i);
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	i++;
+	flag = 1;
 }
