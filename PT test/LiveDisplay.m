@@ -28,7 +28,7 @@
 %
 
 %% If the above initialization does not work, please run the following commands manually and disconnect and reconnect USB.
-fclose(serial('COM4','Baudrate', 9600));
+fclose(serial('COM7','Baudrate', 9600));
 fclose(instrfindall);
 clear all;
 close all;
@@ -41,7 +41,7 @@ close all;
 
 %% SERIAL
 %----> for ***WINDOZE***
-M2USB = serial('COM4','Baudrate', 9600);
+M2USB = serial('COM7','Baudrate', 9600);
 % *** Use the device manager to check where the microcontroller is plugged
 % into.
 
@@ -55,7 +55,13 @@ fwrite(M2USB,1);% Send a packet to the M2.
 m2_buffer = fgetl(M2USB);   % Load buffer
 fwrite(M2USB,1);
 
-        [ADC] = strtok(m2_buffer);
+        [ADC1, remain] = strtok(m2_buffer);
+        [ADC2, remain2] = strtok(remain);
+        [ADC3, remain3] = strtok(remain2);
+        [ADC4, remain4] = strtok(remain3);
+        [ADC5, remain5] = strtok(remain4);
+        [ADC6, remain6] = strtok(remain5);
+        [ADC7] = strtok(remain6);
         m2_buffer;
 
 figure;
@@ -69,17 +75,31 @@ try
         m2_buffer = fgetl(M2USB);   % Load buffer
         fwrite(M2USB,1);            % Confirmation packet
         
-        [ADC] = strtok(m2_buffer);
+
+        [ADC1, remain] = strtok(m2_buffer);
+        [ADC2, remain2] = strtok(remain);
+        [ADC3, remain3] = strtok(remain2);
+        [ADC4, remain4] = strtok(remain3);
+        [ADC5, remain5] = strtok(remain4);
+        [ADC6, remain6] = strtok(remain5);
+        [ADC7] = strtok(remain6);
         m2_buffer;
         
-        int_ADC = str2double(ADC);
+        int_ADC1 = str2double(ADC1);
+        int_ADC2 = str2double(ADC2);
+        int_ADC3 = str2double(ADC3);
+        int_ADC4 = str2double(ADC4);
+        int_ADC5 = str2double(ADC5);
+        int_ADC6 = str2double(ADC6);
+        int_ADC7 = str2double(ADC7);
         
         %% Plotting
         % figure(1);
         % clf;
         % hold on
         
-        disp(int_ADC);
+        disp(m2_buffer);
+        
 
         i=i+1;  % Incrememnt indexer
         %% Logging

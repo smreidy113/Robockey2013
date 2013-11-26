@@ -175,11 +175,12 @@ int main(void)
 {
 	/*/wireless stuffs
 	m_bus_init();
-	m_num_init();
+	
 	m_rf_open(CHANNEL, ADDRESS, PACKET_LENGTH);
 	int counter = 0;
 	/*/
 	
+	m_num_init();
 	int flag;
 	
 	m_clockdivide(0);
@@ -281,7 +282,7 @@ int main(void)
 	
 	 
 	int state; // state variable
-	state = -4; //set state
+	state = -1; //set state
 	int count = 0;
 	
 	m_usb_init();
