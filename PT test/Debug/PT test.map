@@ -23,65 +23,11 @@ c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_udivmodsi4.o)
                               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libc.a(ltoa.o) (__udivmodsi4)
 
-Allocating common symbols
-Common symbol       size              file
-
-buffer              0x2               Robockey.o
-
 Discarded input sections
 
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
- .text          0x00000000        0x0 m_bus.o
- .bss           0x00000000        0x0 m_bus.o
- .text.m_bus_init
-                0x00000000       0x22 m_bus.o
- .text.twi_read_byte
-                0x00000000       0x16 m_bus.o
- .text.twi_stop
-                0x00000000        0x8 m_bus.o
- .text.twi_wait_for_ack
-                0x00000000       0x26 m_bus.o
- .text.twi_send_byte
-                0x00000000       0x1e m_bus.o
- .text.twi_start
-                0x00000000       0x58 m_bus.o
- .text.m_write_register
-                0x00000000       0x3e m_bus.o
- .text.m_read_register
-                0x00000000       0x42 m_bus.o
- .text          0x00000000        0x0 m_num.o
- .bss           0x00000000        0x0 m_num.o
- .text.disp     0x00000000      0x322 m_num.o
- .text.m_num_init
-                0x00000000       0x4e m_num.o
- .text          0x00000000        0x0 m_port.o
- .bss           0x00000000        0x0 m_port.o
- .text.m_port_init
-                0x00000000       0x14 m_port.o
- .text.m_port_set
-                0x00000000       0x68 m_port.o
- .text.m_port_clear
-                0x00000000       0x68 m_port.o
- .text.m_port_check
-                0x00000000       0x1a m_port.o
- .text          0x00000000        0x0 m_rf.o
- .bss           0x00000000        0x0 m_rf.o
- .text.m_rf_open
-                0x00000000       0xac m_rf.o
- .text.m_rf_read
-                0x00000000       0xc2 m_rf.o
- .text.m_rf_send
-                0x00000000       0xac m_rf.o
  .text          0x00000000        0x0 m_usb.o
  .bss           0x00000000        0x0 m_usb.o
- .text.m_usb_isconnected
-                0x00000000        0x6 m_usb.o
- .text.m_usb_rx_char
-                0x00000000       0x3c m_usb.o
- .text.m_usb_rx_available
-                0x00000000       0x1e m_usb.o
- .text.m_usb_rx_flush
-                0x00000000       0x2c m_usb.o
  .text.usb_serial_putchar_nowait
                 0x00000000       0x42 m_usb.o
  .text.usb_serial_write
@@ -100,6 +46,7 @@ Discarded input sections
                 0x00000000        0x6 m_usb.o
  .text.usb_serial_set_control
                 0x00000000       0x50 m_usb.o
+ .text.print_P  0x00000000       0x34 m_usb.o
  .text.phex1    0x00000000       0x12 m_usb.o
  .text.phex     0x00000000       0x18 m_usb.o
  .text.m_usb_tx_hex
@@ -112,38 +59,9 @@ Discarded input sections
                 0x00000000       0x6a m_usb.o
  .text.m_usb_tx_ulong
                 0x00000000       0x6a m_usb.o
- .text          0x00000000        0x0 m_wii.o
- .bss           0x00000000        0x0 m_wii.o
- .text.twi_wait
-                0x00000000       0x26 m_wii.o
- .text.send_byte
-                0x00000000       0x1e m_wii.o
- .text.start_read
-                0x00000000       0x34 m_wii.o
- .text.start_write
-                0x00000000       0x32 m_wii.o
- .text.end      0x00000000        0x8 m_wii.o
- .text.m_wii_read
-                0x00000000      0x12a m_wii.o
- .text.m_wii_open
-                0x00000000      0x206 m_wii.o
- .text          0x00000000        0x0 Robockey.o
- .bss           0x00000000        0x0 Robockey.o
- .text.rotate   0x00000000       0x34 Robockey.o
- .text.turn     0x00000000        0x2 Robockey.o
- .text.reverse  0x00000000       0x26 Robockey.o
- .text.forward  0x00000000       0x26 Robockey.o
- .text.findPuck
-                0x00000000        0x2 Robockey.o
- .text.drive_to_puck
-                0x00000000        0x2 Robockey.o
- .text.drive_to_goal
-                0x00000000        0x2 Robockey.o
- .text.shoot    0x00000000       0x18 Robockey.o
- .text.game_pause
-                0x00000000       0x1a Robockey.o
- .text.game_resume
-                0x00000000       0x2a Robockey.o
+ .text          0x00000000        0x0 PT test.o
+ .bss           0x00000000        0x0 PT test.o
+ .bss.flag      0x00000000        0x2 PT test.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  .text.libgcc.mul
@@ -253,13 +171,8 @@ Linker script and memory map
 
 Address of section .data set to 0x800100
 LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
-LOAD m_bus.o
-LOAD m_num.o
-LOAD m_port.o
-LOAD m_rf.o
 LOAD m_usb.o
-LOAD m_wii.o
-LOAD Robockey.o
+LOAD PT test.o
 START GROUP
 LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libm.a
 END GROUP
@@ -357,7 +270,7 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x98a
+.text           0x00000000      0x896
  *(.vectors)
  .vectors       0x00000000       0xac c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
                 0x00000000                __vector_default
@@ -381,42 +294,41 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
                 0x0000014d        0x8 m_usb.o
  .progmem.data.string3
                 0x00000155        0xa m_usb.o
- .progmem.data.__c.1872
-                0x0000015f        0x7 Robockey.o
-                0x00000166                . = ALIGN (0x2)
-                0x00000166                __trampolines_start = .
+                0x00000160                . = ALIGN (0x2)
+ *fill*         0x0000015f        0x1 
+                0x00000160                __trampolines_start = .
  *(.trampolines)
- .trampolines   0x00000166        0x0 linker stubs
+ .trampolines   0x00000160        0x0 linker stubs
  *(.trampolines*)
-                0x00000166                __trampolines_end = .
+                0x00000160                __trampolines_end = .
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x00000166                __ctors_start = .
+                0x00000160                __ctors_start = .
  *(.ctors)
-                0x00000166                __ctors_end = .
-                0x00000166                __dtors_start = .
+                0x00000160                __ctors_end = .
+                0x00000160                __dtors_start = .
  *(.dtors)
-                0x00000166                __dtors_end = .
+                0x00000160                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x00000166        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
-                0x00000166                __init
+ .init0         0x00000160        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
+                0x00000160                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x00000166        0xc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
+ .init2         0x00000160        0xc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x00000172       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_copy_data.o)
-                0x00000172                __do_copy_data
- .init4         0x00000188       0x10 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_clear_bss.o)
-                0x00000188                __do_clear_bss
+ .init4         0x0000016c       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_copy_data.o)
+                0x0000016c                __do_copy_data
+ .init4         0x00000182       0x10 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_clear_bss.o)
+                0x00000182                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -427,91 +339,96 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x00000198        0x8 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
+ .init9         0x00000192        0x8 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
  *(.init9)
  *(.text)
- .text          0x000001a0        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
-                0x000001a0                __vector_38
-                0x000001a0                __vector_22
-                0x000001a0                __vector_28
-                0x000001a0                __vector_1
-                0x000001a0                __vector_32
-                0x000001a0                __vector_34
-                0x000001a0                __vector_24
-                0x000001a0                __vector_12
-                0x000001a0                __bad_interrupt
-                0x000001a0                __vector_6
-                0x000001a0                __vector_31
-                0x000001a0                __vector_35
-                0x000001a0                __vector_39
-                0x000001a0                __vector_3
-                0x000001a0                __vector_23
-                0x000001a0                __vector_30
-                0x000001a0                __vector_25
-                0x000001a0                __vector_13
-                0x000001a0                __vector_17
-                0x000001a0                __vector_19
-                0x000001a0                __vector_7
-                0x000001a0                __vector_41
-                0x000001a0                __vector_27
-                0x000001a0                __vector_5
-                0x000001a0                __vector_33
-                0x000001a0                __vector_37
-                0x000001a0                __vector_4
-                0x000001a0                __vector_9
-                0x000001a0                __vector_2
-                0x000001a0                __vector_21
-                0x000001a0                __vector_15
-                0x000001a0                __vector_36
-                0x000001a0                __vector_40
-                0x000001a0                __vector_8
-                0x000001a0                __vector_26
-                0x000001a0                __vector_14
-                0x000001a0                __vector_16
-                0x000001a0                __vector_18
-                0x000001a0                __vector_20
-                0x000001a0                __vector_42
-                0x000001a4                . = ALIGN (0x2)
+ .text          0x0000019a        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
+                0x0000019a                __vector_38
+                0x0000019a                __vector_22
+                0x0000019a                __vector_28
+                0x0000019a                __vector_1
+                0x0000019a                __vector_32
+                0x0000019a                __vector_34
+                0x0000019a                __vector_24
+                0x0000019a                __vector_12
+                0x0000019a                __bad_interrupt
+                0x0000019a                __vector_6
+                0x0000019a                __vector_31
+                0x0000019a                __vector_35
+                0x0000019a                __vector_39
+                0x0000019a                __vector_3
+                0x0000019a                __vector_23
+                0x0000019a                __vector_30
+                0x0000019a                __vector_25
+                0x0000019a                __vector_13
+                0x0000019a                __vector_17
+                0x0000019a                __vector_19
+                0x0000019a                __vector_7
+                0x0000019a                __vector_41
+                0x0000019a                __vector_27
+                0x0000019a                __vector_5
+                0x0000019a                __vector_33
+                0x0000019a                __vector_37
+                0x0000019a                __vector_4
+                0x0000019a                __vector_9
+                0x0000019a                __vector_2
+                0x0000019a                __vector_21
+                0x0000019a                __vector_15
+                0x0000019a                __vector_36
+                0x0000019a                __vector_29
+                0x0000019a                __vector_40
+                0x0000019a                __vector_8
+                0x0000019a                __vector_26
+                0x0000019a                __vector_14
+                0x0000019a                __vector_16
+                0x0000019a                __vector_18
+                0x0000019a                __vector_20
+                0x0000019a                __vector_42
+                0x0000019e                . = ALIGN (0x2)
  *(.text.*)
  .text.m_usb_init
-                0x000001a4       0x32 m_usb.o
-                0x000001a4                m_usb_init
+                0x0000019e       0x32 m_usb.o
+                0x0000019e                m_usb_init
+ .text.m_usb_isconnected
+                0x000001d0        0x6 m_usb.o
+                0x000001d0                m_usb_isconnected
+ .text.m_usb_rx_char
+                0x000001d6       0x3c m_usb.o
+                0x000001d6                m_usb_rx_char
+ .text.m_usb_rx_available
+                0x00000212       0x1e m_usb.o
+                0x00000212                m_usb_rx_available
+ .text.m_usb_rx_flush
+                0x00000230       0x2c m_usb.o
+                0x00000230                m_usb_rx_flush
  .text.m_usb_tx_char
-                0x000001d6       0xb8 m_usb.o
-                0x000001d6                m_usb_tx_char
+                0x0000025c       0xb8 m_usb.o
+                0x0000025c                m_usb_tx_char
  .text.__vector_10
-                0x0000028e       0x7c m_usb.o
-                0x0000028e                __vector_10
+                0x00000314       0x7c m_usb.o
+                0x00000314                __vector_10
  .text.__vector_11
-                0x0000030a      0x310 m_usb.o
-                0x0000030a                __vector_11
- .text.print_P  0x0000061a       0x34 m_usb.o
-                0x0000061a                print_P
+                0x00000390      0x310 m_usb.o
+                0x00000390                __vector_11
  .text.m_usb_tx_int
-                0x0000064e       0x6a m_usb.o
-                0x0000064e                m_usb_tx_int
- .text.PT_cycle
-                0x000006b8       0x32 Robockey.o
-                0x000006b8                PT_cycle
- .text.main     0x000006ea      0x1da Robockey.o
-                0x000006ea                main
- .text.__vector_29
-                0x000008c4       0x38 Robockey.o
-                0x000008c4                __vector_29
+                0x000006a0       0x6a m_usb.o
+                0x000006a0                m_usb_tx_int
+ .text.main     0x0000070a       0xfe PT test.o
+                0x0000070a                main
  .text.avr-libc
-                0x000008fc       0x42 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libc.a(itoa.o)
-                0x000008fc                itoa
+                0x00000808       0x42 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+                0x00000808                itoa
  .text.avr-libc
-                0x0000093e       0x20 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libc.a(strrev.o)
-                0x0000093e                strrev
+                0x0000084a       0x20 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5\libc.a(strrev.o)
+                0x0000084a                strrev
  .text.libgcc.div
-                0x0000095e       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_udivmodhi4.o)
-                0x0000095e                __udivmodhi4
-                0x00000986                . = ALIGN (0x2)
+                0x0000086a       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_udivmodhi4.o)
+                0x0000086a                __udivmodhi4
+                0x00000892                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000986        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
-                0x00000986                _exit
-                0x00000986                exit
+ .fini9         0x00000892        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
+                0x00000892                _exit
+                0x00000892                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -530,21 +447,16 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000986        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000892        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000098a                _etext = .
+                0x00000896                _etext = .
 
-.data           0x00800100        0x8 load address 0x0000098a
+.data           0x00800100        0x8 load address 0x00000896
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr5/crtm32u4.o
- .data          0x00800100        0x0 m_bus.o
- .data          0x00800100        0x0 m_num.o
- .data          0x00800100        0x0 m_port.o
- .data          0x00800100        0x0 m_rf.o
  .data          0x00800100        0x0 m_usb.o
- .data          0x00800100        0x0 m_wii.o
- .data          0x00800100        0x0 Robockey.o
+ .data          0x00800100        0x0 PT test.o
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_exit.o)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_tablejump.o)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr5\libgcc.a(_copy_data.o)
@@ -567,7 +479,7 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
                 0x00800108                _edata = .
                 0x00800108                PROVIDE (__data_end, .)
 
-.bss            0x00800108        0x6
+.bss            0x00800108        0x4
                 0x00800108                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -580,18 +492,16 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  .bss.transmit_previous_timeout
                 0x0080010b        0x1 m_usb.o
  *(COMMON)
- COMMON         0x0080010c        0x2 Robockey.o
-                0x0080010c                buffer
-                0x0080010e                PROVIDE (__bss_end, .)
-                0x0000098a                __data_load_start = LOADADDR (.data)
-                0x00000992                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0080010c                PROVIDE (__bss_end, .)
+                0x00000896                __data_load_start = LOADADDR (.data)
+                0x0000089e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080010e        0x0
-                0x0080010e                PROVIDE (__noinit_start, .)
+.noinit         0x0080010c        0x0
+                0x0080010c                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x0080010e                PROVIDE (__noinit_end, .)
-                0x0080010e                _end = .
-                0x0080010e                PROVIDE (__heap_start, .)
+                0x0080010c                PROVIDE (__noinit_end, .)
+                0x0080010c                _end = .
+                0x0080010c                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -644,14 +554,9 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 
 .comment        0x00000000       0x2f
  *(.comment)
- .comment       0x00000000       0x2f m_bus.o
+ .comment       0x00000000       0x2f m_usb.o
                                  0x30 (size before relaxing)
- .comment       0x00000000       0x30 m_num.o
- .comment       0x00000000       0x30 m_port.o
- .comment       0x00000000       0x30 m_rf.o
- .comment       0x00000000       0x30 m_usb.o
- .comment       0x00000000       0x30 m_wii.o
- .comment       0x00000000       0x30 Robockey.o
+ .comment       0x00000000       0x30 PT test.o
 
 .debug
  *(.debug)
@@ -665,93 +570,47 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x298
+.debug_aranges  0x00000000      0x100
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x58 m_bus.o
+                0x00000000       0xe0 m_usb.o
  .debug_aranges
-                0x00000058       0x28 m_num.o
- .debug_aranges
-                0x00000080       0x38 m_port.o
- .debug_aranges
-                0x000000b8       0x30 m_rf.o
- .debug_aranges
-                0x000000e8       0xe0 m_usb.o
- .debug_aranges
-                0x000001c8       0x50 m_wii.o
- .debug_aranges
-                0x00000218       0x80 Robockey.o
+                0x000000e0       0x20 PT test.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x28aa
+.debug_info     0x00000000      0xed5
  *(.debug_info)
- .debug_info    0x00000000      0x2de m_bus.o
- .debug_info    0x000002de      0xa10 m_num.o
- .debug_info    0x00000cee      0x295 m_port.o
- .debug_info    0x00000f83      0x18e m_rf.o
- .debug_info    0x00001111      0xd4c m_usb.o
- .debug_info    0x00001e5d      0x71a m_wii.o
- .debug_info    0x00002577      0x333 Robockey.o
+ .debug_info    0x00000000      0xd4c m_usb.o
+ .debug_info    0x00000d4c      0x189 PT test.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x912
+.debug_abbrev   0x00000000      0x343
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x10e m_bus.o
- .debug_abbrev  0x0000010e       0xc0 m_num.o
- .debug_abbrev  0x000001ce       0xe4 m_port.o
- .debug_abbrev  0x000002b2       0xb6 m_rf.o
- .debug_abbrev  0x00000368      0x23a m_usb.o
- .debug_abbrev  0x000005a2      0x196 m_wii.o
- .debug_abbrev  0x00000738      0x1da Robockey.o
+ .debug_abbrev  0x00000000      0x23a m_usb.o
+ .debug_abbrev  0x0000023a      0x109 PT test.o
 
-.debug_line     0x00000000      0xf91
+.debug_line     0x00000000      0x653
  *(.debug_line)
- .debug_line    0x00000000      0x18e m_bus.o
- .debug_line    0x0000018e       0xaf m_num.o
- .debug_line    0x0000023d       0x88 m_port.o
- .debug_line    0x000002c5      0x1c1 m_rf.o
- .debug_line    0x00000486      0x53f m_usb.o
- .debug_line    0x000009c5      0x2ed m_wii.o
- .debug_line    0x00000cb2      0x2df Robockey.o
+ .debug_line    0x00000000      0x53f m_usb.o
+ .debug_line    0x0000053f      0x114 PT test.o
 
-.debug_frame    0x00000000      0x6b0
+.debug_frame    0x00000000      0x348
  *(.debug_frame)
- .debug_frame   0x00000000       0xb8 m_bus.o
- .debug_frame   0x000000b8       0x34 m_num.o
- .debug_frame   0x000000ec       0x7c m_port.o
- .debug_frame   0x00000168       0x6c m_rf.o
- .debug_frame   0x000001d4      0x324 m_usb.o
- .debug_frame   0x000004f8       0xb8 m_wii.o
- .debug_frame   0x000005b0      0x100 Robockey.o
+ .debug_frame   0x00000000      0x324 m_usb.o
+ .debug_frame   0x00000324       0x24 PT test.o
 
-.debug_str      0x00000000      0x73c
+.debug_str      0x00000000      0x44a
  *(.debug_str)
- .debug_str     0x00000000      0x10a m_bus.o
-                                0x155 (size before relaxing)
- .debug_str     0x0000010a       0x85 m_num.o
-                                 0xf8 (size before relaxing)
- .debug_str     0x0000018f       0x1b m_port.o
-                                0x114 (size before relaxing)
- .debug_str     0x000001aa       0x61 m_rf.o
-                                0x11f (size before relaxing)
- .debug_str     0x0000020b      0x3a5 m_usb.o
-                                0x491 (size before relaxing)
- .debug_str     0x000005b0       0xb4 m_wii.o
-                                0x1a7 (size before relaxing)
- .debug_str     0x00000664       0xd8 Robockey.o
-                                0x1ea (size before relaxing)
+ .debug_str     0x00000000      0x427 m_usb.o
+                                0x499 (size before relaxing)
+ .debug_str     0x00000427       0x23 PT test.o
+                                0x14f (size before relaxing)
 
-.debug_loc      0x00000000     0x26d7
+.debug_loc      0x00000000     0x18c9
  *(.debug_loc)
- .debug_loc     0x00000000      0x23b m_bus.o
- .debug_loc     0x0000023b      0x134 m_num.o
- .debug_loc     0x0000036f      0x2af m_port.o
- .debug_loc     0x0000061e      0x2aa m_rf.o
- .debug_loc     0x000008c8     0x18c9 m_usb.o
- .debug_loc     0x00002191      0x4b0 m_wii.o
- .debug_loc     0x00002641       0x96 Robockey.o
+ .debug_loc     0x00000000     0x18c9 m_usb.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -759,17 +618,12 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x278
+.debug_ranges   0x00000000      0x130
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x48 m_bus.o
- .debug_ranges  0x00000048       0x18 m_num.o
- .debug_ranges  0x00000060       0x28 m_port.o
- .debug_ranges  0x00000088       0x20 m_rf.o
- .debug_ranges  0x000000a8      0x120 m_usb.o
- .debug_ranges  0x000001c8       0x40 m_wii.o
- .debug_ranges  0x00000208       0x70 Robockey.o
+ .debug_ranges  0x00000000      0x120 m_usb.o
+ .debug_ranges  0x00000120       0x10 PT test.o
 
 .debug_macro
  *(.debug_macro)
-OUTPUT(Robockey.elf elf32-avr)
+OUTPUT(PT test.elf elf32-avr)
 LOAD linker stubs

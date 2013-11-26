@@ -3,79 +3,81 @@ mPortTest.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  000002ac  00000320  2**0
+  0 .data         00000000  00800100  00000362  000003f6  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000002ac  00000000  00000000  00000074  2**1
+  1 .text         00000362  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .stab         000006cc  00000000  00000000  00000320  2**2
+  2 .bss          00000001  00800100  00800100  000003f6  2**0
+                  ALLOC
+  3 .stab         000006cc  00000000  00000000  000003f8  2**2
                   CONTENTS, READONLY, DEBUGGING
-  3 .stabstr      00000097  00000000  00000000  000009ec  2**0
+  4 .stabstr      00000097  00000000  00000000  00000ac4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .comment      0000002f  00000000  00000000  00000a83  2**0
+  5 .comment      0000002f  00000000  00000000  00000b5b  2**0
                   CONTENTS, READONLY
-  5 .debug_aranges 000000b0  00000000  00000000  00000ab2  2**0
+  6 .debug_aranges 000000b0  00000000  00000000  00000b8a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000729  00000000  00000000  00000b62  2**0
+  7 .debug_info   00000790  00000000  00000000  00000c3a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000321  00000000  00000000  0000128b  2**0
+  8 .debug_abbrev 00000332  00000000  00000000  000013ca  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000003a1  00000000  00000000  000015ac  2**0
+  9 .debug_line   000003b1  00000000  00000000  000016fc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000158  00000000  00000000  00001950  2**2
+ 10 .debug_frame  00000158  00000000  00000000  00001ab0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000001e5  00000000  00000000  00001aa8  2**0
+ 11 .debug_str    0000022c  00000000  00000000  00001c08  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000004ea  00000000  00000000  00001c8d  2**0
+ 12 .debug_loc    00000536  00000000  00000000  00001e34  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000080  00000000  00000000  00002177  2**0
+ 13 .debug_ranges 00000080  00000000  00000000  0000236a  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <__vectors>:
    0:	0c 94 56 00 	jmp	0xac	; 0xac <__ctors_end>
-   4:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-   8:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-   c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  10:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  14:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  18:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  1c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  20:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  24:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  28:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  2c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  30:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  34:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  38:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  3c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  40:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  44:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  48:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  4c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  50:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  54:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  58:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  5c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  60:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  64:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  68:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  6c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  70:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  74:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  78:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  7c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  80:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  84:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  88:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  8c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  90:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  94:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  98:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  9c:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  a0:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  a4:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
-  a8:	0c 94 60 00 	jmp	0xc0	; 0xc0 <__bad_interrupt>
+   4:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+   8:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+   c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  10:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  14:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  18:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  1c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  20:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  24:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  28:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  2c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  30:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  34:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  38:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  3c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  40:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  44:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  48:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  4c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  50:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  54:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  58:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  5c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  60:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  64:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  68:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  6c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  70:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  74:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  78:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  7c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  80:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  84:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  88:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  8c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  90:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  94:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  98:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  9c:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  a0:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  a4:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
+  a8:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__bad_interrupt>
 
 000000ac <__ctors_end>:
   ac:	11 24       	eor	r1, r1
@@ -84,397 +86,393 @@ Disassembly of section .text:
   b2:	da e0       	ldi	r29, 0x0A	; 10
   b4:	de bf       	out	0x3e, r29	; 62
   b6:	cd bf       	out	0x3d, r28	; 61
-  b8:	0e 94 62 00 	call	0xc4	; 0xc4 <main>
-  bc:	0c 94 54 01 	jmp	0x2a8	; 0x2a8 <_exit>
 
-000000c0 <__bad_interrupt>:
-  c0:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+000000b8 <__do_clear_bss>:
+  b8:	21 e0       	ldi	r18, 0x01	; 1
+  ba:	a0 e0       	ldi	r26, 0x00	; 0
+  bc:	b1 e0       	ldi	r27, 0x01	; 1
+  be:	01 c0       	rjmp	.+2      	; 0xc2 <.do_clear_bss_start>
 
-000000c4 <main>:
-#include "m_port.h"
+000000c0 <.do_clear_bss_loop>:
+  c0:	1d 92       	st	X+, r1
+
+000000c2 <.do_clear_bss_start>:
+  c2:	a1 30       	cpi	r26, 0x01	; 1
+  c4:	b2 07       	cpc	r27, r18
+  c6:	e1 f7       	brne	.-8      	; 0xc0 <.do_clear_bss_loop>
+  c8:	0e 94 6a 00 	call	0xd4	; 0xd4 <main>
+  cc:	0c 94 af 01 	jmp	0x35e	; 0x35e <_exit>
+
+000000d0 <__bad_interrupt>:
+  d0:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000d4 <main>:
+
+char yes;
 
 int main(void)
 {
-	
-	m_port_init(ADDR);
-  c4:	80 e2       	ldi	r24, 0x20	; 32
-  c6:	0e 94 16 01 	call	0x22c	; 0x22c <m_port_init>
+	m_clockdivide(0);
+  d4:	e1 e6       	ldi	r30, 0x61	; 97
+  d6:	f0 e0       	ldi	r31, 0x00	; 0
+  d8:	80 e8       	ldi	r24, 0x80	; 128
+  da:	80 83       	st	Z, r24
+  dc:	10 82       	st	Z, r1
+	yes = m_port_init(ADDR);
+  de:	80 e2       	ldi	r24, 0x20	; 32
+  e0:	0e 94 3d 01 	call	0x27a	; 0x27a <m_port_init>
+  e4:	80 93 00 01 	sts	0x0100, r24
 	m_port_set(ADDR,DDRG,3);
-  ca:	43 e0       	ldi	r20, 0x03	; 3
-  cc:	60 e0       	ldi	r22, 0x00	; 0
-  ce:	80 e2       	ldi	r24, 0x20	; 32
-  d0:	0e 94 20 01 	call	0x240	; 0x240 <m_port_set>
+  e8:	43 e0       	ldi	r20, 0x03	; 3
+  ea:	60 e0       	ldi	r22, 0x00	; 0
+  ec:	80 e2       	ldi	r24, 0x20	; 32
+  ee:	0e 94 47 01 	call	0x28e	; 0x28e <m_port_set>
+	int flag = 0;
+	set(DDRD,7);
+  f2:	57 9a       	sbi	0x0a, 7	; 10
+int main(void)
+{
+	m_clockdivide(0);
+	yes = m_port_init(ADDR);
+	m_port_set(ADDR,DDRG,3);
+	int flag = 0;
+  f4:	80 e0       	ldi	r24, 0x00	; 0
+  f6:	90 e0       	ldi	r25, 0x00	; 0
+			//set(PORTD,7);
+			flag = 1;
+		} else {
+			m_port_clear(ADDR,PORTG,3);
+			//clear(PORTD,7);
+			flag = 0;
+  f8:	c0 e0       	ldi	r28, 0x00	; 0
+  fa:	d0 e0       	ldi	r29, 0x00	; 0
+		}
+        m_wait(500);
+		if (flag == 0) {
+			m_port_set(ADDR,PORTG,3);
+			//set(PORTD,7);
+			flag = 1;
+  fc:	01 e0       	ldi	r16, 0x01	; 1
+  fe:	10 e0       	ldi	r17, 0x00	; 0
+	m_port_set(ADDR,DDRG,3);
+	int flag = 0;
+	set(DDRD,7);
+    while(1)
+    {
+		if (yes){
+ 100:	20 91 00 01 	lds	r18, 0x0100
+ 104:	22 23       	and	r18, r18
+ 106:	11 f0       	breq	.+4      	; 0x10c <main+0x38>
+			clear(PORTD,7);
+ 108:	5f 98       	cbi	0x0b, 7	; 11
+ 10a:	01 c0       	rjmp	.+2      	; 0x10e <main+0x3a>
+		}
+		else {
+			set(PORTD,7);
+ 10c:	5f 9a       	sbi	0x0b, 7	; 11
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  d4:	2f ef       	ldi	r18, 0xFF	; 255
-  d6:	89 e6       	ldi	r24, 0x69	; 105
-  d8:	98 e1       	ldi	r25, 0x18	; 24
-  da:	21 50       	subi	r18, 0x01	; 1
-  dc:	80 40       	sbci	r24, 0x00	; 0
-  de:	90 40       	sbci	r25, 0x00	; 0
-  e0:	e1 f7       	brne	.-8      	; 0xda <main+0x16>
-  e2:	00 c0       	rjmp	.+0      	; 0xe4 <main+0x20>
-  e4:	00 00       	nop
-	
-    while(1)
-    {
+ 10e:	2f ef       	ldi	r18, 0xFF	; 255
+ 110:	39 e6       	ldi	r19, 0x69	; 105
+ 112:	48 e1       	ldi	r20, 0x18	; 24
+ 114:	21 50       	subi	r18, 0x01	; 1
+ 116:	30 40       	sbci	r19, 0x00	; 0
+ 118:	40 40       	sbci	r20, 0x00	; 0
+ 11a:	e1 f7       	brne	.-8      	; 0x114 <main+0x40>
+ 11c:	00 c0       	rjmp	.+0      	; 0x11e <main+0x4a>
+ 11e:	00 00       	nop
+		}
         m_wait(500);
 		if (flag == 0) {
+ 120:	89 2b       	or	r24, r25
+ 122:	39 f4       	brne	.+14     	; 0x132 <main+0x5e>
 			m_port_set(ADDR,PORTG,3);
-  e6:	43 e0       	ldi	r20, 0x03	; 3
-  e8:	62 e1       	ldi	r22, 0x12	; 18
-  ea:	80 e2       	ldi	r24, 0x20	; 32
-  ec:	0e 94 20 01 	call	0x240	; 0x240 <m_port_set>
-  f0:	f1 cf       	rjmp	.-30     	; 0xd4 <main+0x10>
+ 124:	43 e0       	ldi	r20, 0x03	; 3
+ 126:	62 e1       	ldi	r22, 0x12	; 18
+ 128:	80 e2       	ldi	r24, 0x20	; 32
+ 12a:	0e 94 47 01 	call	0x28e	; 0x28e <m_port_set>
+			//set(PORTD,7);
+			flag = 1;
+ 12e:	c8 01       	movw	r24, r16
+ 130:	e7 cf       	rjmp	.-50     	; 0x100 <main+0x2c>
+		} else {
+			m_port_clear(ADDR,PORTG,3);
+ 132:	43 e0       	ldi	r20, 0x03	; 3
+ 134:	62 e1       	ldi	r22, 0x12	; 18
+ 136:	80 e2       	ldi	r24, 0x20	; 32
+ 138:	0e 94 7b 01 	call	0x2f6	; 0x2f6 <m_port_clear>
+			//clear(PORTD,7);
+			flag = 0;
+ 13c:	ce 01       	movw	r24, r28
+ 13e:	e0 cf       	rjmp	.-64     	; 0x100 <main+0x2c>
 
-000000f2 <twi_read_byte>:
-}
+00000140 <twi_read_byte>:
+ 140:	84 e8       	ldi	r24, 0x84	; 132
+ 142:	80 93 bc 00 	sts	0x00BC, r24
+ 146:	ec eb       	ldi	r30, 0xBC	; 188
+ 148:	f0 e0       	ldi	r31, 0x00	; 0
+ 14a:	80 81       	ld	r24, Z
+ 14c:	88 23       	and	r24, r24
+ 14e:	ec f7       	brge	.-6      	; 0x14a <twi_read_byte+0xa>
+ 150:	80 91 bb 00 	lds	r24, 0x00BB
+ 154:	08 95       	ret
 
-// TWI: read BYTE, NACK, STOP
-unsigned char twi_read_byte(void)
-{
-    TWCR = (1<<TWINT) | (1<<TWEN);	// clear the flag, NACK, and wait for another byte
-  f2:	84 e8       	ldi	r24, 0x84	; 132
-  f4:	80 93 bc 00 	sts	0x00BC, r24
-    while(!(TWCR & (1<<TWINT))){};  // wait for an interrupt to signal that a new byte is available
-  f8:	ec eb       	ldi	r30, 0xBC	; 188
-  fa:	f0 e0       	ldi	r31, 0x00	; 0
-  fc:	80 81       	ld	r24, Z
-  fe:	88 23       	and	r24, r24
- 100:	ec f7       	brge	.-6      	; 0xfc <twi_read_byte+0xa>
-    return TWDR;
- 102:	80 91 bb 00 	lds	r24, 0x00BB
-    twi_stop();
-}
- 106:	08 95       	ret
+00000156 <twi_stop>:
+ 156:	84 e9       	ldi	r24, 0x94	; 148
+ 158:	80 93 bc 00 	sts	0x00BC, r24
+ 15c:	08 95       	ret
 
-00000108 <twi_stop>:
+0000015e <twi_wait_for_ack>:
+ 15e:	20 e0       	ldi	r18, 0x00	; 0
+ 160:	30 e0       	ldi	r19, 0x00	; 0
+ 162:	ec eb       	ldi	r30, 0xBC	; 188
+ 164:	f0 e0       	ldi	r31, 0x00	; 0
+ 166:	80 81       	ld	r24, Z
+ 168:	88 23       	and	r24, r24
+ 16a:	34 f0       	brlt	.+12     	; 0x178 <twi_wait_for_ack+0x1a>
+ 16c:	2f 5f       	subi	r18, 0xFF	; 255
+ 16e:	3f 4f       	sbci	r19, 0xFF	; 255
+ 170:	29 3e       	cpi	r18, 0xE9	; 233
+ 172:	83 e0       	ldi	r24, 0x03	; 3
+ 174:	38 07       	cpc	r19, r24
+ 176:	b9 f7       	brne	.-18     	; 0x166 <twi_wait_for_ack+0x8>
+ 178:	81 e0       	ldi	r24, 0x01	; 1
+ 17a:	28 3e       	cpi	r18, 0xE8	; 232
+ 17c:	33 40       	sbci	r19, 0x03	; 3
+ 17e:	09 f4       	brne	.+2      	; 0x182 <twi_wait_for_ack+0x24>
+ 180:	80 e0       	ldi	r24, 0x00	; 0
+ 182:	08 95       	ret
 
-// TWI: send STOP condition
-void twi_stop(void)
-{
-	TWCR = (1<<TWINT)|(1<<TWEN)| (1<<TWSTO);
- 108:	84 e9       	ldi	r24, 0x94	; 148
- 10a:	80 93 bc 00 	sts	0x00BC, r24
- 10e:	08 95       	ret
+00000184 <twi_send_byte>:
+ 184:	80 93 bb 00 	sts	0x00BB, r24
+ 188:	84 e8       	ldi	r24, 0x84	; 132
+ 18a:	80 93 bc 00 	sts	0x00BC, r24
+ 18e:	0e 94 af 00 	call	0x15e	; 0x15e <twi_wait_for_ack>
+ 192:	88 23       	and	r24, r24
+ 194:	21 f0       	breq	.+8      	; 0x19e <twi_send_byte+0x1a>
+ 196:	80 91 b9 00 	lds	r24, 0x00B9
+ 19a:	88 7f       	andi	r24, 0xF8	; 248
+ 19c:	08 95       	ret
+ 19e:	80 e0       	ldi	r24, 0x00	; 0
+ 1a0:	08 95       	ret
 
-00000110 <twi_wait_for_ack>:
-}
+000001a2 <twi_start>:
+ 1a2:	cf 93       	push	r28
+ 1a4:	df 93       	push	r29
+ 1a6:	c8 2f       	mov	r28, r24
+ 1a8:	d6 2f       	mov	r29, r22
+ 1aa:	94 ea       	ldi	r25, 0xA4	; 164
+ 1ac:	90 93 bc 00 	sts	0x00BC, r25
+ 1b0:	0e 94 af 00 	call	0x15e	; 0x15e <twi_wait_for_ack>
+ 1b4:	81 11       	cpse	r24, r1
+ 1b6:	04 c0       	rjmp	.+8      	; 0x1c0 <twi_start+0x1e>
+ 1b8:	0e 94 ab 00 	call	0x156	; 0x156 <twi_stop>
+ 1bc:	80 e0       	ldi	r24, 0x00	; 0
+ 1be:	1a c0       	rjmp	.+52     	; 0x1f4 <twi_start+0x52>
+ 1c0:	dd 23       	and	r29, r29
+ 1c2:	59 f0       	breq	.+22     	; 0x1da <twi_start+0x38>
+ 1c4:	8c 2f       	mov	r24, r28
+ 1c6:	88 0f       	add	r24, r24
+ 1c8:	8f 5f       	subi	r24, 0xFF	; 255
+ 1ca:	0e 94 c2 00 	call	0x184	; 0x184 <twi_send_byte>
+ 1ce:	88 34       	cpi	r24, 0x48	; 72
+ 1d0:	71 f4       	brne	.+28     	; 0x1ee <twi_start+0x4c>
+ 1d2:	0e 94 ab 00 	call	0x156	; 0x156 <twi_stop>
+ 1d6:	80 e0       	ldi	r24, 0x00	; 0
+ 1d8:	0d c0       	rjmp	.+26     	; 0x1f4 <twi_start+0x52>
+ 1da:	8c 2f       	mov	r24, r28
+ 1dc:	88 0f       	add	r24, r24
+ 1de:	0e 94 c2 00 	call	0x184	; 0x184 <twi_send_byte>
+ 1e2:	80 32       	cpi	r24, 0x20	; 32
+ 1e4:	31 f4       	brne	.+12     	; 0x1f2 <twi_start+0x50>
+ 1e6:	0e 94 ab 00 	call	0x156	; 0x156 <twi_stop>
+ 1ea:	80 e0       	ldi	r24, 0x00	; 0
+ 1ec:	03 c0       	rjmp	.+6      	; 0x1f4 <twi_start+0x52>
+ 1ee:	81 e0       	ldi	r24, 0x01	; 1
+ 1f0:	01 c0       	rjmp	.+2      	; 0x1f4 <twi_start+0x52>
+ 1f2:	81 e0       	ldi	r24, 0x01	; 1
+ 1f4:	df 91       	pop	r29
+ 1f6:	cf 91       	pop	r28
+ 1f8:	08 95       	ret
 
-// TWI:  wait for ACK packet (0=fail, 1=success)
-unsigned char twi_wait_for_ack(void)
-{
-	unsigned int wait=0;
- 110:	20 e0       	ldi	r18, 0x00	; 0
- 112:	30 e0       	ldi	r19, 0x00	; 0
-	while((!(TWCR & (1<<TWINT))) && (wait++<MAX_WAIT)){};	// wait for acknowledgement that the byte was sent
- 114:	ec eb       	ldi	r30, 0xBC	; 188
- 116:	f0 e0       	ldi	r31, 0x00	; 0
- 118:	80 81       	ld	r24, Z
- 11a:	88 23       	and	r24, r24
- 11c:	34 f0       	brlt	.+12     	; 0x12a <twi_wait_for_ack+0x1a>
- 11e:	2f 5f       	subi	r18, 0xFF	; 255
- 120:	3f 4f       	sbci	r19, 0xFF	; 255
- 122:	29 3e       	cpi	r18, 0xE9	; 233
- 124:	83 e0       	ldi	r24, 0x03	; 3
- 126:	38 07       	cpc	r19, r24
- 128:	b9 f7       	brne	.-18     	; 0x118 <twi_wait_for_ack+0x8>
-    return (wait==MAX_WAIT? 0 : 1);
- 12a:	81 e0       	ldi	r24, 0x01	; 1
- 12c:	28 3e       	cpi	r18, 0xE8	; 232
- 12e:	33 40       	sbci	r19, 0x03	; 3
- 130:	09 f4       	brne	.+2      	; 0x134 <twi_wait_for_ack+0x24>
- 132:	80 e0       	ldi	r24, 0x00	; 0
- 134:	08 95       	ret
-
-00000136 <twi_send_byte>:
-}
-
-// TWI: send BYTE, wait for ACK
-unsigned char twi_send_byte(unsigned char byte)
-{
-	TWDR = byte;					// load the byte
- 136:	80 93 bb 00 	sts	0x00BB, r24
-	TWCR = (1<<TWINT) | (1<<TWEN);	// send the byte
- 13a:	84 e8       	ldi	r24, 0x84	; 132
- 13c:	80 93 bc 00 	sts	0x00BC, r24
-	return (twi_wait_for_ack()) ? (TWSR & 0xF8) : 0 ;
- 140:	0e 94 88 00 	call	0x110	; 0x110 <twi_wait_for_ack>
- 144:	88 23       	and	r24, r24
- 146:	21 f0       	breq	.+8      	; 0x150 <twi_send_byte+0x1a>
- 148:	80 91 b9 00 	lds	r24, 0x00B9
- 14c:	88 7f       	andi	r24, 0xF8	; 248
- 14e:	08 95       	ret
- 150:	80 e0       	ldi	r24, 0x00	; 0
-}
- 152:	08 95       	ret
-
-00000154 <twi_start>:
-// PRIVATE FUNCTIONS:
-
-// TWI: send START condition, wait for ACK, send ADDRESS with R/W flag
-// readwrite = 1 for read, 0 for write
-unsigned char twi_start(unsigned char address, unsigned char readwrite)
-{
- 154:	cf 93       	push	r28
- 156:	df 93       	push	r29
- 158:	c8 2f       	mov	r28, r24
- 15a:	d6 2f       	mov	r29, r22
-    unsigned char status;
-    
-    // START packet:
-    TWCR = (1<<TWEN)|(1<<TWSTA)|(1<<TWINT);
- 15c:	94 ea       	ldi	r25, 0xA4	; 164
- 15e:	90 93 bc 00 	sts	0x00BC, r25
-    if(!twi_wait_for_ack()){
- 162:	0e 94 88 00 	call	0x110	; 0x110 <twi_wait_for_ack>
- 166:	81 11       	cpse	r24, r1
- 168:	04 c0       	rjmp	.+8      	; 0x172 <twi_start+0x1e>
-        twi_stop();
- 16a:	0e 94 84 00 	call	0x108	; 0x108 <twi_stop>
-        return 0; // COMM failure
- 16e:	80 e0       	ldi	r24, 0x00	; 0
- 170:	1a c0       	rjmp	.+52     	; 0x1a6 <twi_start+0x52>
-    }
-    
-    // ADDRESS packet:
-    if(readwrite)
- 172:	dd 23       	and	r29, r29
- 174:	59 f0       	breq	.+22     	; 0x18c <twi_start+0x38>
-    { // READ
-        status = twi_send_byte(((address<<1) + 1));
- 176:	8c 2f       	mov	r24, r28
- 178:	88 0f       	add	r24, r24
- 17a:	8f 5f       	subi	r24, 0xFF	; 255
- 17c:	0e 94 9b 00 	call	0x136	; 0x136 <twi_send_byte>
-        if(status== 0x48){ // ACK was not received - may not be connected/listening
- 180:	88 34       	cpi	r24, 0x48	; 72
- 182:	71 f4       	brne	.+28     	; 0x1a0 <twi_start+0x4c>
-            twi_stop();    
- 184:	0e 94 84 00 	call	0x108	; 0x108 <twi_stop>
-            return 0;	// failure
- 188:	80 e0       	ldi	r24, 0x00	; 0
- 18a:	0d c0       	rjmp	.+26     	; 0x1a6 <twi_start+0x52>
-        }	
-    } else { // WRITE
-        status = twi_send_byte(address<<1);
- 18c:	8c 2f       	mov	r24, r28
- 18e:	88 0f       	add	r24, r24
- 190:	0e 94 9b 00 	call	0x136	; 0x136 <twi_send_byte>
-        if(status== 0x20){ // ACK was not received - may not be connected/listening
- 194:	80 32       	cpi	r24, 0x20	; 32
- 196:	31 f4       	brne	.+12     	; 0x1a4 <twi_start+0x50>
-            twi_stop();
- 198:	0e 94 84 00 	call	0x108	; 0x108 <twi_stop>
-            return 0;	// failure
- 19c:	80 e0       	ldi	r24, 0x00	; 0
- 19e:	03 c0       	rjmp	.+6      	; 0x1a6 <twi_start+0x52>
-        }	        
-    }
-    return 1;	// success
- 1a0:	81 e0       	ldi	r24, 0x01	; 1
- 1a2:	01 c0       	rjmp	.+2      	; 0x1a6 <twi_start+0x52>
- 1a4:	81 e0       	ldi	r24, 0x01	; 1
-    
-}
- 1a6:	df 91       	pop	r29
- 1a8:	cf 91       	pop	r28
- 1aa:	08 95       	ret
-
-000001ac <m_write_register>:
-    if(!twi_start(addr,READ)) return 0;  // START + R
-	return(twi_read_byte());             // return register value
-}
-
-unsigned char m_write_register(unsigned char addr, unsigned char reg, unsigned char value)
-{
- 1ac:	cf 93       	push	r28
- 1ae:	df 93       	push	r29
- 1b0:	c6 2f       	mov	r28, r22
- 1b2:	d4 2f       	mov	r29, r20
-    if(!twi_start(addr,WRITE)) return 0; // START + W
- 1b4:	60 e0       	ldi	r22, 0x00	; 0
- 1b6:	0e 94 aa 00 	call	0x154	; 0x154 <twi_start>
- 1ba:	88 23       	and	r24, r24
- 1bc:	71 f0       	breq	.+28     	; 0x1da <m_write_register+0x2e>
-	if(!twi_send_byte(reg)) return 0;    // register to write to
- 1be:	8c 2f       	mov	r24, r28
- 1c0:	0e 94 9b 00 	call	0x136	; 0x136 <twi_send_byte>
- 1c4:	88 23       	and	r24, r24
- 1c6:	59 f0       	breq	.+22     	; 0x1de <m_write_register+0x32>
-    if(!twi_send_byte(value)) return 0;  // value
- 1c8:	8d 2f       	mov	r24, r29
- 1ca:	0e 94 9b 00 	call	0x136	; 0x136 <twi_send_byte>
- 1ce:	88 23       	and	r24, r24
- 1d0:	41 f0       	breq	.+16     	; 0x1e2 <m_write_register+0x36>
-    twi_stop();                          // STOP
- 1d2:	0e 94 84 00 	call	0x108	; 0x108 <twi_stop>
-    return(1);
- 1d6:	81 e0       	ldi	r24, 0x01	; 1
- 1d8:	05 c0       	rjmp	.+10     	; 0x1e4 <m_write_register+0x38>
-	return(twi_read_byte());             // return register value
-}
-
-unsigned char m_write_register(unsigned char addr, unsigned char reg, unsigned char value)
-{
-    if(!twi_start(addr,WRITE)) return 0; // START + W
- 1da:	80 e0       	ldi	r24, 0x00	; 0
- 1dc:	03 c0       	rjmp	.+6      	; 0x1e4 <m_write_register+0x38>
-	if(!twi_send_byte(reg)) return 0;    // register to write to
- 1de:	80 e0       	ldi	r24, 0x00	; 0
- 1e0:	01 c0       	rjmp	.+2      	; 0x1e4 <m_write_register+0x38>
-    if(!twi_send_byte(value)) return 0;  // value
- 1e2:	80 e0       	ldi	r24, 0x00	; 0
-    twi_stop();                          // STOP
-    return(1);
-}
- 1e4:	df 91       	pop	r29
- 1e6:	cf 91       	pop	r28
- 1e8:	08 95       	ret
-
-000001ea <m_read_register>:
-	set(EIMSK,INT2); // demask the interrupt
-	sei(); // enable global interrupts
-}
-
-unsigned char m_read_register(unsigned char addr, unsigned char reg)
-{
- 1ea:	cf 93       	push	r28
- 1ec:	df 93       	push	r29
- 1ee:	c8 2f       	mov	r28, r24
- 1f0:	d6 2f       	mov	r29, r22
-    if(!twi_start(addr,WRITE)) return 0; // START + W
- 1f2:	60 e0       	ldi	r22, 0x00	; 0
- 1f4:	0e 94 aa 00 	call	0x154	; 0x154 <twi_start>
- 1f8:	88 23       	and	r24, r24
- 1fa:	81 f0       	breq	.+32     	; 0x21c <m_read_register+0x32>
-	if(!twi_send_byte(reg)) return 0;    // register to read
- 1fc:	8d 2f       	mov	r24, r29
- 1fe:	0e 94 9b 00 	call	0x136	; 0x136 <twi_send_byte>
- 202:	88 23       	and	r24, r24
- 204:	69 f0       	breq	.+26     	; 0x220 <m_read_register+0x36>
-    twi_stop();                          // STOP
- 206:	0e 94 84 00 	call	0x108	; 0x108 <twi_stop>
-    if(!twi_start(addr,READ)) return 0;  // START + R
- 20a:	61 e0       	ldi	r22, 0x01	; 1
+000001fa <m_write_register>:
+ 1fa:	cf 93       	push	r28
+ 1fc:	df 93       	push	r29
+ 1fe:	c6 2f       	mov	r28, r22
+ 200:	d4 2f       	mov	r29, r20
+ 202:	60 e0       	ldi	r22, 0x00	; 0
+ 204:	0e 94 d1 00 	call	0x1a2	; 0x1a2 <twi_start>
+ 208:	88 23       	and	r24, r24
+ 20a:	71 f0       	breq	.+28     	; 0x228 <m_write_register+0x2e>
  20c:	8c 2f       	mov	r24, r28
- 20e:	0e 94 aa 00 	call	0x154	; 0x154 <twi_start>
+ 20e:	0e 94 c2 00 	call	0x184	; 0x184 <twi_send_byte>
  212:	88 23       	and	r24, r24
- 214:	39 f0       	breq	.+14     	; 0x224 <m_read_register+0x3a>
-	return(twi_read_byte());             // return register value
- 216:	0e 94 79 00 	call	0xf2	; 0xf2 <twi_read_byte>
- 21a:	05 c0       	rjmp	.+10     	; 0x226 <m_read_register+0x3c>
-	sei(); // enable global interrupts
-}
+ 214:	59 f0       	breq	.+22     	; 0x22c <m_write_register+0x32>
+ 216:	8d 2f       	mov	r24, r29
+ 218:	0e 94 c2 00 	call	0x184	; 0x184 <twi_send_byte>
+ 21c:	88 23       	and	r24, r24
+ 21e:	41 f0       	breq	.+16     	; 0x230 <m_write_register+0x36>
+ 220:	0e 94 ab 00 	call	0x156	; 0x156 <twi_stop>
+ 224:	81 e0       	ldi	r24, 0x01	; 1
+ 226:	05 c0       	rjmp	.+10     	; 0x232 <m_write_register+0x38>
+ 228:	80 e0       	ldi	r24, 0x00	; 0
+ 22a:	03 c0       	rjmp	.+6      	; 0x232 <m_write_register+0x38>
+ 22c:	80 e0       	ldi	r24, 0x00	; 0
+ 22e:	01 c0       	rjmp	.+2      	; 0x232 <m_write_register+0x38>
+ 230:	80 e0       	ldi	r24, 0x00	; 0
+ 232:	df 91       	pop	r29
+ 234:	cf 91       	pop	r28
+ 236:	08 95       	ret
 
-unsigned char m_read_register(unsigned char addr, unsigned char reg)
-{
-    if(!twi_start(addr,WRITE)) return 0; // START + W
- 21c:	80 e0       	ldi	r24, 0x00	; 0
- 21e:	03 c0       	rjmp	.+6      	; 0x226 <m_read_register+0x3c>
-	if(!twi_send_byte(reg)) return 0;    // register to read
- 220:	80 e0       	ldi	r24, 0x00	; 0
- 222:	01 c0       	rjmp	.+2      	; 0x226 <m_read_register+0x3c>
-    twi_stop();                          // STOP
-    if(!twi_start(addr,READ)) return 0;  // START + R
- 224:	80 e0       	ldi	r24, 0x00	; 0
-	return(twi_read_byte());             // return register value
-}
- 226:	df 91       	pop	r29
- 228:	cf 91       	pop	r28
- 22a:	08 95       	ret
+00000238 <m_read_register>:
+ 238:	cf 93       	push	r28
+ 23a:	df 93       	push	r29
+ 23c:	c8 2f       	mov	r28, r24
+ 23e:	d6 2f       	mov	r29, r22
+ 240:	60 e0       	ldi	r22, 0x00	; 0
+ 242:	0e 94 d1 00 	call	0x1a2	; 0x1a2 <twi_start>
+ 246:	88 23       	and	r24, r24
+ 248:	81 f0       	breq	.+32     	; 0x26a <m_read_register+0x32>
+ 24a:	8d 2f       	mov	r24, r29
+ 24c:	0e 94 c2 00 	call	0x184	; 0x184 <twi_send_byte>
+ 250:	88 23       	and	r24, r24
+ 252:	69 f0       	breq	.+26     	; 0x26e <m_read_register+0x36>
+ 254:	0e 94 ab 00 	call	0x156	; 0x156 <twi_stop>
+ 258:	61 e0       	ldi	r22, 0x01	; 1
+ 25a:	8c 2f       	mov	r24, r28
+ 25c:	0e 94 d1 00 	call	0x1a2	; 0x1a2 <twi_start>
+ 260:	88 23       	and	r24, r24
+ 262:	39 f0       	breq	.+14     	; 0x272 <m_read_register+0x3a>
+ 264:	0e 94 a0 00 	call	0x140	; 0x140 <twi_read_byte>
+ 268:	05 c0       	rjmp	.+10     	; 0x274 <m_read_register+0x3c>
+ 26a:	80 e0       	ldi	r24, 0x00	; 0
+ 26c:	03 c0       	rjmp	.+6      	; 0x274 <m_read_register+0x3c>
+ 26e:	80 e0       	ldi	r24, 0x00	; 0
+ 270:	01 c0       	rjmp	.+2      	; 0x274 <m_read_register+0x3c>
+ 272:	80 e0       	ldi	r24, 0x00	; 0
+ 274:	df 91       	pop	r29
+ 276:	cf 91       	pop	r28
+ 278:	08 95       	ret
 
-0000022c <m_port_init>:
+0000027a <m_port_init>:
+ 27a:	48 e3       	ldi	r20, 0x38	; 56
+ 27c:	65 e0       	ldi	r22, 0x05	; 5
+ 27e:	0e 94 fd 00 	call	0x1fa	; 0x1fa <m_write_register>
+ 282:	91 e0       	ldi	r25, 0x01	; 1
+ 284:	81 11       	cpse	r24, r1
+ 286:	01 c0       	rjmp	.+2      	; 0x28a <m_port_init+0x10>
+ 288:	90 e0       	ldi	r25, 0x00	; 0
+ 28a:	89 2f       	mov	r24, r25
+ 28c:	08 95       	ret
 
-//unsigned char m_read_register(unsigned char addr, unsigned char reg);
-//unsigned char m_write_register(unsigned char addr, unsigned char reg, unsigned char value);
+0000028e <m_port_set>:
+ 28e:	1f 93       	push	r17
+ 290:	cf 93       	push	r28
+ 292:	df 93       	push	r29
+ 294:	d8 2f       	mov	r29, r24
+ 296:	c6 2f       	mov	r28, r22
+ 298:	14 2f       	mov	r17, r20
+ 29a:	0e 94 1c 01 	call	0x238	; 0x238 <m_read_register>
+ 29e:	c2 30       	cpi	r28, 0x02	; 2
+ 2a0:	88 f4       	brcc	.+34     	; 0x2c4 <m_port_set+0x36>
+ 2a2:	a1 e0       	ldi	r26, 0x01	; 1
+ 2a4:	b0 e0       	ldi	r27, 0x00	; 0
+ 2a6:	fd 01       	movw	r30, r26
+ 2a8:	02 c0       	rjmp	.+4      	; 0x2ae <m_port_set+0x20>
+ 2aa:	ee 0f       	add	r30, r30
+ 2ac:	ff 1f       	adc	r31, r31
+ 2ae:	1a 95       	dec	r17
+ 2b0:	e2 f7       	brpl	.-8      	; 0x2aa <m_port_set+0x1c>
+ 2b2:	e0 95       	com	r30
+ 2b4:	48 2f       	mov	r20, r24
+ 2b6:	4e 23       	and	r20, r30
+ 2b8:	6c 2f       	mov	r22, r28
+ 2ba:	8d 2f       	mov	r24, r29
+ 2bc:	0e 94 fd 00 	call	0x1fa	; 0x1fa <m_write_register>
+ 2c0:	81 e0       	ldi	r24, 0x01	; 1
+ 2c2:	15 c0       	rjmp	.+42     	; 0x2ee <m_port_set+0x60>
+ 2c4:	9c 2f       	mov	r25, r28
+ 2c6:	92 51       	subi	r25, 0x12	; 18
+ 2c8:	92 30       	cpi	r25, 0x02	; 2
+ 2ca:	80 f4       	brcc	.+32     	; 0x2ec <m_port_set+0x5e>
+ 2cc:	e1 e0       	ldi	r30, 0x01	; 1
+ 2ce:	f0 e0       	ldi	r31, 0x00	; 0
+ 2d0:	9f 01       	movw	r18, r30
+ 2d2:	02 c0       	rjmp	.+4      	; 0x2d8 <m_port_set+0x4a>
+ 2d4:	22 0f       	add	r18, r18
+ 2d6:	33 1f       	adc	r19, r19
+ 2d8:	1a 95       	dec	r17
+ 2da:	e2 f7       	brpl	.-8      	; 0x2d4 <m_port_set+0x46>
+ 2dc:	48 2f       	mov	r20, r24
+ 2de:	42 2b       	or	r20, r18
+ 2e0:	6c 2f       	mov	r22, r28
+ 2e2:	8d 2f       	mov	r24, r29
+ 2e4:	0e 94 fd 00 	call	0x1fa	; 0x1fa <m_write_register>
+ 2e8:	81 e0       	ldi	r24, 0x01	; 1
+ 2ea:	01 c0       	rjmp	.+2      	; 0x2ee <m_port_set+0x60>
+ 2ec:	80 e0       	ldi	r24, 0x00	; 0
+ 2ee:	df 91       	pop	r29
+ 2f0:	cf 91       	pop	r28
+ 2f2:	1f 91       	pop	r17
+ 2f4:	08 95       	ret
 
-unsigned char m_port_init(unsigned char address){
-	if(m_write_register(address, 0x05, 0x38))
- 22c:	48 e3       	ldi	r20, 0x38	; 56
- 22e:	65 e0       	ldi	r22, 0x05	; 5
- 230:	0e 94 d6 00 	call	0x1ac	; 0x1ac <m_write_register>
- 234:	91 e0       	ldi	r25, 0x01	; 1
- 236:	81 11       	cpse	r24, r1
- 238:	01 c0       	rjmp	.+2      	; 0x23c <m_port_init+0x10>
- 23a:	90 e0       	ldi	r25, 0x00	; 0
-        return 1;
-    else
-        return 0;
-}
- 23c:	89 2f       	mov	r24, r25
- 23e:	08 95       	ret
+000002f6 <m_port_clear>:
+ 2f6:	1f 93       	push	r17
+ 2f8:	cf 93       	push	r28
+ 2fa:	df 93       	push	r29
+ 2fc:	d8 2f       	mov	r29, r24
+ 2fe:	c6 2f       	mov	r28, r22
+ 300:	14 2f       	mov	r17, r20
+ 302:	0e 94 1c 01 	call	0x238	; 0x238 <m_read_register>
+ 306:	9c 2f       	mov	r25, r28
+ 308:	92 51       	subi	r25, 0x12	; 18
+ 30a:	92 30       	cpi	r25, 0x02	; 2
+ 30c:	88 f4       	brcc	.+34     	; 0x330 <m_port_clear+0x3a>
+ 30e:	a1 e0       	ldi	r26, 0x01	; 1
+ 310:	b0 e0       	ldi	r27, 0x00	; 0
+ 312:	fd 01       	movw	r30, r26
+ 314:	02 c0       	rjmp	.+4      	; 0x31a <m_port_clear+0x24>
+ 316:	ee 0f       	add	r30, r30
+ 318:	ff 1f       	adc	r31, r31
+ 31a:	1a 95       	dec	r17
+ 31c:	e2 f7       	brpl	.-8      	; 0x316 <m_port_clear+0x20>
+ 31e:	e0 95       	com	r30
+ 320:	48 2f       	mov	r20, r24
+ 322:	4e 23       	and	r20, r30
+ 324:	6c 2f       	mov	r22, r28
+ 326:	8d 2f       	mov	r24, r29
+ 328:	0e 94 fd 00 	call	0x1fa	; 0x1fa <m_write_register>
+ 32c:	81 e0       	ldi	r24, 0x01	; 1
+ 32e:	13 c0       	rjmp	.+38     	; 0x356 <m_port_clear+0x60>
+ 330:	c2 30       	cpi	r28, 0x02	; 2
+ 332:	80 f4       	brcc	.+32     	; 0x354 <m_port_clear+0x5e>
+ 334:	e1 e0       	ldi	r30, 0x01	; 1
+ 336:	f0 e0       	ldi	r31, 0x00	; 0
+ 338:	9f 01       	movw	r18, r30
+ 33a:	02 c0       	rjmp	.+4      	; 0x340 <m_port_clear+0x4a>
+ 33c:	22 0f       	add	r18, r18
+ 33e:	33 1f       	adc	r19, r19
+ 340:	1a 95       	dec	r17
+ 342:	e2 f7       	brpl	.-8      	; 0x33c <m_port_clear+0x46>
+ 344:	48 2f       	mov	r20, r24
+ 346:	42 2b       	or	r20, r18
+ 348:	6c 2f       	mov	r22, r28
+ 34a:	8d 2f       	mov	r24, r29
+ 34c:	0e 94 fd 00 	call	0x1fa	; 0x1fa <m_write_register>
+ 350:	81 e0       	ldi	r24, 0x01	; 1
+ 352:	01 c0       	rjmp	.+2      	; 0x356 <m_port_clear+0x60>
+ 354:	80 e0       	ldi	r24, 0x00	; 0
+ 356:	df 91       	pop	r29
+ 358:	cf 91       	pop	r28
+ 35a:	1f 91       	pop	r17
+ 35c:	08 95       	ret
 
-00000240 <m_port_set>:
+0000035e <_exit>:
+ 35e:	f8 94       	cli
 
-unsigned char m_port_set(unsigned char address, unsigned char reg, unsigned char pin){
- 240:	1f 93       	push	r17
- 242:	cf 93       	push	r28
- 244:	df 93       	push	r29
- 246:	d8 2f       	mov	r29, r24
- 248:	c6 2f       	mov	r28, r22
- 24a:	14 2f       	mov	r17, r20
-	unsigned char value = m_read_register(address, reg);
- 24c:	0e 94 f5 00 	call	0x1ea	; 0x1ea <m_read_register>
-	if(reg == DDRH || reg == DDRG){
- 250:	c2 30       	cpi	r28, 0x02	; 2
- 252:	88 f4       	brcc	.+34     	; 0x276 <m_port_set+0x36>
-        m_write_register(address, reg, value &= ~(1 << pin));
- 254:	a1 e0       	ldi	r26, 0x01	; 1
- 256:	b0 e0       	ldi	r27, 0x00	; 0
- 258:	fd 01       	movw	r30, r26
- 25a:	02 c0       	rjmp	.+4      	; 0x260 <m_port_set+0x20>
- 25c:	ee 0f       	add	r30, r30
- 25e:	ff 1f       	adc	r31, r31
- 260:	1a 95       	dec	r17
- 262:	e2 f7       	brpl	.-8      	; 0x25c <m_port_set+0x1c>
- 264:	e0 95       	com	r30
- 266:	48 2f       	mov	r20, r24
- 268:	4e 23       	and	r20, r30
- 26a:	6c 2f       	mov	r22, r28
- 26c:	8d 2f       	mov	r24, r29
- 26e:	0e 94 d6 00 	call	0x1ac	; 0x1ac <m_write_register>
-        return 1;
- 272:	81 e0       	ldi	r24, 0x01	; 1
- 274:	15 c0       	rjmp	.+42     	; 0x2a0 <m_port_set+0x60>
-	}
-	else if(reg == PORTH || reg == PORTG){
- 276:	9c 2f       	mov	r25, r28
- 278:	92 51       	subi	r25, 0x12	; 18
- 27a:	92 30       	cpi	r25, 0x02	; 2
- 27c:	80 f4       	brcc	.+32     	; 0x29e <m_port_set+0x5e>
-        m_write_register(address, reg, value |= 1 << pin);
- 27e:	e1 e0       	ldi	r30, 0x01	; 1
- 280:	f0 e0       	ldi	r31, 0x00	; 0
- 282:	9f 01       	movw	r18, r30
- 284:	02 c0       	rjmp	.+4      	; 0x28a <m_port_set+0x4a>
- 286:	22 0f       	add	r18, r18
- 288:	33 1f       	adc	r19, r19
- 28a:	1a 95       	dec	r17
- 28c:	e2 f7       	brpl	.-8      	; 0x286 <m_port_set+0x46>
- 28e:	48 2f       	mov	r20, r24
- 290:	42 2b       	or	r20, r18
- 292:	6c 2f       	mov	r22, r28
- 294:	8d 2f       	mov	r24, r29
- 296:	0e 94 d6 00 	call	0x1ac	; 0x1ac <m_write_register>
-        return 1;
- 29a:	81 e0       	ldi	r24, 0x01	; 1
- 29c:	01 c0       	rjmp	.+2      	; 0x2a0 <m_port_set+0x60>
-    }
-    else return 0;
- 29e:	80 e0       	ldi	r24, 0x00	; 0
-}
- 2a0:	df 91       	pop	r29
- 2a2:	cf 91       	pop	r28
- 2a4:	1f 91       	pop	r17
- 2a6:	08 95       	ret
-
-000002a8 <_exit>:
- 2a8:	f8 94       	cli
-
-000002aa <__stop_program>:
- 2aa:	ff cf       	rjmp	.-2      	; 0x2aa <__stop_program>
+00000360 <__stop_program>:
+ 360:	ff cf       	rjmp	.-2      	; 0x360 <__stop_program>
