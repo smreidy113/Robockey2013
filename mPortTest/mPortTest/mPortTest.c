@@ -18,10 +18,11 @@ char yes;
 int main(void)
 {
 	m_clockdivide(0);
+	m_bus_init();
 	yes = m_port_init(ADDR);
-	m_port_set(ADDR,DDRG,3);
 	int flag = 0;
 	set(DDRD,7);
+	m_port_set(ADDR,DDRH,7);
     while(1)
     {
 		if (yes){
@@ -32,12 +33,13 @@ int main(void)
 		}
         m_wait(500);
 		if (flag == 0) {
-			m_port_set(ADDR,PORTG,3);
-			//set(PORTD,7);
+			m_green(TOGGLE);
+			m_port_set(ADDR,PORTH,7);
+			set(PORTD,7);
 			flag = 1;
 		} else {
-			m_port_clear(ADDR,PORTG,3);
-			//clear(PORTD,7);
+			m_port_clear(ADDR,PORTH,7);
+			clear(PORTD,7);
 			flag = 0;
 		}
     }
