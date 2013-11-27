@@ -12,13 +12,22 @@
 #include <avr/io.h>
 #include <stdarg.h>
 #include "m_general.h"
-#include "m_rf.h"
-#include "m_port.h"
-#include "m_num.h"
+//#include "m_rf.h"
+//#include "m_port.h"
+//#include "m_num.h"
 #include "m_wii.h"
-#include "m_wireless_variables.h" //define CHANNEL, ADDRESS, PACKET_LENGTH in this header (# of variables to send = (PACKET_LENGTH-1))
+//#include "m_wireless_variables.h" //define CHANNEL, ADDRESS, PACKET_LENGTH in this header (# of variables to send = (PACKET_LENGTH-1))
 #include "m_usb.h"
 #include "m_loc.h"
+
+
+// subroutines
+void set_ADC(void);
+void update_ADC(void);
+
+// global variables
+#define DEBUG 1
+#define CLOCK 0
 
 void rotate(int dir) {
 	OCR1B = OCR1A;
@@ -99,9 +108,12 @@ void game_resume() {
 	set(DDRB,3);
 }
 
-int MATLAB_test(int count, ...) {
+
+
+int MATLAB_test(float* data) {
+	char rx_buffer;
 	//see wikipedia article on variadic functions******
-			va_list ap;
+			/*va_list ap;
 			int array[count];
 			va_start(ap, count);
 			for (int j= 0; j < count; j++) {
@@ -125,7 +137,24 @@ int MATLAB_test(int count, ...) {
 		
 
 				m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
+			}*/
+		
+		while(!m_usb_rx_available());  	//wait for an indication from the computer
+		rx_buffer = m_usb_rx_char();  	//grab the computer packet
+
+		m_usb_rx_flush();  				//clear buffer
+
+		if(rx_buffer == 1) {  			//computer wants ir buffer
+			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
+
+			for (int i = 0 ; i < 15 ; i++){
+				m_usb_tx_int((int)data[i]);
+				m_usb_tx_char('\t');
+
 			}
+
+			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
+		}
 }
 
 int main(void)
@@ -137,7 +166,7 @@ int main(void)
 	int counter = 0;
 	/*/
 	
-	m_num_init();
+	//m_num_init();
 	int flag;
 	
 	m_clockdivide(0);
@@ -205,8 +234,8 @@ int main(void)
 	set(DDRC,6);
 	
 	//Pins for determining direction of wheels
-	clear(DDRB,2);
-	clear(DDRB,3);
+	set(DDRB,2);
+	set(DDRB,3);
 	
 	//ADC's
 	sei();					//Set up interrupts
@@ -244,10 +273,13 @@ int main(void)
 	long count = 0;
 	
 	char yes;
-	m_usb_init();
 	m_bus_init();
 	m_wii_open();
-	local_init();
+	//m_usb_init();
+	//while(!m_usb_isconnected());
+	//local_init();
+	
+	char rx_buffer;
 
     while(1)
     {
@@ -271,15 +303,30 @@ int main(void)
 		*/
 		
 		//constant localization
-		yes = m_wii_open();
-		m_wii_read(blobs);
+		m_red(ON);
+		m_green(OFF);
+		//localize(data);
+		m_red(OFF);
+		m_green(ON);
 		
-					if (yes) {
-						MATLAB_test(13, 1, (int) blobs[0], (int)blobs[1], (int)blobs[2], (int)blobs[3], (int)blobs[4], (int)blobs[5], (int)blobs[6], (int)blobs[7], (int)blobs[8], (int)blobs[9], (int)blobs[10], (int)blobs[11]);
-					}
-					
-					else {m_red(ON);}
-					
+		/*
+		while(!m_usb_rx_available());  	//wait for an indication from the computer
+		rx_buffer = m_usb_rx_char();  	//grab the computer packet
+
+		m_usb_rx_flush();  				//clear buffer
+
+		if(rx_buffer == 1) {  			//computer wants ir buffer
+			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
+
+			for (int i = 0 ; i < 15 ; i++){
+				m_usb_tx_int((int)data[i]);
+				m_usb_tx_char('\t');
+
+			}
+
+			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
+		}
+		*/
 		
 		//switch states
         switch (state) {
@@ -291,15 +338,11 @@ int main(void)
 			break;
 			
 			case -3: //test Limit switches
+				/*
 				if (check(PINB,1)) {
 					
 					rotate(LEFT);
 				}
-				
-				//else if (!check(PINB,1)) {
-					//OCR1B = 0;
-					//OCR3A = 0;
-				//}
 				
 				else if (check(PINB,0)) {
 					
@@ -310,12 +353,21 @@ int main(void)
 					OCR1B = 0;
 					OCR3A = 0;
 				}
+				*/
+				OCR1B = OCR1A;
+				OCR3A = ICR3;
+				set(PORTB,2);
+				set(PORTB,3);
+				m_wait(1000);
+				clear(PORTB,3);
+				clear(PORTB,2);
 			break;
 			
 			case -2: //test turning n driving n stuff
 			turn(LEFT,OCR1A/4);
 			m_wait(1000);
 			turn(RIGHT, ICR3/5);
+			m_wait(1000);
 			break;
 			
 				
@@ -367,3 +419,4 @@ ISR(ADC_vect) {
 		m_green(OFF);
 	}
 }
+

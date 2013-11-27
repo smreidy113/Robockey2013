@@ -6,12 +6,6 @@ m_bus.c
 
 m_loc.c
 
-m_num.c
-
-m_port.c
-
-m_rf.c
-
 m_usb.c
 
 m_wii.c

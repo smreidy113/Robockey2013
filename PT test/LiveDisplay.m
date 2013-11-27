@@ -28,7 +28,7 @@
 %
 
 %% If the above initialization does not work, please run the following commands manually and disconnect and reconnect USB.
-fclose(serial('COM4','Baudrate', 9600));
+fclose(serial('COM7','Baudrate', 9600));
 fclose(instrfindall);
 clear all;
 close all;
@@ -41,7 +41,7 @@ close all;
 
 %% SERIAL
 %----> for ***WINDOZE***
-M2USB = serial('COM4','Baudrate', 9600);
+M2USB = serial('COM7','Baudrate', 9600);
 % *** Use the device manager to check where the microcontroller is plugged
 % into.
 
@@ -55,8 +55,13 @@ fwrite(M2USB,1);% Send a packet to the M2.
 m2_buffer = fgetl(M2USB);   % Load buffer
 fwrite(M2USB,1);
 
-        %[OCR3A, remain] = strtok(m2_buffer);
-        %[ICR3] = strtok(remain);
+        [x, remain] = strtok(m2_buffer);
+        [y, remain2] = strtok(remain);
+        [a, remain3] = strtok(remain2);
+        [x_top, remain4] = strtok(remain3);
+        [y_top, remain5] = strtok(remain4);
+        [x_bottom, remain6] = strtok(remain5);
+        [y_bottom] = strtok(remain6);
 
         m2_buffer;
 
@@ -72,13 +77,21 @@ try
         fwrite(M2USB,1);            % Confirmation packet
         
 
-        %[OCR3A, remain] = strtok(m2_buffer);
-        %[ICR3] = strtok(remain);
-
+        [x, remain] = strtok(m2_buffer);
+        [y, remain2] = strtok(remain);
+        [a, remain3] = strtok(remain2);
+        [x_top, remain4] = strtok(remain3);
+        [y_top, remain5] = strtok(remain4);
+        [x_bottom, remain6] = strtok(remain5);
+        [y_bottom] = strtok(remain6);
         m2_buffer;
         
-        %int_OCR3A = str2double(OCR3A);
-        %int_ICR3 = str2double(ICR3);
+        int_x = str2double(x);
+       int_y = str2double(y);
+       int_x_top = str2double(x_top);
+       int_y_top = str2double(y_top);
+       int_x_bottom = str2double(x_bottom);
+       int_y_bottom = str2double(y_bottom);
 
         disp(m2_buffer);
         %% Plotting
@@ -86,15 +99,15 @@ try
         % clf;
         % hold on
         
-       % plot(Wii_m2_x, Wii_m2_y, '.', Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b', Wii_m2_posx, Wii_m2_posy, 'p');
+       plot(int_x, int_y, '.', int_x_top,int_y_top, 'o', int_x_bottom,int_y_bottom,'o');
 
-        %axis([0 1023 0 768]);
+        axis([0 1023 0 768]);
         
         
-        %grid on
-        %pause(.04);
+        grid on
+        pause(.04);
         
-        %hold off
+        hold off
         
         i=i+1;  % Incrememnt indexer
         %% Logging
