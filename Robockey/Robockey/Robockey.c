@@ -10,6 +10,7 @@
 #define LEFT 1
 
 #include <avr/io.h>
+#include <stdarg.h>
 #include "m_general.h"
 #include "m_rf.h"
 #include "m_port.h"
@@ -17,10 +18,11 @@
 #include "m_wii.h"
 #include "m_wireless_variables.h" //define CHANNEL, ADDRESS, PACKET_LENGTH in this header (# of variables to send = (PACKET_LENGTH-1))
 #include "m_usb.h"
+#include "m_loc.h"
 
 void rotate(int dir) {
 	OCR1B = OCR1A;
-	ICR3 = OCR3A;
+	OCR3A = ICR3;
 	if (dir == RIGHT) {
 		set(PORTB,2);
 		clear(PORTB,3);
@@ -31,106 +33,36 @@ void rotate(int dir) {
 	}
 }
 
-void turn(int dir) {
-	//TODO: Implement code
+void turn(int dir,int degree) {
+	set(PORTB,2);
+	set(PORTB,3);
+	if (dir == LEFT) {
+		OCR3A = ICR3;
+		OCR1B = degree;
+	}
+	
+		if (dir == RIGHT) {
+			OCR3A = degree;
+			OCR1B = OCR1A;
+		}
 }
 
 void reverse(){
 	OCR1B = OCR1A;
-	ICR3 = OCR3A;
+	OCR3A = ICR3;
 	clear(PORTB,2);
 	clear(PORTB,3);
 }
 
 void forward() {
 			OCR1B = OCR1A;
-			ICR3 = OCR3A;
+			OCR3A = ICR3;
 			set(PORTB,2);
 			set(PORTB,3);
 }
 
 void PT_cycle() {
-	//cycles ADC input clockwise
 
-	clear(ADCSRB, MUX5);//Set analog input (F6) PHOTOTRANSISTOR 1
-	set(ADMUX, MUX2);	//^
-	set(ADMUX, MUX1);	//^
-	clear(ADMUX, MUX0);	//^
-	
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	/*
-	clear(ADCSRA, ADEN);	//stop conversion
-	clear(ADCSRA, ADSC);
-	
-	clear(ADCSRB, MUX5);//Set analog input (F5)
-	set(ADMUX, MUX2);	//^
-	clear(ADMUX, MUX1);	//^
-	set(ADMUX, MUX0);	//^
-
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	clear(ADCSRA, ADEN);	//stop conversion
-	clear(ADCSRA, ADSC);
-		
-	clear(ADCSRB, MUX5);//Set analog input (F4)
-	set(ADMUX, MUX2);	//^
-	clear(ADMUX, MUX1);	//^
-	clear(ADMUX, MUX0);	//^
-
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	clear(ADCSRA, ADEN);	//stop conversion
-	clear(ADCSRA, ADSC);
-	
-	clear(ADCSRB, MUX5);//Set analog input (F1)
-	clear(ADMUX, MUX2);	//^
-	clear(ADMUX, MUX1);	//^
-	set(ADMUX, MUX0);	//^
-	
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	clear(ADCSRA, ADEN);	//stop conversion
-	clear(ADCSRA, ADSC);
-	
-	clear(ADCSRB, MUX5);//Set analog input (F0)
-	clear(ADMUX, MUX2);	//^
-	clear(ADMUX, MUX1);	//^
-	clear(ADMUX, MUX0);	//^
-
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	clear(ADCSRA, ADEN);	//stop conversion
-	clear(ADCSRA, ADSC);
-	
-	set(ADCSRB, MUX5);//Set analog input (D4)
-	clear(ADMUX, MUX2);	//^
-	clear(ADMUX, MUX1);	//^
-	clear(ADMUX, MUX0);	//^
-	
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	clear(ADCSRA, ADEN);	//stop conversion
-	clear(ADCSRA, ADSC);
-	
-	set(ADCSRB, MUX5);//Set analog input (D6)
-	clear(ADMUX, MUX2);	//^
-	clear(ADMUX, MUX1);	//^
-	set(ADMUX, MUX0);	//^
-	
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	clear(ADCSRA, ADEN);	//stop conversion
-	clear(ADCSRA, ADSC);
-	*/
-	
 }
 
 void findPuck() {
@@ -149,13 +81,11 @@ void drive_to_goal() {
 
 void shoot() {
 		set(PORTB,7);
-		m_wait(300);
+		m_wait(100);
 		clear(PORTB,7);
 }
 
 void game_pause() {
-	OCR1B= 0;
-	ICR3 = 0;
 	clear(DDRB,6);
 	clear(DDRC,6);
 	clear(DDRB,2);
@@ -163,12 +93,39 @@ void game_pause() {
 }
 
 void game_resume() {
-	OCR1B = OCR1A;
-	ICR3 = OCR3A;
 	set(DDRB,6);
 	set(DDRC,6);
 	set(DDRB,2);
 	set(DDRB,3);
+}
+
+int MATLAB_test(int count, ...) {
+	//see wikipedia article on variadic functions******
+			va_list ap;
+			int array[count];
+			va_start(ap, count);
+			for (int j= 0; j < count; j++) {
+				array[j] = va_arg(ap, int);
+			}
+			va_end(ap);
+		//*************
+			char rx_buffer;
+			while(!m_usb_rx_available());  	//wait for an indication from the computer
+			rx_buffer = m_usb_rx_char();  	//grab the computer packet
+
+			m_usb_rx_flush();  				//clear buffer
+
+			if(rx_buffer == 1) {  			//computer wants ir buffer
+				//write ir buffer as concatenated hex:  i.e. f0f1f4f5
+
+				for (int i = 0; i < count; i++) {
+				m_usb_tx_uint(array[i]);
+				m_usb_tx_char('\t');
+				}
+		
+
+				m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
+			}
 }
 
 int main(void)
@@ -200,8 +157,8 @@ int main(void)
 	
 	set(DDRB,7);
 	
-	OCR1A = 0xFF;
-	OCR1B = 0;
+	OCR0A = 0xFF;
+	OCR0B = 0;
 	
 	//TIMER 1: For Controlling the left wheel
 	
@@ -223,21 +180,22 @@ int main(void)
 	OCR1B = 0;
 	
 	//TIMER 3: For Controlling the right wheel
+	//up to ICR3, clear at OCR3A & set at rollover
 	
 	set(TCCR3B, WGM33);
 	set(TCCR3B, WGM32);
 	set(TCCR3A, WGM31);
 	clear(TCCR3A, WGM30);
 	
-	set(TCCR3A, COM3A1);
-	clear(TCCR3A, COM3A0);
+	set(TCCR3A, COM3A1); 
+	clear(TCCR3A, COM3A0); 
 	
 	clear(TCCR3B, CS32);
 	clear(TCCR3B, CS31);
 	set(TCCR3B, CS30);
 	
 	ICR3 = 0xFFFF;
-	OCR1A = 0;
+	OCR3A = 0;
 	
 	//Pin for controlling solenoid pulse
 	set(DDRB,7);
@@ -247,8 +205,8 @@ int main(void)
 	set(DDRC,6);
 	
 	//Pins for determining direction of wheels
-	set(DDRB,2);
-	set(DDRB,3);
+	clear(DDRB,2);
+	clear(DDRB,3);
 	
 	//ADC's
 	sei();					//Set up interrupts
@@ -282,11 +240,15 @@ int main(void)
 	
 	 
 	int state; // state variable
-	state = -1; //set state
-	int count = 0;
+	state = -3; //set state
+	long count = 0;
 	
+	char yes;
 	m_usb_init();
-	
+	m_bus_init();
+	m_wii_open();
+	local_init();
+
     while(1)
     {
 		//wireless stuffs
@@ -294,8 +256,8 @@ int main(void)
         //manually say what each buffer[i] will be (corresponds to a state, variable output, etc.)
 
         //e.g.
-        buffer[0] = 50;
-        buffer[1] = 2;
+        //buffer[0] = 50;
+        //buffer[1] = 2;
         
 		/*
         if (counter > 30000) {
@@ -308,55 +270,52 @@ int main(void)
         counter++;
 		*/
 		
+		//constant localization
+		yes = m_wii_open();
+		m_wii_read(blobs);
+		
+					if (yes) {
+						MATLAB_test(13, 1, (int) blobs[0], (int)blobs[1], (int)blobs[2], (int)blobs[3], (int)blobs[4], (int)blobs[5], (int)blobs[6], (int)blobs[7], (int)blobs[8], (int)blobs[9], (int)blobs[10], (int)blobs[11]);
+					}
+					
+					else {m_red(ON);}
+					
 		
 		//switch states
         switch (state) {
 			
-			case -4: //test phototransistors
-				PT_cycle();
-				if (count > 10000) {
-				m_usb_tx_string("\tADC: ");
-				m_usb_tx_int(ADC);
-				count = 0;
-				}
-				count++;
+			case -4:
+			m_wait(1000);
+				shoot();
+				state = -3;
 			break;
 			
 			case -3: //test Limit switches
-				if (check(PINB,0)) {
-					m_green(ON);
-				}
-				
-				else {
-					m_green(OFF);
-				}
-				
 				if (check(PINB,1)) {
-					m_red(ON);
+					
+					rotate(LEFT);
+				}
+				
+				//else if (!check(PINB,1)) {
+					//OCR1B = 0;
+					//OCR3A = 0;
+				//}
+				
+				else if (check(PINB,0)) {
+					
+					rotate(RIGHT);
 				}
 				
 				else {
-					m_red(OFF);
+					OCR1B = 0;
+					OCR3A = 0;
 				}
 			break;
 			
-			case -2: //test motor & shooting
-				//m_wait(500);
-				//rotate(RIGHT);
-				//m_wait(2000);
-				//rotate(RIGHT);
-				//m_wait(2000);
-				//drive_to_puck();
-				//m_wait(1000);
-				//game_pause();
-				//m_wait(500);
-				forward();
-				m_wait(500);
-				reverse();
-				m_wait(500);
-				game_pause();
-				m_wait(500);
-				game_resume();
+			case -2: //test turning n driving n stuff
+			turn(LEFT,OCR1A/4);
+			m_wait(1000);
+			turn(RIGHT, ICR3/5);
 			break;
 			
 				

@@ -28,7 +28,7 @@
 %
 
 %% If the above initialization does not work, please run the following commands manually and disconnect and reconnect USB.
-fclose(serial('COM4','Baudrate', 9600));
+fclose(serial('COM7','Baudrate', 9600));
 fclose(instrfindall);
 clear all;
 close all;
@@ -41,7 +41,7 @@ close all;
 
 %% SERIAL
 %----> for ***WINDOZE***
-M2USB = serial('COM4','Baudrate', 9600);
+M2USB = serial('COM7','Baudrate', 9600);
 % *** Use the device manager to check where the microcontroller is plugged
 % into.
 
@@ -58,18 +58,18 @@ fwrite(M2USB,1);
         [m2_x, remain] = strtok(m2_buffer);
         [m2_y, remain2] = strtok(remain);
         [m2_a, remain3] = strtok(remain2);
-%         [m2_x_top, remain4] = strtok(remain3);
-%         [m2_y_top, remain5] = strtok(remain4);
-%         [m2_x_bottom, remain6] = strtok(remain5);
-%         [m2_y_bottom, remain7] = strtok(remain6);
-%         [m2_x_right, remain8] = strtok(remain7);
-%         [m2_y_right, remain9] = strtok(remain8);
-%         [m2_x_left, remain10] = strtok(remain9);
-%         [m2_y_left, remain11] = strtok(remain10);
-%         [m2_phi, remain12] = strtok(remain11);
-%         [m2_posx, remain13] = strtok(remain12);
-%         [m2_posy, remain14] = strtok(remain13);
-%         [m2_r] = strtok(remain14);
+        [m2_x_top, remain4] = strtok(remain3);
+        [m2_y_top, remain5] = strtok(remain4);
+        [m2_x_bottom, remain6] = strtok(remain5);
+        [m2_y_bottom, remain7] = strtok(remain6);
+        [m2_x_right, remain8] = strtok(remain7);
+        [m2_y_right, remain9] = strtok(remain8);
+        [m2_x_left, remain10] = strtok(remain9);
+        [m2_y_left, remain11] = strtok(remain10);
+        [m2_phi, remain12] = strtok(remain11);
+        [m2_posx, remain13] = strtok(remain12);
+        [m2_posy, remain14] = strtok(remain13);
+        [m2_r] = strtok(remain14);
         m2_buffer;
 
 figure;
@@ -86,42 +86,42 @@ try
         [m2_x, remain] = strtok(m2_buffer);
         [m2_y, remain2] = strtok(remain);
         [m2_a, remain3] = strtok(remain2);
-%         [m2_x_top, remain4] = strtok(remain3);
-%         [m2_y_top, remain5] = strtok(remain4);
-%         [m2_x_bottom, remain6] = strtok(remain5);
-%         [m2_y_bottom, remain7] = strtok(remain6);
-%         [m2_x_right, remain8] = strtok(remain7);
-%         [m2_y_right, remain9] = strtok(remain8);
-%         [m2_x_left, remain10] = strtok(remain9);
-%         [m2_y_left, remain11] = strtok(remain10);
-%         [m2_phi, remain12] = strtok(remain11);
-%         [m2_posx, remain13] = strtok(remain12);
-%         [m2_posy, remain14] = strtok(remain13);
-%         [m2_r] = strtok(remain14);
+        [m2_x_top, remain4] = strtok(remain3);
+        [m2_y_top, remain5] = strtok(remain4);
+        [m2_x_bottom, remain6] = strtok(remain5);
+        [m2_y_bottom, remain7] = strtok(remain6);
+        [m2_x_right, remain8] = strtok(remain7);
+        [m2_y_right, remain9] = strtok(remain8);
+        [m2_x_left, remain10] = strtok(remain9);
+        [m2_y_left, remain11] = strtok(remain10);
+        [m2_phi, remain12] = strtok(remain11);
+        [m2_posx, remain13] = strtok(remain12);
+        [m2_posy, remain14] = strtok(remain13);
+        [m2_r] = strtok(remain14);
         m2_buffer;
         
         Wii_m2_x = str2double(m2_x);
         Wii_m2_y = str2double(m2_y);
-%         Wii_m2_x_top = str2double(m2_x_top);
-%         Wii_m2_y_top = str2double(m2_y_top);
-%         Wii_m2_x_bottom = str2double(m2_x_bottom);
-%         Wii_m2_y_bottom = str2double(m2_y_bottom);
-%         Wii_m2_x_right = str2double(m2_x_right);
-%         Wii_m2_y_right = str2double(m2_y_right);
-%         Wii_m2_x_left = str2double(m2_x_left);
-%         Wii_m2_y_left = str2double(m2_y_left);
-%         Wii_m2_posx = str2double(m2_posx);
-%         Wii_m2_posy = str2double(m2_posy);
-%         Wii_m2_r = str2double(m2_r);
+        Wii_m2_x_top = str2double(m2_x_top);
+        Wii_m2_y_top = str2double(m2_y_top);
+        Wii_m2_x_bottom = str2double(m2_x_bottom);
+        Wii_m2_y_bottom = str2double(m2_y_bottom);
+        Wii_m2_x_right = str2double(m2_x_right);
+        Wii_m2_y_right = str2double(m2_y_right);
+        Wii_m2_x_left = str2double(m2_x_left);
+        Wii_m2_y_left = str2double(m2_y_left);
+        Wii_m2_posx = str2double(m2_posx);
+        Wii_m2_posy = str2double(m2_posy);
+        Wii_m2_r = str2double(m2_r);
         
         %% Plotting
         % figure(1);
         % clf;
         % hold on
         
-        plot(Wii_m2_x, Wii_m2_y, '.');%, Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b', Wii_m2_posx, Wii_m2_posy, 'p');
+        plot(Wii_m2_x, Wii_m2_y, '.', Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b', Wii_m2_posx, Wii_m2_posy, 'p');
         disp(m2_buffer);
-        %disp(Wii_m2_r);
+        disp(Wii_m2_r);
         axis([0 1023 0 768]);
         
         

@@ -55,13 +55,12 @@ fwrite(M2USB,1);% Send a packet to the M2.
 m2_buffer = fgetl(M2USB);   % Load buffer
 fwrite(M2USB,1);
 
-        %[OCR3A, remain] = strtok(m2_buffer);
-        %[ICR3] = strtok(remain);
+        [ADC1, remain] = strtok(m2_buffer);
 
         m2_buffer;
 
 
-%figure;
+
 
 %% Run program forever
 try
@@ -72,30 +71,21 @@ try
         fwrite(M2USB,1);            % Confirmation packet
         
 
-        %[OCR3A, remain] = strtok(m2_buffer);
-        %[ICR3] = strtok(remain);
+        [ADC1, remain] = strtok(m2_buffer);
 
         m2_buffer;
         
-        %int_OCR3A = str2double(OCR3A);
-        %int_ICR3 = str2double(ICR3);
+        int_ADC1 = str2double(ADC1);
 
-        disp(m2_buffer);
+        
         %% Plotting
         % figure(1);
         % clf;
         % hold on
         
-       % plot(Wii_m2_x, Wii_m2_y, '.', Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b', Wii_m2_posx, Wii_m2_posy, 'p');
+        disp(m2_buffer);
+        
 
-        %axis([0 1023 0 768]);
-        
-        
-        %grid on
-        %pause(.04);
-        
-        %hold off
-        
         i=i+1;  % Incrememnt indexer
         %% Logging
         %    if(rem(i,LOGFREQUENCY) == 0)
