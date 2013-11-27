@@ -11,7 +11,7 @@
 #include "m_general.h"
 #include "m_usb.h"
 
-volatile int flag = 0;
+int flag = 0;
 
 int i = 0;
 int ADCarr[7] = {0, 0, 0, 0, 0, 0, 0};
@@ -59,17 +59,19 @@ void chooseInput(int i) {
 		clear(ADMUX, MUX2);	//^
 		clear(ADMUX, MUX1);	//^
 		set(ADMUX, MUX0);	//^
-		break;
-		default:
-		i = 0;
-		clear(ADCSRB, MUX5);//Set analog input (F0)
-		clear(ADMUX, MUX2);	//^
-		clear(ADMUX, MUX1);	//^
-		clear(ADMUX, MUX0);	//^
+		i=-1;
 		break;
 	}
 }
 
+int ADC0 = 0;
+int ADC1 = 0;
+int ADC2 = 0;
+int ADC3 = 0;
+int ADC4 = 0;
+int ADC5 = 0;
+int ADC6 = 0;
+int conversion = 0;
 
 int main(void)
 {
@@ -90,6 +92,8 @@ int main(void)
 	set(DIDR0, ADC0D);	//Disable digital input for F0
 	
 	set(ADCSRA, ADATE);	//Set trigger to free-running mode
+	
+	chooseInput(1);
 	
 	set(ADCSRA, ADEN);	//Enable/Start conversion
 	set(ADCSRA, ADSC);	//^
@@ -116,22 +120,8 @@ int main(void)
 
 	while(1){
 		
-	m_green(TOGGLE);		
-					if (i < 7 && i >= 0) {
-						ADCarr[i] = (int) ADC;
-					}
-					i++;
-					clear(ADCSRA, ADEN);	//Enable/Start conversion
-					clear(ADCSRA, ADSC);	//^
-					chooseInput(i);
-					set(ADCSRA, ADATE);	//Set trigger to free-running mode
-					set(ADCSRA, ADEN);	//Enable/Start conversion
-					set(ADCSRA, ADSC);	//^
-					
-					set(ADCSRA, ADIF);	//Enable reading results
-					m_wait(500);
-					m_red(TOGGLE);
-					
+
+		
 		
 
 		while(!m_usb_rx_available());  	//wait for an indication from the computer
@@ -157,21 +147,92 @@ int main(void)
 		
 		if(rx_buffer == 1) {  			//computer wants ir buffer
 			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
-
-			for (int j = 0 ; j < 7 ; j++){
-				m_usb_tx_int(ADCarr[i]);
-				m_usb_tx_char('\t');
-
-			}
-
-			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
+			m_usb_tx_int(ADC0);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADC1);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADC2);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADC3);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADC4);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADC5);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADC6);
+			/*for (int j = 0 ; j < 7 ; j++){
+			m_usb_tx_int(ADCarr[j]);
+			m_usb_tx_char('\t');
+			}*/
 		}
+		m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
 		
+		if (conversion) {
+			switch (flag) {
+				case 0:
+					ADC0 = ADC;
+					break;
+				case 1:
+					ADC1 = ADC;
+					break;
+				case 2:
+					ADC2 = ADC;
+					break;
+				case 3:
+					ADC3 = ADC;
+					break;
+				case 4:
+					ADC4 = ADC;
+					break;
+				case 5:
+					ADC5 = ADC;
+					break;
+				case 6:
+					ADC6 = ADC;
+					break;
+			}
+		}
+		clear(ADCSRA, ADEN);	//Enable/Start conversion
+		clear(ADCSRA, ADSC);	//^
+		clear(ADCSRA, ADATE);
+		clear(ADCSRA, ADIF);
+		if (flag >= 0 && flag < 7) {
+			chooseInput(flag);
+			flag = (flag + 1) % 7;
+		}
+		set(ADCSRA, ADATE);	//Set trigger to free-running mode
+		set(ADCSRA, ADEN);	//Enable/Start conversion
+		set(ADCSRA, ADSC);	//^
 		
+		set(ADCSRA, ADIF);	//Enable reading results
+		conversion = 0;
 	}
 	
 }
 
-ISR(ADC_vect) {
 
+
+
+ISR(ADC_vect) {
+	conversion = 1;
+
+	
+	/*if (i < 7 && i >= 0) {
+	ADCarr[i] = (int) ADC;
+	}
+	else {
+	m_green(TOGGLE);
+	}
+	i++;
+	clear(ADCSRA, ADEN);	//Enable/Start conversion
+	clear(ADCSRA, ADSC);	//^
+	chooseInput(i);
+	set(ADCSRA, ADATE);	//Set trigger to free-running mode
+	set(ADCSRA, ADEN);	//Enable/Start conversion
+	set(ADCSRA, ADSC);	//^
+	
+	set(ADCSRA, ADIF);	//Enable reading results
+	//m_wait(500);
+	m_red(TOGGLE);
+	flag = 1;*/
 }
