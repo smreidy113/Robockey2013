@@ -90,6 +90,12 @@ int main(void)
 	set(ADCSRA, ADPS0);	//^
 	
 	set(DIDR0, ADC0D);	//Disable digital input for F0
+	set(DIDR0, ADC1D),
+	set(DIDR0, ADC4D);
+	set(DIDR0, ADC5D);
+	set(DIDR0, ADC6D);
+	set(DIDR2, ADC8D);
+	set(DIDR2, ADC9D);
 	
 	set(ADCSRA, ADATE);	//Set trigger to free-running mode
 	
