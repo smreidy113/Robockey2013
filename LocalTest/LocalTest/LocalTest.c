@@ -310,7 +310,7 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = 20; //set state
+	state = -2; //set state
 	long count = 0;
 	
 	char yes;

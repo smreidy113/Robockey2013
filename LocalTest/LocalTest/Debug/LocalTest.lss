@@ -898,9 +898,9 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = 20; //set state
-     61c:	84 e1       	ldi	r24, 0x14	; 20
-     61e:	90 e0       	ldi	r25, 0x00	; 0
+	state = -2; //set state
+     61c:	8e ef       	ldi	r24, 0xFE	; 254
+     61e:	9f ef       	ldi	r25, 0xFF	; 255
      620:	90 93 15 01 	sts	0x0115, r25
      624:	80 93 14 01 	sts	0x0114, r24
 	long count = 0;
