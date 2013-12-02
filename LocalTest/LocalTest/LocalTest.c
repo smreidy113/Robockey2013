@@ -8,11 +8,16 @@
 #define F_CPU 16000000UL
 #define RIGHT 0
 #define LEFT 1
+#define CHANNEL 0x01
+#define RXADDRESS 0x08
+#define PACKET_LENGTH 10
+#define GOALBX 0
+#define GOALBY 100
 
 #include <avr/io.h>
 #include <stdarg.h>
 #include "m_general.h"
-//#include "m_rf.h"
+#include "m_rf.h"
 //#include "m_port.h"
 //#include "m_num.h"
 #include "m_wii.h"
@@ -28,6 +33,9 @@ void update_ADC(void);
 // global variables
 #define DEBUG 1
 #define CLOCK 0
+
+char buffer[10];
+int state = 0;
 
 void rotate(int dir) {
 	OCR1B = OCR1A;
@@ -82,10 +90,30 @@ void drive_to_puck() {
 
 }
 
-
+void drive_to_point(int x, int y) {
+	
+	//Rotate until you are facing target
+	rotate(LEFT);
+	while(1) {
+		localize(data);
+		if (abs(atan2((float)y-data[1],(float)x-data[0])-data[2] < 3.14/100)) {
+			break;
+		}
+	}
+	
+	//Drive until you're close to being there
+	forward();
+	while(1) {
+		localize(data);
+		if (sqrt((data[1]-y)*(data[1]-y)+(data[0]-x)*(data[0]-x)) < 5) {
+			break;
+		}
+	}
+	game_pause();
+}
 
 void drive_to_goal() {
-	//TODO: Implement code
+	drive_to_point(GOALBX,GOALBY);
 }
 
 void shoot() {
@@ -106,6 +134,14 @@ void game_resume() {
 	set(DDRC,6);
 	set(DDRB,2);
 	set(DDRB,3);
+}
+
+void comm_test() {
+	set(PORTD,5);
+	m_wait(500);
+	clear(PORTD,5);
+	m_wait(500);
+	state = 0;
 }
 
 
@@ -159,12 +195,14 @@ int MATLAB_test(float* data) {
 
 int main(void)
 {
-	/*/wireless stuffs
+	set(DDRD,5);
+	//wireless stuffs
 	m_bus_init();
 	
-	m_rf_open(CHANNEL, ADDRESS, PACKET_LENGTH);
+	m_rf_open(CHANNEL, RXADDRESS, PACKET_LENGTH);
+
 	int counter = 0;
-	/*/
+	//
 	
 	//m_num_init();
 	int flag;
@@ -237,6 +275,9 @@ int main(void)
 	set(DDRB,2);
 	set(DDRB,3);
 	
+	//Blue LED for Comm Test
+	//set(DDRB,5);
+	
 	//ADC's
 	sei();					//Set up interrupts
 	set(ADCSRA,ADIE);
@@ -268,8 +309,8 @@ int main(void)
 	clear(PORTB,1); //disable internal pull up resistor
 	
 	 
-	int state; // state variable
-	state = -3; //set state
+	//int state; // state variable
+	state = 20; //set state
 	long count = 0;
 	
 	char yes;
@@ -373,13 +414,12 @@ int main(void)
 				
 			case -1: //testing electronics/LED number display
 				m_wait(500);
-				disp(8);
+				//disp(8);
 				//count++;
 			break;
 			
 			case 0:
-			rotate(LEFT);
-			rotate(RIGHT);
+			
 			break;
 			
 			case 1:
@@ -398,8 +438,23 @@ int main(void)
 			shoot();
 			break;
 			
-			case 5:
+			/*case 20:
+			m_green(ON);
+			m_wait(500);
+			m_green(OFF);
+			m_wait(500);
+			break;*/
+			
+			case 0xA4:
 			game_pause();
+			break;
+			
+			case 0xA0:
+			comm_test();
+			break;
+			
+			case 0xA1:
+			drive_to_goal();
 			break;
 			
 			default:
@@ -418,5 +473,11 @@ ISR(ADC_vect) {
 	else {
 		m_green(OFF);
 	}
+}
+
+ISR(INT2_vect)  {
+	m_green(TOGGLE);
+	m_rf_read(buffer,PACKET_LENGTH);
+	state=buffer[0];
 }
 
