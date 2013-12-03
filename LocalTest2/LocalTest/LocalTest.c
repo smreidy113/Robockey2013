@@ -324,7 +324,6 @@ int main(void)
 
     while(1)
     {
-		state = -2;
 		//wireless stuffs
 		
         //manually say what each buffer[i] will be (corresponds to a state, variable output, etc.)
@@ -345,11 +344,11 @@ int main(void)
 		*/
 		
 		//constant localization
-		/*m_red(ON);
+		m_red(ON);
 		m_green(OFF);
 		//localize(data);
 		m_red(OFF);
-		m_green(ON);*/
+		m_green(ON);
 		
 		/*
 		while(!m_usb_rx_available());  	//wait for an indication from the computer
@@ -406,12 +405,9 @@ int main(void)
 			break;
 			
 			case -2: //test turning n driving n stuff
-			m_red(TOGGLE);
-			rotate(LEFT);
-			//turn(LEFT,OCR1A/4);
+			turn(LEFT,OCR1A/4);
 			m_wait(1000);
-			rotate(RIGHT);
-			//turn(RIGHT, ICR3/5);
+			turn(RIGHT, ICR3/5);
 			m_wait(1000);
 			break;
 			
@@ -468,7 +464,7 @@ int main(void)
         
     }
 }
-/*
+
 ISR(ADC_vect) {
 	if (ADC  > 500) {
 		m_green(ON);
@@ -477,12 +473,10 @@ ISR(ADC_vect) {
 	else {
 		m_green(OFF);
 	}
-}*/
-
+}
 
 ISR(INT2_vect)  {
-	cli();
 	m_rf_read(buffer,PACKET_LENGTH);
 	state=buffer[0];
-	sei();
 }
+
