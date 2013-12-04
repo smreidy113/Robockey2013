@@ -8,11 +8,10 @@
 #define F_CPU 16000000UL
 #define RIGHT 0
 #define LEFT 1
-#define CHANNEL 0x01
+#define CHANNEL 1
 #define RXADDRESS 0x08
-#define PACKET_LENGTH 10
-#define GOALBX 0
-#define GOALBY 100
+#define GOALBX 115
+#define GOALBY 0
 
 #include <avr/io.h>
 #include <stdarg.h>
@@ -21,10 +20,13 @@
 //#include "m_port.h"
 //#include "m_num.h"
 #include "m_wii.h"
-//#include "m_wireless_variables.h" //define CHANNEL, ADDRESS, PACKET_LENGTH in this header (# of variables to send = (PACKET_LENGTH-1))
+#include "m_wireless_variables.h" //define CHANNEL, ADDRESS, PACKET_LENGTH in this header (# of variables to send = (PACKET_LENGTH-1))
 #include "m_usb.h"
 #include "m_loc.h"
 
+//char array[3] = {1, 2, 3};
+
+int changedState = 0;
 
 // subroutines
 void set_ADC(void);
@@ -38,8 +40,8 @@ char buffer[10];
 int state = 0;
 
 void rotate(int dir) {
-	OCR1B = OCR1A;
-	OCR3A = ICR3;
+	OCR1B = OCR1A/7;
+	OCR3A = ICR3/7;
 	if (dir == RIGHT) {
 		set(PORTB,2);
 		clear(PORTB,3);
@@ -91,24 +93,48 @@ void drive_to_puck() {
 }
 
 void drive_to_point(int x, int y) {
-	
+	m_green(ON);
+	m_wait(250);
+	localize(data);
+	float xref = data[0];
+	float yref = data[1];
 	//Rotate until you are facing target
+	int exit = 0;
 	rotate(LEFT);
 	while(1) {
+		m_green(TOGGLE);
+		//m_wait(250);
 		localize(data);
-		if (abs(atan2((float)y-data[1],(float)x-data[0])-data[2] < 3.14/100)) {
+		array[0] = (char)data[0];
+		array[1] = (char)data[1];
+		array[2] = 3;
+		cli();
+		m_rf_send(ADDRESS,array,PACKET_LENGTH);
+		sei();
+		if (fabs(atan2((float)y-yref,(float)x-xref)-(data[2] * 3.14 / 180.0)) < 3.14/100.0) {
 			break;
 		}
+		if (changedState) return;
 	}
-	
+	exit = 0;
+	m_green(OFF);
+	m_red(ON);
 	//Drive until you're close to being there
 	forward();
-	while(1) {
+	while(!exit) {
 		localize(data);
+		array[0] = (char)data[0];
+		array[1] = (char)data[1];
+		array[2] = 3;
+		cli();
+		m_rf_send(ADDRESS,array,PACKET_LENGTH);
+		sei();
 		if (sqrt((data[1]-y)*(data[1]-y)+(data[0]-x)*(data[0]-x)) < 5) {
-			break;
+			exit = 1;
 		}
+		if (changedState) return;
 	}
+	m_red(OFF);
 	game_pause();
 }
 
@@ -123,17 +149,15 @@ void shoot() {
 }
 
 void game_pause() {
-	clear(DDRB,6);
-	clear(DDRC,6);
-	clear(DDRB,2);
-	clear(DDRB,3);
+	OCR1B = 0;
+	OCR3A = 0;
+	clear(PORTB,2);
+	clear(PORTB,3);
 }
 
 void game_resume() {
-	set(DDRB,6);
-	set(DDRC,6);
-	set(DDRB,2);
-	set(DDRB,3);
+	set(PORTB,2);
+	set(PORTB,3);
 }
 
 void comm_test() {
@@ -146,10 +170,10 @@ void comm_test() {
 
 
 
-int MATLAB_test(float* data) {
+int MATLAB_test(int count, ...) {
 	char rx_buffer;
 	//see wikipedia article on variadic functions******
-			/*va_list ap;
+			va_list ap;
 			int array[count];
 			va_start(ap, count);
 			for (int j= 0; j < count; j++) {
@@ -157,7 +181,7 @@ int MATLAB_test(float* data) {
 			}
 			va_end(ap);
 		//*************
-			char rx_buffer;
+			//char rx_buffer;
 			while(!m_usb_rx_available());  	//wait for an indication from the computer
 			rx_buffer = m_usb_rx_char();  	//grab the computer packet
 
@@ -173,8 +197,9 @@ int MATLAB_test(float* data) {
 		
 
 				m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
-			}*/
+			}
 		
+		/*
 		while(!m_usb_rx_available());  	//wait for an indication from the computer
 		rx_buffer = m_usb_rx_char();  	//grab the computer packet
 
@@ -191,6 +216,7 @@ int MATLAB_test(float* data) {
 
 			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
 		}
+		*/
 }
 
 int main(void)
@@ -310,21 +336,21 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = -2; //set state
+	state = 0; //set state
 	long count = 0;
 	
 	char yes;
-	m_bus_init();
+	//m_bus_init();
 	m_wii_open();
 	//m_usb_init();
 	//while(!m_usb_isconnected());
-	//local_init();
+	local_init();
 	
 	char rx_buffer;
 
     while(1)
     {
-		state = -2;
+		changedState = 0;
 		//wireless stuffs
 		
         //manually say what each buffer[i] will be (corresponds to a state, variable output, etc.)
@@ -345,14 +371,15 @@ int main(void)
 		*/
 		
 		//constant localization
-		/*m_red(ON);
-		m_green(OFF);
-		//localize(data);
-		m_red(OFF);
-		m_green(ON);*/
+		//m_red(ON);
+		//m_green(OFF);
+		localize(data);
+		//MATLAB_test(3,data[0],data[1],data[2]);
+		//m_red(OFF);
+		//m_green(ON);
 		
-		/*
-		while(!m_usb_rx_available());  	//wait for an indication from the computer
+		//*
+		//while(!m_usb_rx_available());  	//wait for an indication from the computer
 		rx_buffer = m_usb_rx_char();  	//grab the computer packet
 
 		m_usb_rx_flush();  				//clear buffer
@@ -368,8 +395,9 @@ int main(void)
 
 			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
 		}
-		*/
 		
+		//*/
+
 		//switch states
         switch (state) {
 			
@@ -406,12 +434,9 @@ int main(void)
 			break;
 			
 			case -2: //test turning n driving n stuff
-			m_red(TOGGLE);
-			rotate(LEFT);
-			//turn(LEFT,OCR1A/4);
+			turn(LEFT,OCR1A/4);
 			m_wait(1000);
-			rotate(RIGHT);
-			//turn(RIGHT, ICR3/5);
+			turn(RIGHT, ICR3/5);
 			m_wait(1000);
 			break;
 			
@@ -423,6 +448,7 @@ int main(void)
 			break;
 			
 			case 0:
+			game_pause();
 			
 			break;
 			
@@ -442,12 +468,12 @@ int main(void)
 			shoot();
 			break;
 			
-			/*case 20:
-			m_green(ON);
-			m_wait(500);
-			m_green(OFF);
-			m_wait(500);
-			break;*/
+			case 20:
+
+	//m_rf_send(ADDRESS, array, PACKET_LENGTH);
+			m_green(TOGGLE);
+			
+			break;
 			
 			case 0xA4:
 			game_pause();
@@ -462,13 +488,13 @@ int main(void)
 			break;
 			
 			default:
-			rotate(LEFT);
+			game_pause();
 			break;
 		}
         
     }
 }
-/*
+
 ISR(ADC_vect) {
 	if (ADC  > 500) {
 		m_green(ON);
@@ -477,12 +503,13 @@ ISR(ADC_vect) {
 	else {
 		m_green(OFF);
 	}
-}*/
-
+}
 
 ISR(INT2_vect)  {
 	cli();
 	m_rf_read(buffer,PACKET_LENGTH);
-	state=buffer[0];
 	sei();
+	state=buffer[0];
+	changedState = 1;
 }
+

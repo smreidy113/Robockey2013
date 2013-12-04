@@ -7,6 +7,9 @@
 
 #define F_CPU 16000000UL
 
+#define BETA 0.95
+#define BETAa 0.95
+
 #include <avr/io.h>
 #include "m_wii.h"
 #include "m_general.h"
@@ -22,8 +25,15 @@ int right = 0;
 float beta = 0;
 float theta = 0;
 
-float rcenterx = 512;
-float rcentery = 384;
+float xi = 0;
+float yi = 0;
+float ai = 0;
+float xi1 = 0;
+float yi1 = 0;
+float ai1 = 0;
+
+float rcenterx = 511.5;
+float rcentery = 378;
 
 unsigned int x[4] = {0, 0, 0, 0};
 unsigned int y[4] = {0, 0, 0, 0};
@@ -172,13 +182,24 @@ unsigned char localize (float* data) {
 		
 		r = (float) sqrt((double)((posx)*(posx) + (posy)*(posy)));
 		
+		if (ai1 == 0) {
+			ai1 = angle;
+		}
 		
+		data[2] = (((BETAa * ai1 + (1 - BETAa) * ai) * 180.0 / 3.14) + 90.0) * -1.0;
+		
+		xi = (115/360.0) * (-1 * r * (float) sin((double) (((3 * 3.14)/2) - (data[2] * 3.14 / 180) - phi)));
+		yi = (60/205.0) * (r * (float) cos((double) (((3 * 3.14)/2) - (data[2] * 3.14 / 180)) - phi));
+		
+		if (xi1 == 0 && yi1 == 0) {
+			xi1 = xi;
+			yi1 = yi;
+		}
 
-		data[0] = (rcenterx + r * (float) sin((double) (((3 * 3.14)/2) - angle - phi)));
-		data[1] = rcentery + r * (float) cos((double) (((3 * 3.14)/2) - angle - phi));
+		data[0] = BETA * xi1 + (1 - BETA) * xi;
+		data[1] = BETA * yi1 + (1 - BETA) * yi;
 		//data[0] = posx- r*(float)cos((double)phi);
 		//data[1] = posy- r*(float)sin((double)phi);
-		data[2] = angle * 180.0 / 3.14;
 		data[3] = x[top];
 		data[4] = y[top];
 		data[5] = x[bottom];
@@ -191,6 +212,11 @@ unsigned char localize (float* data) {
 		data[12] = posx;
 		data[13] = posy;
 		data[14] = r;
+		
+		xi1 = xi;
+		yi1 = yi;
+		ai1 = ai;
+		
 		return 1;
 	}
 	
