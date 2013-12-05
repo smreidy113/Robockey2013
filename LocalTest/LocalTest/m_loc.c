@@ -6,7 +6,6 @@
  */ 
 
 #define F_CPU 16000000UL
-
 #define BETA 0.95
 #define BETAa 0.95
 
@@ -186,7 +185,7 @@ unsigned char localize (float* data) {
 			ai1 = angle;
 		}
 		
-		data[2] = (((BETAa * ai1 + (1 - BETAa) * ai) * 180.0 / 3.14) + 90.0) * -1.0;
+		data[2] = (BETAa * ai1 + (1 - BETAa) * ai) * 180.0 / 3.14;
 		
 		xi = (115/360.0) * (-1 * r * (float) sin((double) (((3 * 3.14)/2) - (data[2] * 3.14 / 180) - phi)));
 		yi = (60/205.0) * (r * (float) cos((double) (((3 * 3.14)/2) - (data[2] * 3.14 / 180)) - phi));

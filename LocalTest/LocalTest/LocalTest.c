@@ -52,17 +52,17 @@ void rotate(int dir) {
 	}
 }
 
-void turn(int dir,int degree) {
+void turn(int dir,float speed, float degree) {
 	set(PORTB,2);
 	set(PORTB,3);
 	if (dir == LEFT) {
-		OCR3A = ICR3;
-		OCR1B = degree;
+		OCR3A = (unsigned int) ((float)ICR3 * speed);
+		OCR1B = (unsigned int) (degree * speed * OCR1A);
 	}
 	
 		if (dir == RIGHT) {
-			OCR3A = degree;
-			OCR1B = OCR1A;
+			OCR3A = (unsigned int) (degree * speed * ICR3);
+			OCR1B = (unsigned int) ((float) OCR1A * speed);
 		}
 }
 
@@ -92,12 +92,41 @@ void drive_to_puck() {
 
 }
 
+void drive_to_point2(int x, int y) {
+	m_green(ON);
+	m_wait(500);
+	float speed_cap = 0.25;
+	localize(data);
+	float angle_dif = 0.0;
+	float dist = 0.0;
+	float spd = 0.0;
+	float deg = 0.0;
+	int dir = 0;
+	while(1) {
+		localize(data);
+		
+		//Set angle difference to be between -180 and 180
+		angle_dif = (((int) (((data[2] + 90.0) * -1.0) - (float)(atan2((double)y-data[1],(double)x-data[0]))*180.0/3.14)) + 900) % 360 - 180;
+		if (angle_dif > 0) {
+			dir = RIGHT;
+		}
+		else {
+			dir = LEFT;
+		}
+		//Angle of 180 corresponds to deg of 0; angle of 0 corresponds to deg of 1
+		deg = 1.0 - (((float)angle_dif)/180.0);
+		//Set distance
+		dist = (int) sqrt(((double)y - data[1])*((double)y - data[1])+((double)x - data[0])*((double)x - data[0]));
+		spd = ((float)dist)/70.0;
+		if (spd > speed_cap) spd = speed_cap;
+		turn(dir, spd, deg);
+	}
+}
+
 void drive_to_point(int x, int y) {
 	m_green(ON);
 	m_wait(250);
 	localize(data);
-	float xref = data[0];
-	float yref = data[1];
 	//Rotate until you are facing target
 	int exit = 0;
 	rotate(LEFT);
@@ -105,13 +134,13 @@ void drive_to_point(int x, int y) {
 		m_green(TOGGLE);
 		//m_wait(250);
 		localize(data);
-		array[0] = (char)data[0];
-		array[1] = (char)data[1];
-		array[2] = 3;
-		cli();
-		m_rf_send(ADDRESS,array,PACKET_LENGTH);
-		sei();
-		if (fabs(atan2((float)y-yref,(float)x-xref)-(data[2] * 3.14 / 180.0)) < 3.14/100.0) {
+// 		array[0] = (char)data[0];
+// 		array[1] = (char)data[1];
+// 		array[2] = 3;
+// 		cli();
+// 		m_rf_send(ADDRESS,array,PACKET_LENGTH);
+// 		sei();
+		if (fabs(atan2((float)y-data[1],(float)x-data[0])-(data[2] * 3.14 / 180.0)) < 3.14/100.0) {
 			break;
 		}
 		if (changedState) return;
@@ -123,12 +152,12 @@ void drive_to_point(int x, int y) {
 	forward();
 	while(!exit) {
 		localize(data);
-		array[0] = (char)data[0];
-		array[1] = (char)data[1];
-		array[2] = 3;
-		cli();
-		m_rf_send(ADDRESS,array,PACKET_LENGTH);
-		sei();
+// 		array[0] = (char)data[0];
+// 		array[1] = (char)data[1];
+// 		array[2] = 3;
+// 		cli();
+// 		m_rf_send(ADDRESS,array,PACKET_LENGTH);
+// 		sei();
 		if (sqrt((data[1]-y)*(data[1]-y)+(data[0]-x)*(data[0]-x)) < 5) {
 			exit = 1;
 		}
@@ -139,7 +168,7 @@ void drive_to_point(int x, int y) {
 }
 
 void drive_to_goal() {
-	drive_to_point(GOALBX,GOALBY);
+	drive_to_point2(60,0);
 }
 
 void shoot() {
@@ -342,7 +371,7 @@ int main(void)
 	char yes;
 	//m_bus_init();
 	m_wii_open();
-	//m_usb_init();
+	m_usb_init();
 	//while(!m_usb_isconnected());
 	local_init();
 	
@@ -386,8 +415,9 @@ int main(void)
 
 		if(rx_buffer == 1) {  			//computer wants ir buffer
 			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
-
-			for (int i = 0 ; i < 15 ; i++){
+			data[3] = fabs(atan2((float)0-data[1],(float)0-data[0])-(data[2] * 3.14 / 180.0));
+			data[4] = (3.14/100.0) * 1000.0;
+			for (int i = 0 ; i < 7 ; i++){
 				m_usb_tx_int((int)data[i]);
 				m_usb_tx_char('\t');
 
@@ -434,10 +464,12 @@ int main(void)
 			break;
 			
 			case -2: //test turning n driving n stuff
-			turn(LEFT,OCR1A/4);
-			m_wait(1000);
-			turn(RIGHT, ICR3/5);
-			m_wait(1000);
+				for (float i = 0; i <= 1; i += .2) {
+					turn(LEFT,1.0,i);
+					m_wait(1000);
+					turn(RIGHT,1.0,i);
+					m_wait(1000);
+				}
 			break;
 			
 				
@@ -512,4 +544,3 @@ ISR(INT2_vect)  {
 	state=buffer[0];
 	changedState = 1;
 }
-
