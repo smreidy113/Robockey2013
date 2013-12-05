@@ -24,9 +24,11 @@
 #include "m_usb.h"
 #include "m_loc.h"
 
-//char array[3] = {1, 2, 3};
 
 int changedState = 0;
+char rx_buffer;
+char yes;
+char buffer[10];
 
 // subroutines
 void set_ADC(void);
@@ -36,8 +38,9 @@ void update_ADC(void);
 #define DEBUG 1
 #define CLOCK 0
 
-char buffer[10];
+
 int state = 0;
+
 
 void rotate(int dir) {
 	OCR1B = OCR1A/7;
@@ -95,7 +98,7 @@ void drive_to_puck() {
 void drive_to_point2(int x, int y) {
 	m_green(ON);
 	m_wait(500);
-	float speed_cap = 0.25;
+	float speed_cap = 0.5;
 	localize(data);
 	float angle_dif = 0.0;
 	float dist = 0.0;
@@ -113,14 +116,43 @@ void drive_to_point2(int x, int y) {
 		else {
 			dir = LEFT;
 		}
+		
 		//Angle of 180 corresponds to deg of 0; angle of 0 corresponds to deg of 1
-		deg = 1.0 - (((float)angle_dif)/180.0);
+		deg = exp(-1.0* ((double)fabs(angle_dif))/30.0);
 		//Set distance
 		dist = (int) sqrt(((double)y - data[1])*((double)y - data[1])+((double)x - data[0])*((double)x - data[0]));
 		spd = ((float)dist)/70.0;
+		//*****************************************************************************
+			rx_buffer = m_usb_rx_char();  	//grab the computer packet
+
+			m_usb_rx_flush();  				//clear buffer
+
+			if(rx_buffer == 1) {  			//computer wants ir buffer
+				//write ir buffer as concatenated hex:  i.e. f0f1f4f5
+				data[3] = angle_dif;
+				data[4] = deg*100.0;
+				data[5] = dist;
+				data[6] = spd*100.0;
+				for (int i = 0 ; i < 7 ; i++){
+					m_usb_tx_int((int)data[i]);
+					m_usb_tx_char('\t');
+
+				}
+
+				m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
+			}
+			
+		//*********************************************************************************
+		
 		if (spd > speed_cap) spd = speed_cap;
+		if (dist < 5) {break;}
 		turn(dir, spd, deg);
+		
 	}
+	reverse();
+	OCR1B = 0;
+	OCR3A = 0;
+	while(1);
 }
 
 void drive_to_point(int x, int y) {
@@ -168,7 +200,7 @@ void drive_to_point(int x, int y) {
 }
 
 void drive_to_goal() {
-	drive_to_point2(60,0);
+	drive_to_point2(30,0);
 }
 
 void shoot() {
@@ -368,77 +400,27 @@ int main(void)
 	state = 0; //set state
 	long count = 0;
 	
-	char yes;
+
 	//m_bus_init();
 	m_wii_open();
 	m_usb_init();
-	//while(!m_usb_isconnected());
 	local_init();
-	
-	char rx_buffer;
 
     while(1)
     {
 		changedState = 0;
-		//wireless stuffs
 		
-        //manually say what each buffer[i] will be (corresponds to a state, variable output, etc.)
 
-        //e.g.
-        //buffer[0] = 50;
-        //buffer[1] = 2;
-        
-		/*
-        if (counter > 30000) {
-	        m_rf_send(ADDRESS,buffer,PACKET_LENGTH);
-	        m_green(TOGGLE);
+		//localize(data);
 
-	        counter = 0;
-        }
-        
-        counter++;
-		*/
-		
-		//constant localization
-		//m_red(ON);
-		//m_green(OFF);
-		localize(data);
-		//MATLAB_test(3,data[0],data[1],data[2]);
-		//m_red(OFF);
-		//m_green(ON);
-		
-		//*
-		//while(!m_usb_rx_available());  	//wait for an indication from the computer
-		rx_buffer = m_usb_rx_char();  	//grab the computer packet
+	
 
-		m_usb_rx_flush();  				//clear buffer
-
-		if(rx_buffer == 1) {  			//computer wants ir buffer
-			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
-			data[3] = fabs(atan2((float)0-data[1],(float)0-data[0])-(data[2] * 3.14 / 180.0));
-			data[4] = (3.14/100.0) * 1000.0;
-			for (int i = 0 ; i < 7 ; i++){
-				m_usb_tx_int((int)data[i]);
-				m_usb_tx_char('\t');
-
-			}
-
-			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
-		}
-		
-		//*/
 
 		//switch states
         switch (state) {
 			
-			case -4:
-			m_wait(1000);
-				shoot();
-				state = -3;
-			break;
-			
 			case -3: //test Limit switches
-				/*
+				
 				if (check(PINB,1)) {
 					
 					rotate(LEFT);
@@ -453,34 +435,11 @@ int main(void)
 					OCR1B = 0;
 					OCR3A = 0;
 				}
-				*/
-				OCR1B = OCR1A;
-				OCR3A = ICR3;
-				set(PORTB,2);
-				set(PORTB,3);
-				m_wait(1000);
-				clear(PORTB,3);
-				clear(PORTB,2);
-			break;
-			
-			case -2: //test turning n driving n stuff
-				for (float i = 0; i <= 1; i += .2) {
-					turn(LEFT,1.0,i);
-					m_wait(1000);
-					turn(RIGHT,1.0,i);
-					m_wait(1000);
-				}
-			break;
-			
 				
-			case -1: //testing electronics/LED number display
-				m_wait(500);
-				//disp(8);
-				//count++;
 			break;
-			
+
 			case 0:
-			game_pause();
+			drive_to_point2(-100,0);
 			
 			break;
 			
@@ -498,14 +457,7 @@ int main(void)
 			
 			case 4:
 			shoot();
-			break;
-			
-			case 20:
-
-	//m_rf_send(ADDRESS, array, PACKET_LENGTH);
-			m_green(TOGGLE);
-			
-			break;
+			break;	
 			
 			case 0xA4:
 			game_pause();
