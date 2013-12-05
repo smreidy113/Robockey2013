@@ -78,6 +78,7 @@ int main(void)
 	
 	m_clockdivide(0);
 	
+	m_disableJTAG();
 	
 	sei();					//Set up interrupts
 	set(ADCSRA, ADIE);
