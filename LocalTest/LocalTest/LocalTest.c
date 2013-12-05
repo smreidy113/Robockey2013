@@ -397,14 +397,14 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = 0; //set state
+	state = -3; //set state
 	long count = 0;
 	
 
 	//m_bus_init();
 	m_wii_open();
 	m_usb_init();
-	local_init();
+	//local_init();
 
     while(1)
     {
@@ -420,20 +420,20 @@ int main(void)
         switch (state) {
 			
 			case -3: //test Limit switches
-				
+				//m_green(ON);
 				if (check(PINB,1)) {
 					
-					rotate(LEFT);
+					m_green(ON);
 				}
 				
 				else if (check(PINB,0)) {
 					
-					rotate(RIGHT);
+					m_red(ON);
 				}
 				
 				else {
-					OCR1B = 0;
-					OCR3A = 0;
+					m_red(OFF);
+					m_green(OFF);
 				}
 				
 			break;
