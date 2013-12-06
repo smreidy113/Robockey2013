@@ -12,6 +12,8 @@
 #define RXADDRESS 0x08
 #define GOALBX 115
 #define GOALBY 0
+#define GOALAX -115
+#define GOALAY 0
 
 #include <avr/io.h>
 #include <stdarg.h>
@@ -25,7 +27,7 @@
 #include "m_loc.h"
 
 
-int changedState = 0;
+volatile char changedState = 0;
 char rx_buffer;
 char yes;
 char buffer[10];
@@ -97,7 +99,7 @@ void drive_to_puck() {
 
 void drive_to_point2(int x, int y) {
 	m_green(ON);
-	m_wait(500);
+	//m_wait(500);
 	float speed_cap = 0.5;
 	localize(data);
 	float angle_dif = 0.0;
@@ -145,10 +147,12 @@ void drive_to_point2(int x, int y) {
 		//*********************************************************************************
 		
 		if (spd > speed_cap) spd = speed_cap;
-		if (dist < 5) {break;}
+		if (dist < 10) break;
+		if (changedState) return;
 		turn(dir, spd, deg);
 		
 	}
+	m_red(ON);
 	reverse();
 	OCR1B = 0;
 	OCR3A = 0;
@@ -199,8 +203,12 @@ void drive_to_point(int x, int y) {
 	game_pause();
 }
 
-void drive_to_goal() {
-	drive_to_point2(30,0);
+void drive_to_goalA() {
+	drive_to_point2(GOALBX,GOALBY);
+}
+
+void drive_to_goalB() {
+	drive_to_point2(GOALAX,GOALAY);
 }
 
 void shoot() {
@@ -212,13 +220,13 @@ void shoot() {
 void game_pause() {
 	OCR1B = 0;
 	OCR3A = 0;
-	clear(PORTB,2);
-	clear(PORTB,3);
+	//clear(PORTB,2);
+	//clear(PORTB,3);
 }
 
 void game_resume() {
-	set(PORTB,2);
-	set(PORTB,3);
+	//set(PORTB,2);
+	//set(PORTB,3);
 }
 
 void comm_test() {
@@ -397,14 +405,14 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = -3; //set state
+	state = 0; //set state
 	long count = 0;
 	
 
 	//m_bus_init();
 	m_wii_open();
 	m_usb_init();
-	//local_init();
+	local_init();
 
     while(1)
     {
@@ -439,8 +447,8 @@ int main(void)
 			break;
 
 			case 0:
-			drive_to_point2(-100,0);
-			
+			//drive_to_point2(-100,0);
+			game_pause();
 			break;
 			
 			case 1:
@@ -452,7 +460,7 @@ int main(void)
 			break;
 			
 			case 3:
-			drive_to_goal();
+			drive_to_goalA();
 			break;
 			
 			case 4:
@@ -468,7 +476,15 @@ int main(void)
 			break;
 			
 			case 0xA1:
-			drive_to_goal();
+			drive_to_goalA();
+			break;
+			
+			case 0xA2:
+			drive_to_goalA();
+			break;
+			
+			case 0xA3:
+			drive_to_goalB();
 			break;
 			
 			default:

@@ -19,33 +19,37 @@ int ADCarr[7] = {0, 0, 0, 0, 0, 0, 0};
 void chooseInput(int i) {
 	switch (i) {
 		case 0:
-		clear(ADCSRB, MUX5);//Set analog input (F6) PHOTOTRANSISTOR 1
-		set(ADMUX, MUX2);	//^
-		set(ADMUX, MUX1);	//^
+		clear(ADCSRB, MUX5);//Set analog input (F0)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
 		clear(ADMUX, MUX0);	//^
+
 		break;
 		case 1:
-		clear(ADCSRB, MUX5);//Set analog input (F5)
-		set(ADMUX, MUX2);	//^
+		clear(ADCSRB, MUX5);//Set analog input (F1)
+		clear(ADMUX, MUX2);	//^
 		clear(ADMUX, MUX1);	//^
 		set(ADMUX, MUX0);	//^
+
 		break;
 		case 2:
 		clear(ADCSRB, MUX5);//Set analog input (F4)
 		set(ADMUX, MUX2);	//^
 		clear(ADMUX, MUX1);	//^
 		clear(ADMUX, MUX0);	//^
+
 		break;
 		case 3:
-		clear(ADCSRB, MUX5);//Set analog input (F1)
-		clear(ADMUX, MUX2);	//^
+
+		clear(ADCSRB, MUX5);//Set analog input (F5)
+		set(ADMUX, MUX2);	//^
 		clear(ADMUX, MUX1);	//^
 		set(ADMUX, MUX0);	//^
 		break;
 		case 4:
-		clear(ADCSRB, MUX5);//Set analog input (F0)
-		clear(ADMUX, MUX2);	//^
-		clear(ADMUX, MUX1);	//^
+		clear(ADCSRB, MUX5);//Set analog input (F6) 
+		set(ADMUX, MUX2);	//^
+		set(ADMUX, MUX1);	//^
 		clear(ADMUX, MUX0);	//^
 		break;
 		case 5:
@@ -78,6 +82,7 @@ int main(void)
 	
 	m_clockdivide(0);
 	
+	m_disableJTAG();
 	
 	sei();					//Set up interrupts
 	set(ADCSRA, ADIE);
@@ -99,7 +104,7 @@ int main(void)
 	
 	set(ADCSRA, ADATE);	//Set trigger to free-running mode
 	
-	chooseInput(1);
+	chooseInput(0);
 	
 	set(ADCSRA, ADEN);	//Enable/Start conversion
 	set(ADCSRA, ADSC);	//^
@@ -176,26 +181,26 @@ int main(void)
 		if (conversion) {
 			switch (flag) {
 				case 0:
-					ADC0 = ADC;
-					break;
+				ADC0 = ADC;
+				break;
 				case 1:
-					ADC1 = ADC;
-					break;
+				ADC1 = ADC;
+				break;
 				case 2:
-					ADC2 = ADC;
-					break;
+				ADC2 = ADC;
+				break;
 				case 3:
-					ADC3 = ADC;
-					break;
+				ADC3 = ADC;
+				break;
 				case 4:
-					ADC4 = ADC;
-					break;
+				ADC4 = ADC;
+				break;
 				case 5:
-					ADC5 = ADC;
-					break;
+				ADC5 = ADC;
+				break;
 				case 6:
-					ADC6 = ADC;
-					break;
+				ADC6 = ADC;
+				break;
 			}
 		}
 		clear(ADCSRA, ADEN);	//Enable/Start conversion
