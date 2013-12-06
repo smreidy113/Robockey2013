@@ -821,40 +821,41 @@ void chooseInput(int i) {
  732:	77 c0       	rjmp	.+238    	; 0x822 <chooseInput+0x118>
  734:	66 c0       	rjmp	.+204    	; 0x802 <chooseInput+0xf8>
 		case 0:
-		clear(ADCSRB, MUX5);//Set analog input (F6) PHOTOTRANSISTOR 1
+		clear(ADCSRB, MUX5);//Set analog input (F0)
  736:	eb e7       	ldi	r30, 0x7B	; 123
  738:	f0 e0       	ldi	r31, 0x00	; 0
  73a:	80 81       	ld	r24, Z
  73c:	8f 7d       	andi	r24, 0xDF	; 223
  73e:	80 83       	st	Z, r24
-		set(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX2);	//^
  740:	ec e7       	ldi	r30, 0x7C	; 124
  742:	f0 e0       	ldi	r31, 0x00	; 0
  744:	80 81       	ld	r24, Z
- 746:	84 60       	ori	r24, 0x04	; 4
+ 746:	8b 7f       	andi	r24, 0xFB	; 251
  748:	80 83       	st	Z, r24
-		set(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX1);	//^
  74a:	80 81       	ld	r24, Z
- 74c:	82 60       	ori	r24, 0x02	; 2
+ 74c:	8d 7f       	andi	r24, 0xFD	; 253
  74e:	80 83       	st	Z, r24
 		clear(ADMUX, MUX0);	//^
  750:	80 81       	ld	r24, Z
  752:	8e 7f       	andi	r24, 0xFE	; 254
  754:	80 83       	st	Z, r24
+
 		break;
  756:	08 95       	ret
 		case 1:
-		clear(ADCSRB, MUX5);//Set analog input (F5)
+		clear(ADCSRB, MUX5);//Set analog input (F1)
  758:	eb e7       	ldi	r30, 0x7B	; 123
  75a:	f0 e0       	ldi	r31, 0x00	; 0
  75c:	80 81       	ld	r24, Z
  75e:	8f 7d       	andi	r24, 0xDF	; 223
  760:	80 83       	st	Z, r24
-		set(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX2);	//^
  762:	ec e7       	ldi	r30, 0x7C	; 124
  764:	f0 e0       	ldi	r31, 0x00	; 0
  766:	80 81       	ld	r24, Z
- 768:	84 60       	ori	r24, 0x04	; 4
+ 768:	8b 7f       	andi	r24, 0xFB	; 251
  76a:	80 83       	st	Z, r24
 		clear(ADMUX, MUX1);	//^
  76c:	80 81       	ld	r24, Z
@@ -864,6 +865,7 @@ void chooseInput(int i) {
  772:	80 81       	ld	r24, Z
  774:	81 60       	ori	r24, 0x01	; 1
  776:	80 83       	st	Z, r24
+
 		break;
  778:	08 95       	ret
 		case 2:
@@ -887,20 +889,22 @@ void chooseInput(int i) {
  794:	80 81       	ld	r24, Z
  796:	8e 7f       	andi	r24, 0xFE	; 254
  798:	80 83       	st	Z, r24
+
 		break;
  79a:	08 95       	ret
 		case 3:
-		clear(ADCSRB, MUX5);//Set analog input (F1)
+
+		clear(ADCSRB, MUX5);//Set analog input (F5)
  79c:	eb e7       	ldi	r30, 0x7B	; 123
  79e:	f0 e0       	ldi	r31, 0x00	; 0
  7a0:	80 81       	ld	r24, Z
  7a2:	8f 7d       	andi	r24, 0xDF	; 223
  7a4:	80 83       	st	Z, r24
-		clear(ADMUX, MUX2);	//^
+		set(ADMUX, MUX2);	//^
  7a6:	ec e7       	ldi	r30, 0x7C	; 124
  7a8:	f0 e0       	ldi	r31, 0x00	; 0
  7aa:	80 81       	ld	r24, Z
- 7ac:	8b 7f       	andi	r24, 0xFB	; 251
+ 7ac:	84 60       	ori	r24, 0x04	; 4
  7ae:	80 83       	st	Z, r24
 		clear(ADMUX, MUX1);	//^
  7b0:	80 81       	ld	r24, Z
@@ -913,21 +917,21 @@ void chooseInput(int i) {
 		break;
  7bc:	08 95       	ret
 		case 4:
-		clear(ADCSRB, MUX5);//Set analog input (F0)
+		clear(ADCSRB, MUX5);//Set analog input (F6) 
  7be:	eb e7       	ldi	r30, 0x7B	; 123
  7c0:	f0 e0       	ldi	r31, 0x00	; 0
  7c2:	80 81       	ld	r24, Z
  7c4:	8f 7d       	andi	r24, 0xDF	; 223
  7c6:	80 83       	st	Z, r24
-		clear(ADMUX, MUX2);	//^
+		set(ADMUX, MUX2);	//^
  7c8:	ec e7       	ldi	r30, 0x7C	; 124
  7ca:	f0 e0       	ldi	r31, 0x00	; 0
  7cc:	80 81       	ld	r24, Z
- 7ce:	8b 7f       	andi	r24, 0xFB	; 251
+ 7ce:	84 60       	ori	r24, 0x04	; 4
  7d0:	80 83       	st	Z, r24
-		clear(ADMUX, MUX1);	//^
+		set(ADMUX, MUX1);	//^
  7d2:	80 81       	ld	r24, Z
- 7d4:	8d 7f       	andi	r24, 0xFD	; 253
+ 7d4:	82 60       	ori	r24, 0x02	; 2
  7d6:	80 83       	st	Z, r24
 		clear(ADMUX, MUX0);	//^
  7d8:	80 81       	ld	r24, Z
@@ -1072,8 +1076,8 @@ int main(void)
  89a:	80 62       	ori	r24, 0x20	; 32
  89c:	88 83       	st	Y, r24
 	
-	chooseInput(1);
- 89e:	81 e0       	ldi	r24, 0x01	; 1
+	chooseInput(0);
+ 89e:	80 e0       	ldi	r24, 0x00	; 0
  8a0:	90 e0       	ldi	r25, 0x00	; 0
  8a2:	0e 94 85 03 	call	0x70a	; 0x70a <chooseInput>
 	
@@ -1119,8 +1123,8 @@ int main(void)
  8d6:	6a 9a       	sbi	0x0d, 2	; 13
  8d8:	72 9a       	sbi	0x0e, 2	; 14
 				case 6:
-					ADC6 = ADC;
-					break;
+				ADC6 = ADC;
+				break;
 			}
 		}
 		clear(ADCSRA, ADEN);	//Enable/Start conversion
@@ -1137,12 +1141,12 @@ int main(void)
  8e2:	ef 2e       	mov	r14, r31
  8e4:	f1 2c       	mov	r15, r1
  8e6:	f0 2d       	mov	r31, r0
-					break;
+				break;
 				case 2:
-					ADC2 = ADC;
-					break;
+				ADC2 = ADC;
+				break;
 				case 3:
-					ADC3 = ADC;
+				ADC3 = ADC;
  8e8:	0f 2e       	mov	r0, r31
  8ea:	f8 e7       	ldi	r31, 0x78	; 120
  8ec:	cf 2e       	mov	r12, r31
@@ -1255,67 +1259,67 @@ int main(void)
  9bc:	c1 f5       	brne	.+112    	; 0xa2e <main+0x20a>
  9be:	30 c0       	rjmp	.+96     	; 0xa20 <main+0x1fc>
 				case 0:
-					ADC0 = ADC;
+				ADC0 = ADC;
  9c0:	f6 01       	movw	r30, r12
  9c2:	80 81       	ld	r24, Z
  9c4:	91 81       	ldd	r25, Z+1	; 0x01
  9c6:	90 93 1b 01 	sts	0x011B, r25
  9ca:	80 93 1a 01 	sts	0x011A, r24
-					break;
+				break;
  9ce:	2f c0       	rjmp	.+94     	; 0xa2e <main+0x20a>
 				case 1:
-					ADC1 = ADC;
+				ADC1 = ADC;
  9d0:	f6 01       	movw	r30, r12
  9d2:	80 81       	ld	r24, Z
  9d4:	91 81       	ldd	r25, Z+1	; 0x01
  9d6:	90 93 19 01 	sts	0x0119, r25
  9da:	80 93 18 01 	sts	0x0118, r24
-					break;
+				break;
  9de:	27 c0       	rjmp	.+78     	; 0xa2e <main+0x20a>
 				case 2:
-					ADC2 = ADC;
+				ADC2 = ADC;
  9e0:	f6 01       	movw	r30, r12
  9e2:	80 81       	ld	r24, Z
  9e4:	91 81       	ldd	r25, Z+1	; 0x01
  9e6:	90 93 17 01 	sts	0x0117, r25
  9ea:	80 93 16 01 	sts	0x0116, r24
-					break;
+				break;
  9ee:	1f c0       	rjmp	.+62     	; 0xa2e <main+0x20a>
 				case 3:
-					ADC3 = ADC;
+				ADC3 = ADC;
  9f0:	f6 01       	movw	r30, r12
  9f2:	80 81       	ld	r24, Z
  9f4:	91 81       	ldd	r25, Z+1	; 0x01
  9f6:	90 93 15 01 	sts	0x0115, r25
  9fa:	80 93 14 01 	sts	0x0114, r24
-					break;
+				break;
  9fe:	17 c0       	rjmp	.+46     	; 0xa2e <main+0x20a>
 				case 4:
-					ADC4 = ADC;
+				ADC4 = ADC;
  a00:	f6 01       	movw	r30, r12
  a02:	80 81       	ld	r24, Z
  a04:	91 81       	ldd	r25, Z+1	; 0x01
  a06:	90 93 13 01 	sts	0x0113, r25
  a0a:	80 93 12 01 	sts	0x0112, r24
-					break;
+				break;
  a0e:	0f c0       	rjmp	.+30     	; 0xa2e <main+0x20a>
 				case 5:
-					ADC5 = ADC;
+				ADC5 = ADC;
  a10:	f6 01       	movw	r30, r12
  a12:	80 81       	ld	r24, Z
  a14:	91 81       	ldd	r25, Z+1	; 0x01
  a16:	90 93 11 01 	sts	0x0111, r25
  a1a:	80 93 10 01 	sts	0x0110, r24
-					break;
+				break;
  a1e:	07 c0       	rjmp	.+14     	; 0xa2e <main+0x20a>
 				case 6:
-					ADC6 = ADC;
+				ADC6 = ADC;
  a20:	f6 01       	movw	r30, r12
  a22:	80 81       	ld	r24, Z
  a24:	91 81       	ldd	r25, Z+1	; 0x01
  a26:	90 93 0f 01 	sts	0x010F, r25
  a2a:	80 93 0e 01 	sts	0x010E, r24
-					break;
+				break;
 			}
 		}
 		clear(ADCSRA, ADEN);	//Enable/Start conversion
