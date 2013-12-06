@@ -28,7 +28,7 @@
 %
 
 %% If the above initialization does not work, please run the following commands manually and disconnect and reconnect USB.
-fclose(serial('COM6','Baudrate', 9600));
+fclose(serial('COM7','Baudrate', 9600));
 fclose(instrfindall);
 clear all;
 close all;
@@ -41,7 +41,7 @@ close all;
 
 %% SERIAL
 %----> for ***WINDOZE***
-M2USB = serial('COM6','Baudrate', 9600);
+M2USB = serial('COM7','Baudrate', 9600);
 % *** Use the device manager to check where the microcontroller is plugged
 % into.
 
@@ -99,15 +99,15 @@ try
         % clf;
         % hold on
         
-       plot(int_x, int_y, '.', int_x_top,int_y_top, 'o', int_x_bottom,int_y_bottom,'o');
+       %plot(int_x, int_y, '.', int_x_top,int_y_top, 'o', int_x_bottom,int_y_bottom,'o');
 
-        axis([0 1023 0 768]);
+       % axis([0 1023 0 768]);
         
         
-        grid on
-        pause(.04);
+        %grid on
+         pause(.04);
         
-        hold off
+        %hold off
         
         i=i+1;  % Incrememnt indexer
         %% Logging

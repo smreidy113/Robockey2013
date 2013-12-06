@@ -162,7 +162,7 @@ void getADC() {
 }
 
 void reportADC() {
-	
+	set(DDRF,7);
 	m_red(ON);
 	m_green(ON);
 
@@ -173,11 +173,42 @@ void reportADC() {
 	m_green(OFF);
 
 	char rx_buffer; //computer interactions
-	
+	int index = 0;
+	int maxval = 0;
+	float deg = 0.0;
+	float diff = 0.0;
 	
 	
 while(1) {
 	getADC();
+	index = 0;
+	maxval = 0;
+	//m_green(TOGGLE);
+	for(int i = 0; i < 7; i++) {
+		if (ADCarr[i] > maxval) {
+			index = i;
+			maxval = ADCarr[i];
+		}
+	}
+	switch (index) {
+		case 0:
+		diff = ADCarr[0] - ADCarr[6];
+		deg = exp(-1.0*fabs(((float)diff))/400.0);
+		//turn(LEFT,0.2,deg);
+		m_green(ON);
+		m_red(OFF);
+		break;
+		case 6:
+		diff = ADCarr[6] - ADCarr[0];
+		deg = exp(-1.0*fabs(((float)diff))/400.0);
+		//turn(RIGHT,0.2,deg);
+		m_green(OFF);
+		m_red(ON);
+		break;
+		default:
+		m_green(ON);
+		m_red(ON);
+	}
 	while(!m_usb_rx_available());  	//wait for an indication from the computer
 		rx_buffer = m_usb_rx_char();  	//grab the computer packet
 
@@ -198,7 +229,7 @@ while(1) {
 		
 		}
 		counter++;*/
-		
+		toggle(PORTF,7);
 		if(rx_buffer == 1) {  			//computer wants ir buffer
 			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
 			m_usb_tx_int(ADCarr[0]);
@@ -214,6 +245,11 @@ while(1) {
 			m_usb_tx_int(ADCarr[5]);
 			m_usb_tx_char('\t');
 			m_usb_tx_int(ADCarr[6]);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(index);
+			m_usb_tx_char('\t');
+			m_usb_tx_int((int)(deg*100));
+			m_usb_tx_char('\t');
 			/*for (int j = 0 ; j < 7 ; j++){
 			m_usb_tx_int(ADCarr[j]);
 			m_usb_tx_char('\t');
@@ -276,16 +312,18 @@ void drive_to_puck() {
 	OCR1B = 0;
 	OCR3A = 0;
 	m_red(ON);
-	
+	set(DDRF,7);
 	int index = 0;
 	int maxval = 0;
-	int diff;
-	float deg;
+	int diff = 0;
+	float deg = 0.0;
+	
+	m_green(OFF);
+	m_red(OFF);
 	while(1) {
 		getADC();
 		index = 0;
 		maxval = 0;
-		m_green(TOGGLE);
 		for(int i = 0; i < 7; i++) {
 			if (ADCarr[i] > maxval) {
 				index = i;
@@ -295,17 +333,26 @@ void drive_to_puck() {
 		switch (index) {
 			case 0: 
 				diff = ADCarr[0] - ADCarr[6];
-				deg = exp(-1.0*(float)diff/100.0);
-				turn(LEFT,0.2,deg);
+				deg = exp(-1.0*(fabs((float)diff))/400.0);
+				turn(RIGHT,0.2,deg);
+				m_green(ON);
+				m_red(OFF);
 				break;
 			case 6:
 				diff = ADCarr[6] - ADCarr[0];
-				deg = exp(-1.0*(float)diff/100.0);
-				turn(RIGHT,0.2,deg);
+				deg = exp(-1.0*(fabs((float)diff))/400.0);
+				turn(LEFT,0.2,deg);
+				m_green(OFF);
+				m_red(ON);
+				break;
+			default:
+				m_red(ON);
+				m_green(ON);
 				break;
 		}
-		
+		toggle(PORTF,7);
 	}
+	clear(DDRF,7);
 }
 
 void drive_to_point2(int x, int y) {
@@ -367,7 +414,7 @@ void drive_to_point2(int x, int y) {
 	reverse();
 	OCR1B = 0;
 	OCR3A = 0;
-	while(1);
+	state = 0;
 }
 
 void drive_to_point(int x, int y) {
@@ -624,7 +671,7 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = 70; //set state
+	state = 2; //set state
 	long count = 0;
 	
 
