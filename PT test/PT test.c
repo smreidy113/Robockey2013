@@ -208,8 +208,8 @@ int main(void)
 		clear(ADCSRA, ADATE);
 		clear(ADCSRA, ADIF);
 		if (flag >= 0 && flag < 7) {
-			chooseInput(flag);
 			flag = (flag + 1) % 7;
+			chooseInput(flag);
 		}
 		set(ADCSRA, ADATE);	//Set trigger to free-running mode
 		set(ADCSRA, ADEN);	//Enable/Start conversion
