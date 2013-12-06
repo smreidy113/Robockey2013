@@ -43,6 +43,185 @@ void update_ADC(void);
 
 int state = 0;
 
+int flag = 0;
+
+int i = 0;
+int ADCarr[7] = {0, 0, 0, 0, 0, 0, 0};
+
+void chooseInput(int i) {
+	switch (i) {
+		case 0:
+		clear(ADCSRB, MUX5);//Set analog input (F0)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX0);	//^
+
+		break;
+		case 1:
+		clear(ADCSRB, MUX5);//Set analog input (F1)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		set(ADMUX, MUX0);	//^
+
+		break;
+		case 2:
+		clear(ADCSRB, MUX5);//Set analog input (F4)
+		set(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX0);	//^
+
+		break;
+		case 3:
+
+		clear(ADCSRB, MUX5);//Set analog input (F5)
+		set(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		set(ADMUX, MUX0);	//^
+		break;
+		case 4:
+		clear(ADCSRB, MUX5);//Set analog input (F6)
+		set(ADMUX, MUX2);	//^
+		set(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX0);	//^
+		break;
+		case 5:
+		set(ADCSRB, MUX5);//Set analog input (D4)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		clear(ADMUX, MUX0);	//^
+		break;
+		case 6:
+		set(ADCSRB, MUX5);//Set analog input (D6)
+		clear(ADMUX, MUX2);	//^
+		clear(ADMUX, MUX1);	//^
+		set(ADMUX, MUX0);	//^
+		i=-1;
+		break;
+	}
+}
+
+int ADC0 = 0;
+int ADC1 = 0;
+int ADC2 = 0;
+int ADC3 = 0;
+int ADC4 = 0;
+int ADC5 = 0;
+int ADC6 = 0;
+int conversion = 0;
+
+void getADC() {
+	if (conversion) {
+		switch (flag) {
+			case 0:
+			ADC0 = ADC;
+			break;
+			case 1:
+			ADC1 = ADC;
+			break;
+			case 2:
+			ADC2 = ADC;
+			break;
+			case 3:
+			ADC3 = ADC;
+			break;
+			case 4:
+			ADC4 = ADC;
+			break;
+			case 5:
+			ADC5 = ADC;
+			break;
+			case 6:
+			ADC6 = ADC;
+			break;
+		}
+	}
+	clear(ADCSRA, ADEN);	//Enable/Start conversion
+	clear(ADCSRA, ADSC);	//^
+	clear(ADCSRA, ADATE);
+	clear(ADCSRA, ADIF);
+	if (flag >= 0 && flag < 7) {
+		flag = (flag + 1) % 7;
+		chooseInput(flag);
+	}
+	set(ADCSRA, ADATE);	//Set trigger to free-running mode
+	set(ADCSRA, ADEN);	//Enable/Start conversion
+	set(ADCSRA, ADSC);	//^
+	
+	set(ADCSRA, ADIF);	//Enable reading results
+	conversion = 0;
+	ADCarr[0] = ADC0;
+	ADCarr[1] = ADC1;
+	ADCarr[2] = ADC2;
+	ADCarr[3] = ADC3;
+	ADCarr[4] = ADC4;
+	ADCarr[5] = ADC5;
+	ADCarr[6] = ADC6;
+
+	
+	
+}
+
+void reportADC() {
+	
+	m_red(ON);
+	m_green(ON);
+
+	m_usb_init(); // connect usb
+	while(!m_usb_isconnected());  //wait for connection
+
+	m_red(OFF);
+	m_green(OFF);
+
+	char rx_buffer; //computer interactions
+	
+	
+	
+while(1) {
+	getADC();
+	while(!m_usb_rx_available());  	//wait for an indication from the computer
+		rx_buffer = m_usb_rx_char();  	//grab the computer packet
+
+		m_usb_rx_flush();  				//clear buffer
+
+		
+		//write ir buffer as concatenated hex:  i.e. f0f1f4f5
+		/*if (counter == 300000) {
+		for (int j = 0; j < 7; j++) {
+		m_usb_tx_string("ADC");
+		m_usb_tx_int(j);
+		m_usb_tx_string(": ");
+		m_usb_tx_int(ADCarr[j]);
+		m_usb_tx_string("\t");
+		}
+		m_usb_tx_string("\n");
+		counter = 0;
+		
+		}
+		counter++;*/
+		
+		if(rx_buffer == 1) {  			//computer wants ir buffer
+			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
+			m_usb_tx_int(ADCarr[0]);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADCarr[1]);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADCarr[2]);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADCarr[3]);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADCarr[4]);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADCarr[5]);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADCarr[6]);
+			/*for (int j = 0 ; j < 7 ; j++){
+			m_usb_tx_int(ADCarr[j]);
+			m_usb_tx_char('\t');
+			}*/
+		}
+		m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
+		}
+}
 
 void rotate(int dir) {
 	OCR1B = OCR1A/7;
@@ -94,7 +273,39 @@ void findPuck() {
 }
 
 void drive_to_puck() {
-
+	OCR1B = 0;
+	OCR3A = 0;
+	m_red(ON);
+	
+	int index = 0;
+	int maxval = 0;
+	int diff;
+	float deg;
+	while(1) {
+		getADC();
+		index = 0;
+		maxval = 0;
+		m_green(TOGGLE);
+		for(int i = 0; i < 7; i++) {
+			if (ADCarr[i] > maxval) {
+				index = i;
+				maxval = ADCarr[i];
+			}
+		}
+		switch (index) {
+			case 0: 
+				diff = ADCarr[0] - ADCarr[6];
+				deg = exp(-1.0*(float)diff/100.0);
+				turn(LEFT,0.2,deg);
+				break;
+			case 6:
+				diff = ADCarr[6] - ADCarr[0];
+				deg = exp(-1.0*(float)diff/100.0);
+				turn(RIGHT,0.2,deg);
+				break;
+		}
+		
+	}
 }
 
 void drive_to_point2(int x, int y) {
@@ -304,6 +515,8 @@ int main(void)
 	
 	m_clockdivide(0);
 	
+	m_disableJTAG();
+	
 	//TIMER 0: For Controlling the solenoid
 	
 	set(TCCR0B, WGM02);
@@ -375,7 +588,7 @@ int main(void)
 	
 	//ADC's
 	sei();					//Set up interrupts
-	set(ADCSRA,ADIE);
+	set(ADCSRA, ADIE);
 	
 	clear(ADMUX, REFS1);	//Voltage reference is AR pin (5V)
 	clear(ADMUX, REFS0);	//^
@@ -385,16 +598,22 @@ int main(void)
 	set(ADCSRA, ADPS0);	//^
 	
 	set(DIDR0, ADC0D);	//Disable digital input for F0
-	set(DIDR0, ADC1D);	//Disable digital input for F1
-	set(DIDR0, ADC4D);	//Disable digital input for F4
-	set(DIDR0, ADC5D);	//Disable digital input for F5
-	set(DIDR0, ADC6D);	//Disable digital input for F6
-	set(DIDR2, ADC8D);	//Disable digital input for D4
-	set(DIDR2, ADC9D);	//Disable digital input for D6
-		
+	set(DIDR0, ADC1D),
+	set(DIDR0, ADC4D);
+	set(DIDR0, ADC5D);
+	set(DIDR0, ADC6D);
+	set(DIDR2, ADC8D);
+	set(DIDR2, ADC9D);
+	
 	set(ADCSRA, ADATE);	//Set trigger to free-running mode
 	
+	chooseInput(0);
+	
+	set(ADCSRA, ADEN);	//Enable/Start conversion
+	set(ADCSRA, ADSC);	//^
+	
 	set(ADCSRA, ADIF);	//Enable reading results
+	
 	
 	//Limit Switch stuffs
 	clear(DDRB,0); //set to input, RIGHT LIMIT SWITCH
@@ -405,24 +624,23 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = 0; //set state
+	state = 70; //set state
 	long count = 0;
 	
 
 	//m_bus_init();
 	m_wii_open();
 	m_usb_init();
-	local_init();
+	//local_init();
 
     while(1)
     {
 		changedState = 0;
-		
+		getADC();
 
 		//localize(data);
 
 	
-
 
 		//switch states
         switch (state) {
@@ -487,6 +705,17 @@ int main(void)
 			drive_to_goalB();
 			break;
 			
+			case 69:
+				set(PORTB,2);
+				set(PORTB,3);
+				OCR1B = OCR1A;
+				OCR3A = ICR3;
+				break;
+				
+			case 70:
+				reportADC();
+				break;
+			
 			default:
 			game_pause();
 			break;
@@ -495,15 +724,6 @@ int main(void)
     }
 }
 
-ISR(ADC_vect) {
-	if (ADC  > 500) {
-		m_green(ON);
-	}
-	
-	else {
-		m_green(OFF);
-	}
-}
 
 ISR(INT2_vect)  {
 	cli();
@@ -511,4 +731,29 @@ ISR(INT2_vect)  {
 	sei();
 	state=buffer[0];
 	changedState = 1;
+}
+
+ISR(ADC_vect) {
+	cli();
+	conversion = 1;
+	sei();
+	
+	/*if (i < 7 && i >= 0) {
+	ADCarr[i] = (int) ADC;
+	}
+	else {
+	m_green(TOGGLE);
+	}
+	i++;
+	clear(ADCSRA, ADEN);	//Enable/Start conversion
+	clear(ADCSRA, ADSC);	//^
+	chooseInput(i);
+	set(ADCSRA, ADATE);	//Set trigger to free-running mode
+	set(ADCSRA, ADEN);	//Enable/Start conversion
+	set(ADCSRA, ADSC);	//^
+	
+	set(ADCSRA, ADIF);	//Enable reading results
+	//m_wait(500);
+	m_red(TOGGLE);
+	flag = 1;*/
 }
