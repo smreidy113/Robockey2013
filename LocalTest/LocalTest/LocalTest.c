@@ -156,7 +156,7 @@ void getADC() {
 	ADCarr[4] = ADC4;
 	ADCarr[5] = ADC5;
 	ADCarr[6] = ADC6;
-
+	
 	
 	
 }
@@ -177,6 +177,7 @@ void reportADC() {
 	int maxval = 0;
 	float deg = 0.0;
 	float diff = 0.0;
+
 	
 	
 while(1) {
@@ -194,14 +195,12 @@ while(1) {
 		case 0:
 		diff = ADCarr[0] - ADCarr[6];
 		deg = exp(-1.0*fabs(((float)diff))/400.0);
-		//turn(LEFT,0.2,deg);
 		m_green(ON);
 		m_red(OFF);
 		break;
 		case 6:
 		diff = ADCarr[6] - ADCarr[0];
 		deg = exp(-1.0*fabs(((float)diff))/400.0);
-		//turn(RIGHT,0.2,deg);
 		m_green(OFF);
 		m_red(ON);
 		break;
@@ -214,21 +213,6 @@ while(1) {
 
 		m_usb_rx_flush();  				//clear buffer
 
-		
-		//write ir buffer as concatenated hex:  i.e. f0f1f4f5
-		/*if (counter == 300000) {
-		for (int j = 0; j < 7; j++) {
-		m_usb_tx_string("ADC");
-		m_usb_tx_int(j);
-		m_usb_tx_string(": ");
-		m_usb_tx_int(ADCarr[j]);
-		m_usb_tx_string("\t");
-		}
-		m_usb_tx_string("\n");
-		counter = 0;
-		
-		}
-		counter++;*/
 		toggle(PORTF,7);
 		if(rx_buffer == 1) {  			//computer wants ir buffer
 			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
@@ -250,10 +234,7 @@ while(1) {
 			m_usb_tx_char('\t');
 			m_usb_tx_int((int)(deg*100));
 			m_usb_tx_char('\t');
-			/*for (int j = 0 ; j < 7 ; j++){
-			m_usb_tx_int(ADCarr[j]);
-			m_usb_tx_char('\t');
-			}*/
+
 		}
 		m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
 		}
@@ -309,6 +290,7 @@ void findPuck() {
 }
 
 void drive_to_puck() {
+	
 	OCR1B = 0;
 	OCR3A = 0;
 	m_red(ON);
@@ -334,14 +316,14 @@ void drive_to_puck() {
 			case 0: 
 				diff = ADCarr[0] - ADCarr[6];
 				deg = exp(-1.0*(fabs((float)diff))/400.0);
-				turn(RIGHT,0.2,deg);
+				//turn(RIGHT,0.2,deg);
 				m_green(ON);
 				m_red(OFF);
 				break;
 			case 6:
 				diff = ADCarr[6] - ADCarr[0];
 				deg = exp(-1.0*(fabs((float)diff))/400.0);
-				turn(LEFT,0.2,deg);
+				//turn(LEFT,0.2,deg);
 				m_green(OFF);
 				m_red(ON);
 				break;
@@ -417,50 +399,6 @@ void drive_to_point2(int x, int y) {
 	state = 0;
 }
 
-void drive_to_point(int x, int y) {
-	m_green(ON);
-	m_wait(250);
-	localize(data);
-	//Rotate until you are facing target
-	int exit = 0;
-	rotate(LEFT);
-	while(1) {
-		m_green(TOGGLE);
-		//m_wait(250);
-		localize(data);
-// 		array[0] = (char)data[0];
-// 		array[1] = (char)data[1];
-// 		array[2] = 3;
-// 		cli();
-// 		m_rf_send(ADDRESS,array,PACKET_LENGTH);
-// 		sei();
-		if (fabs(atan2((float)y-data[1],(float)x-data[0])-(data[2] * 3.14 / 180.0)) < 3.14/100.0) {
-			break;
-		}
-		if (changedState) return;
-	}
-	exit = 0;
-	m_green(OFF);
-	m_red(ON);
-	//Drive until you're close to being there
-	forward();
-	while(!exit) {
-		localize(data);
-// 		array[0] = (char)data[0];
-// 		array[1] = (char)data[1];
-// 		array[2] = 3;
-// 		cli();
-// 		m_rf_send(ADDRESS,array,PACKET_LENGTH);
-// 		sei();
-		if (sqrt((data[1]-y)*(data[1]-y)+(data[0]-x)*(data[0]-x)) < 5) {
-			exit = 1;
-		}
-		if (changedState) return;
-	}
-	m_red(OFF);
-	game_pause();
-}
-
 void drive_to_goalA() {
 	drive_to_point2(GOALBX,GOALBY);
 }
@@ -525,25 +463,7 @@ int MATLAB_test(int count, ...) {
 
 				m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
 			}
-		
-		/*
-		while(!m_usb_rx_available());  	//wait for an indication from the computer
-		rx_buffer = m_usb_rx_char();  	//grab the computer packet
 
-		m_usb_rx_flush();  				//clear buffer
-
-		if(rx_buffer == 1) {  			//computer wants ir buffer
-			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
-
-			for (int i = 0 ; i < 15 ; i++){
-				m_usb_tx_int((int)data[i]);
-				m_usb_tx_char('\t');
-
-			}
-
-			m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
-		}
-		*/
 }
 
 int main(void)
@@ -684,6 +604,7 @@ int main(void)
     {
 		changedState = 0;
 		getADC();
+		
 
 		//localize(data);
 
@@ -692,7 +613,15 @@ int main(void)
 		//switch states
         switch (state) {
 			
-			case -3: //test Limit switches
+			case -2:
+			getADC();
+			if (ADCarr[0] > 500) {
+				m_green(ON);
+			}
+			else {m_green(OFF)}
+			break;
+			
+			case -1: //test Limit switches
 				//m_green(ON);
 				if (check(PINB,1)) {
 					
@@ -784,23 +713,4 @@ ISR(ADC_vect) {
 	cli();
 	conversion = 1;
 	sei();
-	
-	/*if (i < 7 && i >= 0) {
-	ADCarr[i] = (int) ADC;
-	}
-	else {
-	m_green(TOGGLE);
-	}
-	i++;
-	clear(ADCSRA, ADEN);	//Enable/Start conversion
-	clear(ADCSRA, ADSC);	//^
-	chooseInput(i);
-	set(ADCSRA, ADATE);	//Set trigger to free-running mode
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	set(ADCSRA, ADIF);	//Enable reading results
-	//m_wait(500);
-	m_red(TOGGLE);
-	flag = 1;*/
 }

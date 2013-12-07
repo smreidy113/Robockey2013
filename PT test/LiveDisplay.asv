@@ -111,7 +111,7 @@ try
         
         i=i+1;  % Incrememnt indexer
         %% Logging
-        %    if(rem(i,LOGFREQUENCY) == 0)
+        %    if(rem(i,lOGFREQUENCY) == 0)
         %        IMU_Log = [IMU_Log; time Angle_Actual];
         %    end
         
