@@ -40,13 +40,18 @@ void update_ADC(void);
 #define DEBUG 1
 #define CLOCK 0
 
-
+float puckdistance;
 int state = 0;
 
 int flag = 0;
 
 int i = 0;
 int ADCarr[7] = {0, 0, 0, 0, 0, 0, 0};
+	
+	int index = 0;
+	int maxval = 0;
+	int diff = 0;
+	float deg = 0.0;
 
 void chooseInput(int i) {
 	switch (i) {
@@ -134,21 +139,22 @@ void getADC() {
 			ADC6 = ADC;
 			break;
 		}
+			clear(ADCSRA, ADEN);	//Enable/Start conversion
+			clear(ADCSRA, ADSC);	//^
+			clear(ADCSRA, ADATE);
+			clear(ADCSRA, ADIF);
+			if (flag >= 0 && flag < 7) {
+				flag = (flag + 1) % 7;
+				chooseInput(flag);
+			}
+			set(ADCSRA, ADATE);	//Set trigger to free-running mode
+			set(ADCSRA, ADEN);	//Enable/Start conversion
+			set(ADCSRA, ADSC);	//^
+			
+			set(ADCSRA, ADIF);	//Enable reading results
+			conversion = 0;
 	}
-	clear(ADCSRA, ADEN);	//Enable/Start conversion
-	clear(ADCSRA, ADSC);	//^
-	clear(ADCSRA, ADATE);
-	clear(ADCSRA, ADIF);
-	if (flag >= 0 && flag < 7) {
-		flag = (flag + 1) % 7;
-		chooseInput(flag);
-	}
-	set(ADCSRA, ADATE);	//Set trigger to free-running mode
-	set(ADCSRA, ADEN);	//Enable/Start conversion
-	set(ADCSRA, ADSC);	//^
-	
-	set(ADCSRA, ADIF);	//Enable reading results
-	conversion = 0;
+
 	ADCarr[0] = ADC0;
 	ADCarr[1] = ADC1;
 	ADCarr[2] = ADC2;
@@ -162,7 +168,7 @@ void getADC() {
 }
 
 void reportADC() {
-	set(DDRF,7);
+
 	m_red(ON);
 	m_green(ON);
 
@@ -213,7 +219,6 @@ void reportADC() {
 
 		//m_usb_rx_flush();  				//clear buffer
 
-		toggle(PORTF,7);
 		//if(rx_buffer == 1) {  			//computer wants ir buffer
 			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
 			m_usb_tx_int(ADCarr[0]);
@@ -240,9 +245,9 @@ void reportADC() {
 		//}
 }
 
-void rotate(int dir) {
-	OCR1B = OCR1A/7;
-	OCR3A = ICR3/7;
+void rotate(int dir, float speed) {
+	OCR1B = OCR1A;
+	OCR3A = ICR3;
 	if (dir == RIGHT) {
 		set(PORTB,2);
 		clear(PORTB,3);
@@ -290,19 +295,6 @@ void findPuck() {
 }
 
 void drive_to_puck() {
-	
-	OCR1B = 0;
-	OCR3A = 0;
-	//m_red(ON);
-	set(DDRF,7);
-	int index = 0;
-	int maxval = 0;
-	int diff = 0;
-	float deg = 0.0;
-	
-	//m_green(OFF);
-	//m_red(OFF);
-	//while(1) {
 		getADC();
 		index = 0;
 		maxval = 0;
@@ -314,40 +306,60 @@ void drive_to_puck() {
 		}
 		switch (index) {
 			case 0: 
+				puckdistance = (log(((double) ADCarr[0])) * -1.0 * 89.64) + 664.58;
 				diff = ADCarr[0] - ADCarr[6];
-				deg = exp(-1.0*(fabs((float)diff))/400.0);
-				//turn(RIGHT,0.2,deg);
+				deg = exp(-1.0*(fabs((float)diff))/70.0);
+				turn(RIGHT,1.0,deg);
 				m_green(ON);
-				//m_red(OFF);
+				m_red(OFF);
+				break;
+			case 1:
+				turn(RIGHT,1.0,0.15);
+				break;
+			case 2:
+				turn(RIGHT,1.0,0);
+				break;
+			case 3:
+				if (ADCarr[2] > ADCarr[4]) {
+					rotate(RIGHT, 1);
+				}
+				else {
+					rotate(LEFT, 1);
+				}
+				break;
+			case 4:
+				turn(LEFT,1.0,0);
+				break;
+			case 5:
+				turn(LEFT,1.0,0.15);
 				break;
 			case 6:
+				puckdistance = (log(((double) ADCarr[0])) * -1.0 * 89.64) + 664.58;
 				diff = ADCarr[6] - ADCarr[0];
-				deg = exp(-1.0*(fabs((float)diff))/400.0);
-				//turn(LEFT,0.2,deg);
+				deg = exp(-1.0*(fabs((float)diff))/70.0);
+				turn(LEFT,1.0,deg);
 				m_green(OFF);
-				//m_red(ON);
+				m_red(ON);
 				break;
 			default:
-				//m_red(ON);
-				//m_green(ON);
+				m_red(ON);
+				m_green(ON);
 				break;
 		}
-		toggle(PORTF,7);
 	//}
-	clear(DDRF,7);
 }
+
+	float speed_cap = 0.5;
+	float angle_dif = 0.0;
+	float distance = 0.0;
+	float spd = 0.0;
+	int dir = 0;
 
 void drive_to_point2(int x, int y) {
 	m_green(ON);
 	//m_wait(500);
-	float speed_cap = 0.5;
-	localize(data);
-	float angle_dif = 0.0;
-	float dist = 0.0;
-	float spd = 0.0;
-	float deg = 0.0;
-	int dir = 0;
-	while(1) {
+
+	//while(1) {
 		localize(data);
 		
 		//Set angle difference to be between -180 and 180
@@ -362,8 +374,8 @@ void drive_to_point2(int x, int y) {
 		//Angle of 180 corresponds to deg of 0; angle of 0 corresponds to deg of 1
 		deg = exp(-1.0* ((double)fabs(angle_dif))/30.0);
 		//Set distance
-		dist = (int) sqrt(((double)y - data[1])*((double)y - data[1])+((double)x - data[0])*((double)x - data[0]));
-		spd = ((float)dist)/70.0;
+		distance = (int) sqrt(((double)y - data[1])*((double)y - data[1])+((double)x - data[0])*((double)x - data[0]));
+		spd = ((float)distance)/70.0;
 		//*****************************************************************************
 			rx_buffer = m_usb_rx_char();  	//grab the computer packet
 
@@ -373,7 +385,7 @@ void drive_to_point2(int x, int y) {
 				//write ir buffer as concatenated hex:  i.e. f0f1f4f5
 				data[3] = angle_dif;
 				data[4] = deg*100.0;
-				data[5] = dist;
+				data[5] = distance;
 				data[6] = spd*100.0;
 				for (int i = 0 ; i < 7 ; i++){
 					m_usb_tx_int((int)data[i]);
@@ -387,16 +399,16 @@ void drive_to_point2(int x, int y) {
 		//*********************************************************************************
 		
 		if (spd > speed_cap) spd = speed_cap;
-		if (dist < 10) break;
-		if (changedState) return;
 		turn(dir, spd, deg);
 		
+	//}
+	if (distance < 10) {
+		m_red(ON);
+		reverse();
+		OCR1B = 0;
+		OCR3A = 0;
+		state = 0;
 	}
-	m_red(ON);
-	reverse();
-	OCR1B = 0;
-	OCR3A = 0;
-	state = 0;
 }
 
 void drive_to_goalA() {
@@ -408,9 +420,11 @@ void drive_to_goalB() {
 }
 
 void shoot() {
+		m_red(ON);
 		set(PORTB,7);
-		m_wait(100);
+		m_wait(1000);
 		clear(PORTB,7);
+		m_red(OFF);
 }
 
 void game_pause() {
@@ -485,23 +499,23 @@ int main(void)
 	m_disableJTAG();
 	
 	//TIMER 0: For Controlling the solenoid
-	
-	set(TCCR0B, WGM02);
-	set(TCCR0A, WGM01);
-	set(TCCR0A, WGM01);
-	
-	set(TCCR0A, COM0B1);
-	clear(TCCR0A, COM0B0);
-	
-	set(TCCR0B, CS02);
-	set(TCCR0B, CS01);
-	set(TCCR0B, CS00);
-	
+// 	
+// 	set(TCCR0B, WGM02);
+// 	set(TCCR0A, WGM01);
+// 	set(TCCR0A, WGM01);
+// 	
+// 	set(TCCR0A, COM0B1);
+// 	clear(TCCR0A, COM0B0);
+// 	
+// 	set(TCCR0B, CS02);
+// 	set(TCCR0B, CS01);
+// 	set(TCCR0B, CS00);
+// 	
 	set(DDRB,7);
 	
-	OCR0A = 0xFF;
-	OCR0B = 0;
-	
+// 	OCR0A = 0xFF;
+// 	OCR0B = 0xff;
+// 	
 	//TIMER 1: For Controlling the left wheel
 	
 	set(TCCR1B, WGM13);
@@ -591,7 +605,7 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = 70; //set state
+	state = 4; //set state
 	long count = 0;
 	
 
@@ -607,7 +621,14 @@ int main(void)
 		
 
 		//localize(data);
-
+		
+// 		if (check(PINB,0)) {
+// 			set(PORTD,5);
+// 			state = 0x1A;
+// 		} else {
+// 			clear(PORTD,5);
+// 			state = 2;
+// 		}
 	
 
 		//switch states
@@ -650,7 +671,7 @@ int main(void)
 			break;
 			
 			case 2:
-			m_red(ON);
+			//m_red(ON);
 			drive_to_puck();
 			break;
 			
@@ -660,6 +681,7 @@ int main(void)
 			
 			case 4:
 			shoot();
+			state =  0;
 			break;	
 			
 			case 0xA4:

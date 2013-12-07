@@ -202,21 +202,22 @@ int main(void)
 				ADC6 = ADC;
 				break;
 			}
+			clear(ADCSRA, ADEN);	//Enable/Start conversion
+			clear(ADCSRA, ADSC);	//^
+			clear(ADCSRA, ADATE);
+			clear(ADCSRA, ADIF);
+			if (flag >= 0 && flag < 7) {
+				flag = (flag + 1) % 7;
+				chooseInput(flag);
+			}
+			set(ADCSRA, ADATE);	//Set trigger to free-running mode
+			set(ADCSRA, ADEN);	//Enable/Start conversion
+			set(ADCSRA, ADSC);	//^
+			
+			set(ADCSRA, ADIF);	//Enable reading results
+			conversion = 0;
 		}
-		clear(ADCSRA, ADEN);	//Enable/Start conversion
-		clear(ADCSRA, ADSC);	//^
-		clear(ADCSRA, ADATE);
-		clear(ADCSRA, ADIF);
-		if (flag >= 0 && flag < 7) {
-			flag = (flag + 1) % 7;
-			chooseInput(flag);
-		}
-		set(ADCSRA, ADATE);	//Set trigger to free-running mode
-		set(ADCSRA, ADEN);	//Enable/Start conversion
-		set(ADCSRA, ADSC);	//^
 		
-		set(ADCSRA, ADIF);	//Enable reading results
-		conversion = 0;
 	}
 	
 }

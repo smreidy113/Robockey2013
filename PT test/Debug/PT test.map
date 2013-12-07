@@ -634,10 +634,10 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  .debug_abbrev  0x00000000      0x23a m_usb.o
  .debug_abbrev  0x0000023a      0x15d PT test.o
 
-.debug_line     0x00000000      0x6c4
+.debug_line     0x00000000      0x6c3
  *(.debug_line)
  .debug_line    0x00000000      0x53f m_usb.o
- .debug_line    0x0000053f      0x185 PT test.o
+ .debug_line    0x0000053f      0x184 PT test.o
 
 .debug_frame    0x00000000      0x37c
  *(.debug_frame)

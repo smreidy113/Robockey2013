@@ -21,7 +21,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   8 .debug_abbrev 00000397  00000000  00000000  00002a60  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   000006c4  00000000  00000000  00002df7  2**0
+  9 .debug_line   000006c3  00000000  00000000  00002df7  2**0
                   CONTENTS, READONLY, DEBUGGING
  10 .debug_frame  0000037c  00000000  00000000  000034bc  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -1122,19 +1122,19 @@ int main(void)
 	m_green(OFF);
  8d6:	6a 9a       	sbi	0x0d, 2	; 13
  8d8:	72 9a       	sbi	0x0e, 2	; 14
+				break;
 				case 6:
 				ADC6 = ADC;
 				break;
 			}
-		}
-		clear(ADCSRA, ADEN);	//Enable/Start conversion
+			clear(ADCSRA, ADEN);	//Enable/Start conversion
  8da:	ca e7       	ldi	r28, 0x7A	; 122
  8dc:	d0 e0       	ldi	r29, 0x00	; 0
-		clear(ADCSRA, ADSC);	//^
-		clear(ADCSRA, ADATE);
-		clear(ADCSRA, ADIF);
-		if (flag >= 0 && flag < 7) {
-			flag = (flag + 1) % 7;
+			clear(ADCSRA, ADSC);	//^
+			clear(ADCSRA, ADATE);
+			clear(ADCSRA, ADIF);
+			if (flag >= 0 && flag < 7) {
+				flag = (flag + 1) % 7;
  8de:	0f 2e       	mov	r0, r31
  8e0:	f7 e0       	ldi	r31, 0x07	; 7
  8e2:	ef 2e       	mov	r14, r31
@@ -1235,7 +1235,7 @@ int main(void)
  98a:	90 91 0d 01 	lds	r25, 0x010D
  98e:	89 2b       	or	r24, r25
  990:	09 f4       	brne	.+2      	; 0x994 <main+0x170>
- 992:	4d c0       	rjmp	.+154    	; 0xa2e <main+0x20a>
+ 992:	af cf       	rjmp	.-162    	; 0x8f2 <main+0xce>
 			switch (flag) {
  994:	80 91 1c 01 	lds	r24, 0x011C
  998:	90 91 1d 01 	lds	r25, 0x011D
@@ -1320,59 +1320,57 @@ int main(void)
  a2a:	80 93 0e 01 	sts	0x010E, r24
 				break;
 			}
-		}
-		clear(ADCSRA, ADEN);	//Enable/Start conversion
+			clear(ADCSRA, ADEN);	//Enable/Start conversion
  a2e:	88 81       	ld	r24, Y
  a30:	8f 77       	andi	r24, 0x7F	; 127
  a32:	88 83       	st	Y, r24
-		clear(ADCSRA, ADSC);	//^
+			clear(ADCSRA, ADSC);	//^
  a34:	88 81       	ld	r24, Y
  a36:	8f 7b       	andi	r24, 0xBF	; 191
  a38:	88 83       	st	Y, r24
-		clear(ADCSRA, ADATE);
+			clear(ADCSRA, ADATE);
  a3a:	88 81       	ld	r24, Y
  a3c:	8f 7d       	andi	r24, 0xDF	; 223
  a3e:	88 83       	st	Y, r24
-		clear(ADCSRA, ADIF);
+			clear(ADCSRA, ADIF);
  a40:	88 81       	ld	r24, Y
  a42:	8f 7e       	andi	r24, 0xEF	; 239
  a44:	88 83       	st	Y, r24
-		if (flag >= 0 && flag < 7) {
+			if (flag >= 0 && flag < 7) {
  a46:	80 91 1c 01 	lds	r24, 0x011C
  a4a:	90 91 1d 01 	lds	r25, 0x011D
  a4e:	87 30       	cpi	r24, 0x07	; 7
  a50:	91 05       	cpc	r25, r1
  a52:	50 f4       	brcc	.+20     	; 0xa68 <main+0x244>
-			flag = (flag + 1) % 7;
+				flag = (flag + 1) % 7;
  a54:	01 96       	adiw	r24, 0x01	; 1
  a56:	b7 01       	movw	r22, r14
  a58:	0e 94 59 05 	call	0xab2	; 0xab2 <__divmodhi4>
  a5c:	80 93 1c 01 	sts	0x011C, r24
  a60:	90 93 1d 01 	sts	0x011D, r25
-			chooseInput(flag);
+				chooseInput(flag);
  a64:	0e 94 85 03 	call	0x70a	; 0x70a <chooseInput>
-		}
-		set(ADCSRA, ADATE);	//Set trigger to free-running mode
+			}
+			set(ADCSRA, ADATE);	//Set trigger to free-running mode
  a68:	88 81       	ld	r24, Y
  a6a:	80 62       	ori	r24, 0x20	; 32
  a6c:	88 83       	st	Y, r24
-		set(ADCSRA, ADEN);	//Enable/Start conversion
+			set(ADCSRA, ADEN);	//Enable/Start conversion
  a6e:	88 81       	ld	r24, Y
  a70:	80 68       	ori	r24, 0x80	; 128
  a72:	88 83       	st	Y, r24
-		set(ADCSRA, ADSC);	//^
+			set(ADCSRA, ADSC);	//^
  a74:	88 81       	ld	r24, Y
  a76:	80 64       	ori	r24, 0x40	; 64
  a78:	88 83       	st	Y, r24
-		
-		set(ADCSRA, ADIF);	//Enable reading results
+			
+			set(ADCSRA, ADIF);	//Enable reading results
  a7a:	88 81       	ld	r24, Y
  a7c:	80 61       	ori	r24, 0x10	; 16
  a7e:	88 83       	st	Y, r24
-		conversion = 0;
+			conversion = 0;
  a80:	10 92 0d 01 	sts	0x010D, r1
  a84:	10 92 0c 01 	sts	0x010C, r1
-	}
  a88:	34 cf       	rjmp	.-408    	; 0x8f2 <main+0xce>
 
 00000a8a <__vector_29>:
