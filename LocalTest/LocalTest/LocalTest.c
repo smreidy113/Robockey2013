@@ -420,11 +420,12 @@ void drive_to_goalB() {
 }
 
 void shoot() {
-		m_red(ON);
-		set(PORTB,7);
-		m_wait(1000);
-		clear(PORTB,7);
-		m_red(OFF);
+	m_wait(1000);
+	m_red(ON);
+	set(PORTB,7);
+	m_wait(100);
+	clear(PORTB,7);
+	m_red(OFF);
 }
 
 void game_pause() {
