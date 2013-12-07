@@ -180,7 +180,7 @@ void reportADC() {
 
 	
 	
-while(1) {
+
 	getADC();
 	index = 0;
 	maxval = 0;
@@ -208,13 +208,13 @@ while(1) {
 		m_green(ON);
 		m_red(ON);
 	}
-	while(!m_usb_rx_available());  	//wait for an indication from the computer
-		rx_buffer = m_usb_rx_char();  	//grab the computer packet
+	//while(!m_usb_rx_available());  	//wait for an indication from the computer
+		//rx_buffer = m_usb_rx_char();  	//grab the computer packet
 
-		m_usb_rx_flush();  				//clear buffer
+		//m_usb_rx_flush();  				//clear buffer
 
 		toggle(PORTF,7);
-		if(rx_buffer == 1) {  			//computer wants ir buffer
+		//if(rx_buffer == 1) {  			//computer wants ir buffer
 			//write ir buffer as concatenated hex:  i.e. f0f1f4f5
 			m_usb_tx_int(ADCarr[0]);
 			m_usb_tx_char('\t');
@@ -235,9 +235,9 @@ while(1) {
 			m_usb_tx_int((int)(deg*100));
 			m_usb_tx_char('\t');
 
-		}
+		//}
 		m_usb_tx_char('\n');  //MATLAB serial command reads 1 line at a time
-		}
+		//}
 }
 
 void rotate(int dir) {
@@ -293,16 +293,16 @@ void drive_to_puck() {
 	
 	OCR1B = 0;
 	OCR3A = 0;
-	m_red(ON);
+	//m_red(ON);
 	set(DDRF,7);
 	int index = 0;
 	int maxval = 0;
 	int diff = 0;
 	float deg = 0.0;
 	
-	m_green(OFF);
-	m_red(OFF);
-	while(1) {
+	//m_green(OFF);
+	//m_red(OFF);
+	//while(1) {
 		getADC();
 		index = 0;
 		maxval = 0;
@@ -318,22 +318,22 @@ void drive_to_puck() {
 				deg = exp(-1.0*(fabs((float)diff))/400.0);
 				//turn(RIGHT,0.2,deg);
 				m_green(ON);
-				m_red(OFF);
+				//m_red(OFF);
 				break;
 			case 6:
 				diff = ADCarr[6] - ADCarr[0];
 				deg = exp(-1.0*(fabs((float)diff))/400.0);
 				//turn(LEFT,0.2,deg);
 				m_green(OFF);
-				m_red(ON);
+				//m_red(ON);
 				break;
 			default:
-				m_red(ON);
-				m_green(ON);
+				//m_red(ON);
+				//m_green(ON);
 				break;
 		}
 		toggle(PORTF,7);
-	}
+	//}
 	clear(DDRF,7);
 }
 
@@ -591,7 +591,7 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = 2; //set state
+	state = 70; //set state
 	long count = 0;
 	
 
@@ -603,7 +603,7 @@ int main(void)
     while(1)
     {
 		changedState = 0;
-		getADC();
+		//getADC();
 		
 
 		//localize(data);
@@ -650,6 +650,7 @@ int main(void)
 			break;
 			
 			case 2:
+			m_red(ON);
 			drive_to_puck();
 			break;
 			
