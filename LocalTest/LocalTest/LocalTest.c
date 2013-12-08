@@ -26,6 +26,7 @@
 #include "m_usb.h"
 #include "m_loc.h"
 
+char iHaveThePuck = 0;
 
 volatile char changedState = 0;
 char rx_buffer;
@@ -46,7 +47,7 @@ int state = 0;
 int flag = 0;
 
 int i = 0;
-int ADCarr[7] = {0, 0, 0, 0, 0, 0, 0};
+int ADCarr[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 	
 	int index = 0;
 	int maxval = 0;
@@ -100,6 +101,12 @@ void chooseInput(int i) {
 		clear(ADMUX, MUX2);	//^
 		clear(ADMUX, MUX1);	//^
 		set(ADMUX, MUX0);	//^
+		break;
+		case 7:
+		clear(ADCSRB, MUX5);//Set analog input (F7)
+		set(ADMUX, MUX2);
+		set(ADMUX, MUX1);
+		set(ADMUX, MUX0);
 		i=-1;
 		break;
 	}
@@ -112,6 +119,7 @@ int ADC3 = 0;
 int ADC4 = 0;
 int ADC5 = 0;
 int ADC6 = 0;
+int ADC7 = 0;
 int conversion = 0;
 
 void getADC() {
@@ -138,13 +146,16 @@ void getADC() {
 			case 6:
 			ADC6 = ADC;
 			break;
+			case 7:
+			ADC7 = ADC;
+			break;
 		}
 			clear(ADCSRA, ADEN);	//Enable/Start conversion
 			clear(ADCSRA, ADSC);	//^
 			clear(ADCSRA, ADATE);
 			clear(ADCSRA, ADIF);
-			if (flag >= 0 && flag < 7) {
-				flag = (flag + 1) % 7;
+			if (flag >= 0 && flag < 8) {
+				flag = (flag + 1) % 8;
 				chooseInput(flag);
 			}
 			set(ADCSRA, ADATE);	//Set trigger to free-running mode
@@ -162,7 +173,7 @@ void getADC() {
 	ADCarr[4] = ADC4;
 	ADCarr[5] = ADC5;
 	ADCarr[6] = ADC6;
-	
+	ADCarr[7] = ADC7;
 	
 	
 }
@@ -172,8 +183,6 @@ void reportADC() {
 	m_red(ON);
 	m_green(ON);
 
-	m_usb_init(); // connect usb
-	while(!m_usb_isconnected());  //wait for connection
 
 	m_red(OFF);
 	m_green(OFF);
@@ -191,7 +200,7 @@ void reportADC() {
 	index = 0;
 	maxval = 0;
 	//m_green(TOGGLE);
-	for(int i = 0; i < 7; i++) {
+	for(int i = 0; i < 8; i++) {
 		if (ADCarr[i] > maxval) {
 			index = i;
 			maxval = ADCarr[i];
@@ -234,6 +243,8 @@ void reportADC() {
 			m_usb_tx_int(ADCarr[5]);
 			m_usb_tx_char('\t');
 			m_usb_tx_int(ADCarr[6]);
+			m_usb_tx_char('\t');
+			m_usb_tx_int(ADCarr[7]);
 			m_usb_tx_char('\t');
 			m_usb_tx_int(index);
 			m_usb_tx_char('\t');
@@ -584,6 +595,7 @@ int main(void)
 	set(DIDR0, ADC4D);
 	set(DIDR0, ADC5D);
 	set(DIDR0, ADC6D);
+	set(DIDR0, ADC7D);
 	set(DIDR2, ADC8D);
 	set(DIDR2, ADC9D);
 	
@@ -606,9 +618,13 @@ int main(void)
 	
 	 
 	//int state; // state variable
-	state = 4; //set state
+	state = 2; //set state
 	long count = 0;
 	
+	if (state == 70) {
+		m_usb_init(); // connect usb
+		while(!m_usb_isconnected());  //wait for connection
+	}
 
 	//m_bus_init();
 	m_wii_open();
@@ -618,8 +634,16 @@ int main(void)
     while(1)
     {
 		changedState = 0;
-		//getADC();
 		
+		//Detect weather we have the puck
+		getADC();
+		if (ADCarr[7] > 500) {
+			set(PORTD,5);
+			iHaveThePuck = 1;
+		} else {
+			clear(PORTD,5);
+			iHaveThePuck = 0;
+		}
 
 		//localize(data);
 		
@@ -684,6 +708,15 @@ int main(void)
 			shoot();
 			state =  0;
 			break;	
+			
+			case 5:
+			getADC();
+			if (ADCarr[7] > 500) {
+				set(PORTD,5);
+			} else {
+				clear(PORTD,5);
+			}
+			break;
 			
 			case 0xA4:
 			game_pause();
