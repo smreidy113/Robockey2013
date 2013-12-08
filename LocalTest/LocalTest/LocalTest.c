@@ -524,7 +524,7 @@ int MATLAB_test(int count, ...) {
 float distfrombound = 0;
 
 
-char isStuck() {
+/*char isStuck() {
 	m_wait(100);
 	//localize(data);
 	distfrombound = data[1] + ((float)BOUNDARYTHRESHOLD)*sin((data[2]+90.0)*3.14/180.0*-1.0);
@@ -538,7 +538,7 @@ char isStuck() {
 long loccounter = 0;
 float prevx = 0.0;
 float prevy = 0.0;
-
+*/
 int main(void)
 {
 	set(DDRD,5);
@@ -695,7 +695,7 @@ int main(void)
 			prevy = data[1];
 			loccounter = 0;
 		}*/
-		loccounter++;
+		//loccounter++;
 		localize(data);
 		toggle(PORTD,3);
 		changedState = 0;
