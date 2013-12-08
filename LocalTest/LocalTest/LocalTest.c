@@ -14,6 +14,9 @@
 #define GOALBY 0
 #define GOALAX -115
 #define GOALAY 0
+#define BOUNDARYTHRESHOLD 20
+#define GOALWIDTH 80
+#define LOCCOUNT 150
 
 #include <avr/io.h>
 #include <stdarg.h>
@@ -272,6 +275,9 @@ void rotate(int dir, float speed) {
 void turn(int dir,float speed, float degree) {
 	set(PORTB,2);
 	set(PORTB,3);
+	if(iHaveThePuck && degree < 0.27) {
+		degree = 0.27;
+	}
 	if (dir == LEFT) {
 		OCR3A = (unsigned int) ((float)ICR3 * speed);
 		OCR1B = (unsigned int) (degree * speed * OCR1A);
@@ -319,16 +325,24 @@ void drive_to_puck() {
 			case 0: 
 				puckdistance = (log(((double) ADCarr[0])) * -1.0 * 89.64) + 664.58;
 				diff = ADCarr[0] - ADCarr[6];
-				deg = exp(-1.0*(fabs((float)diff))/70.0);
+				deg = exp(-1.0*(fabs((float)diff))/40.0);
 				turn(RIGHT,1.0,deg);
-				m_green(ON);
-				m_red(OFF);
+				//m_green(ON);
+				//m_red(OFF);
 				break;
 			case 1:
-				turn(RIGHT,1.0,0.15);
+				if (ADCarr[1] > 800 && ADCarr[2] > 800) {
+					rotate(LEFT,1);
+				}else {
+				turn(RIGHT,1.0,0.05);
+				}
 				break;
 			case 2:
-				turn(RIGHT,1.0,0);
+				if (ADCarr[1] > 800 && ADCarr[2] > 800) {
+					rotate(LEFT,1);
+				}else {
+					turn(RIGHT,1.0,0);
+				}
 				break;
 			case 3:
 				if (ADCarr[2] > ADCarr[4]) {
@@ -339,22 +353,31 @@ void drive_to_puck() {
 				}
 				break;
 			case 4:
-				turn(LEFT,1.0,0);
+				if (ADCarr[4] > 800 && ADCarr[5] > 800) {
+					rotate(LEFT,1);
+				}
+				else {
+					turn(LEFT,1.0,0);
+				}
 				break;
 			case 5:
-				turn(LEFT,1.0,0.15);
+				if (ADCarr[4] > 800 && ADCarr[5] > 800) {
+					rotate(LEFT,1);
+				}else {
+					turn(LEFT,1.0,0.15);
+				}
 				break;
 			case 6:
 				puckdistance = (log(((double) ADCarr[0])) * -1.0 * 89.64) + 664.58;
 				diff = ADCarr[6] - ADCarr[0];
 				deg = exp(-1.0*(fabs((float)diff))/70.0);
 				turn(LEFT,1.0,deg);
-				m_green(OFF);
-				m_red(ON);
+				//m_green(OFF);
+				//m_red(ON);
 				break;
 			default:
-				m_red(ON);
-				m_green(ON);
+				//m_red(ON);
+				//m_green(ON);
 				break;
 		}
 	//}
@@ -371,10 +394,14 @@ void drive_to_point2(int x, int y) {
 	//m_wait(500);
 
 	//while(1) {
-		localize(data);
+		//localize(data);
 		
 		//Set angle difference to be between -180 and 180
 		angle_dif = (((int) (((data[2] + 90.0) * -1.0) - (float)(atan2((double)y-data[1],(double)x-data[0]))*180.0/3.14)) + 900) % 360 - 180;
+		if (abs(angle_dif) < 5) {
+			//shoot();
+			//game_pause();
+		}
 		if (angle_dif > 0) {
 			dir = RIGHT;
 		}
@@ -423,20 +450,22 @@ void drive_to_point2(int x, int y) {
 }
 
 void drive_to_goalA() {
-	drive_to_point2(GOALBX,GOALBY);
-}
-
-void drive_to_goalB() {
 	drive_to_point2(GOALAX,GOALAY);
 }
 
+void drive_to_goalB() {
+	drive_to_point2(GOALBX,GOALBY);
+}
+
 void shoot() {
-	m_wait(1000);
+	//m_wait(1000);
 	m_red(ON);
+	set(DDRB,7);
 	set(PORTB,7);
-	m_wait(100);
+	m_wait(200);
 	clear(PORTB,7);
 	m_red(OFF);
+	clear(DDRB,7);
 }
 
 void game_pause() {
@@ -492,9 +521,28 @@ int MATLAB_test(int count, ...) {
 
 }
 
+float distfrombound = 0;
+
+
+char isStuck() {
+	m_wait(100);
+	//localize(data);
+	distfrombound = data[1] + ((float)BOUNDARYTHRESHOLD)*sin((data[2]+90.0)*3.14/180.0*-1.0);
+	if (distfrombound > 60.0 || distfrombound < -60.0) {
+		return 1;
+	}
+	m_usb_tx_int((int)distfrombound);
+	m_usb_tx_char('\n');
+}
+
+long loccounter = 0;
+float prevx = 0.0;
+float prevy = 0.0;
+
 int main(void)
 {
 	set(DDRD,5);
+	set(DDRD,3);
 	//wireless stuffs
 	m_bus_init();
 	
@@ -615,25 +663,43 @@ int main(void)
 	
 	clear(PORTB,0); //disable internal pull up resistor
 	clear(PORTB,1); //disable internal pull up resistor
-	
 	 
 	//int state; // state variable
 	state = 2; //set state
 	long count = 0;
 	
 	if (state == 70) {
-		m_usb_init(); // connect usb
-		while(!m_usb_isconnected());  //wait for connection
+			m_usb_init(); // connect usb
+			while(!m_usb_isconnected());  //wait for connection
 	}
 
 	//m_bus_init();
 	m_wii_open();
-	m_usb_init();
-	//local_init();
+	//m_usb_init();
+	local_init();
 
     while(1)
     {
+		/*if (loccounter == LOCCOUNT) {
+			if (sqrt((data[0]-prevx)*(data[0]-prevx)+(data[1]-prevy)-(data[1]-prevy)) < 1.0) {
+				m_red(ON);
+				reverse();
+				m_wait(100);
+				state = 6;
+			}
+			else {
+				m_red(OFF);
+				state = 2;
+			}
+			prevx = data[0];
+			prevy = data[1];
+			loccounter = 0;
+		}*/
+		loccounter++;
+		localize(data);
+		toggle(PORTD,3);
 		changedState = 0;
+		angle_dif = 0;
 		
 		//Detect weather we have the puck
 		getADC();
@@ -644,6 +710,19 @@ int main(void)
 			clear(PORTD,5);
 			iHaveThePuck = 0;
 		}
+		
+		if(iHaveThePuck) {
+			state = 0xA3;
+		}
+		else {
+			state = 2;
+		}
+// 		if(isStuck()) {
+// 			//set(PORTD,5);
+// 		}
+// 		else {
+// 			//clear(PORTD,5);
+// 		}
 
 		//localize(data);
 		
@@ -715,6 +794,14 @@ int main(void)
 				set(PORTD,5);
 			} else {
 				clear(PORTD,5);
+			}
+			break;
+			
+			case 6:
+			if (data[2] > 0) {
+				rotate(RIGHT,1);
+			} else {
+				rotate(LEFT,1);
 			}
 			break;
 			
