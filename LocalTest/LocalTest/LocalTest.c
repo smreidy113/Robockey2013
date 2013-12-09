@@ -460,12 +460,14 @@ void drive_to_goalB() {
 void shoot() {
 	//m_wait(1000);
 	m_red(ON);
+	set(PORTB,0);
 	set(DDRB,7);
 	set(PORTB,7);
 	m_wait(200);
 	clear(PORTB,7);
 	m_red(OFF);
 	clear(DDRB,7);
+	clear(PORTB,0);
 }
 
 void game_pause() {
@@ -541,6 +543,8 @@ float prevy = 0.0;
 */
 int main(void)
 {
+	set(DDRB,0);
+	clear(PORTB,0);
 	set(DDRD,5);
 	set(DDRD,3);
 	//wireless stuffs
@@ -658,11 +662,11 @@ int main(void)
 	
 	
 	//Limit Switch stuffs
-	clear(DDRB,0); //set to input, RIGHT LIMIT SWITCH
-	clear(DDRB,1); //set to input, LEFT LIMIT SWITCH
-	
-	clear(PORTB,0); //disable internal pull up resistor
-	clear(PORTB,1); //disable internal pull up resistor
+// 	clear(DDRB,0); //set to input, RIGHT LIMIT SWITCH
+// 	clear(DDRB,1); //set to input, LEFT LIMIT SWITCH
+// 	
+// 	clear(PORTB,0); //disable internal pull up resistor
+// 	clear(PORTB,1); //disable internal pull up resistor
 	 
 	//int state; // state variable
 	state = 2; //set state
