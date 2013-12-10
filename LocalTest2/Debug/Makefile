@@ -36,7 +36,7 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../LocalTest.c \
+../LocalTest2.c \
 ../m_bus.c \
 ../m_loc.c \
 ../m_rf.c \
@@ -51,7 +51,7 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-LocalTest.o \
+LocalTest2.o \
 m_bus.o \
 m_loc.o \
 m_rf.o \
@@ -59,7 +59,7 @@ m_usb.o \
 m_wii.o
 
 OBJS_AS_ARGS +=  \
-LocalTest.o \
+LocalTest2.o \
 m_bus.o \
 m_loc.o \
 m_rf.o \
@@ -67,7 +67,7 @@ m_usb.o \
 m_wii.o
 
 C_DEPS +=  \
-LocalTest.d \
+LocalTest2.d \
 m_bus.d \
 m_loc.d \
 m_rf.d \
@@ -75,16 +75,16 @@ m_usb.d \
 m_wii.d
 
 C_DEPS_AS_ARGS +=  \
-LocalTest.d \
+LocalTest2.d \
 m_bus.d \
 m_loc.d \
 m_rf.d \
 m_usb.d \
 m_wii.d
 
-OUTPUT_FILE_PATH +=LocalTest.elf
+OUTPUT_FILE_PATH +=LocalTest2.elf
 
-OUTPUT_FILE_PATH_AS_ARGS +=LocalTest.elf
+OUTPUT_FILE_PATH_AS_ARGS +=LocalTest2.elf
 
 ADDITIONAL_DEPENDENCIES:=
 
@@ -138,13 +138,13 @@ all: $(OUTPUT_FILE_PATH) $(ADDITIONAL_DEPENDENCIES)
 $(OUTPUT_FILE_PATH): $(OBJS) $(USER_OBJS) $(OUTPUT_FILE_DEP) $(LIB_DEP)
 	@echo Building target: $@
 	@echo Invoking: AVR/GNU Linker : 3.4.2
-	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="LocalTest.map" -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega32u4 
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="LocalTest2.map" -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega32u4 
 	@echo Finished building target: $@
-	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O ihex -R .eeprom -R .fuse -R .lock -R .signature  "LocalTest.elf" "LocalTest.hex"
-	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-objcopy.exe" -j .eeprom  --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings -O ihex "LocalTest.elf" "LocalTest.eep" || exit 0
-	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-objdump.exe" -h -S "LocalTest.elf" > "LocalTest.lss"
-	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O srec -R .eeprom -R .fuse -R .lock -R .signature  "LocalTest.elf" "LocalTest.srec"
-	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-size.exe" "LocalTest.elf"
+	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O ihex -R .eeprom -R .fuse -R .lock -R .signature  "LocalTest2.elf" "LocalTest2.hex"
+	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-objcopy.exe" -j .eeprom  --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings -O ihex "LocalTest2.elf" "LocalTest2.eep" || exit 0
+	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-objdump.exe" -h -S "LocalTest2.elf" > "LocalTest2.lss"
+	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O srec -R .eeprom -R .fuse -R .lock -R .signature  "LocalTest2.elf" "LocalTest2.srec"
+	"C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.2.1002\avr8-gnu-toolchain\bin\avr-size.exe" "LocalTest2.elf"
 	
 	
 
@@ -156,5 +156,5 @@ $(OUTPUT_FILE_PATH): $(OBJS) $(USER_OBJS) $(OUTPUT_FILE_DEP) $(LIB_DEP)
 clean:
 	-$(RM) $(OBJS_AS_ARGS) $(EXECUTABLES)  
 	-$(RM) $(C_DEPS_AS_ARGS)   
-	rm -rf "LocalTest.elf" "LocalTest.a" "LocalTest.hex" "LocalTest.lss" "LocalTest.eep" "LocalTest.map" "LocalTest.srec"
+	rm -rf "LocalTest2.elf" "LocalTest2.a" "LocalTest2.hex" "LocalTest2.lss" "LocalTest2.eep" "LocalTest2.map" "LocalTest2.srec"
 	

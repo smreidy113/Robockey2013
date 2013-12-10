@@ -102,6 +102,7 @@ try
         
         Wii_m2_x = str2double(m2_x);
         Wii_m2_y = str2double(m2_y);
+        Wii_m2_a = str2double(m2_a);
 %         Wii_m2_x_top = str2double(m2_x_top);
 %         Wii_m2_y_top = str2double(m2_y_top);
 %         Wii_m2_x_bottom = str2double(m2_x_bottom);
@@ -118,13 +119,22 @@ try
         % figure(1);
         % clf;
         % hold on
-        
-        plot(Wii_m2_x, Wii_m2_y, '.');%, Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b', Wii_m2_posx, Wii_m2_posy, 'p');
-        disp(m2_buffer);
+        figure(1);
+        subplot(2,1,1);
+        plot(Wii_m2_x, Wii_m2_y, '.');%, [Wii m2_x (Wii_m2_x+10*cos(Wii_m2_a*3.14/180))], [Wii_m2_y (Wii_m2_y+10*sin(Wii_m2_a*3.14/180))], 'r-');%, Wii_m2_x_top,Wii_m2_y_top,'om', Wii_m2_x_bottom,Wii_m2_y_bottom,'og', Wii_m2_x_right,Wii_m2_y_right,'+r', Wii_m2_x_left,Wii_m2_y_left,'+b', Wii_m2_posx, Wii_m2_posy, 'p');
+        grid on
         %disp(Wii_m2_r);
-        axis([0 1023 0 768]);
+        axis([-115 115 -60 60]);
+        
+        subplot(2,1,2);
         
         
+        
+       %plot([Wii m2_x (Wii_m2_x+10*cos(Wii_m2_a*3.14/180))],[Wii_m2_y (Wii_m2_+y+10*sin(Wii_m2_a*3.14/180))]);
+       plot(cos(Wii_m2_a * (pi()/180)), sin(Wii_m2_a * (pi()/180)), 'o');
+       axis([-1 1 -1 1]);
+        
+        disp(m2_buffer);
         grid on
         pause(.04);
         
@@ -138,7 +148,7 @@ try
         
     end
     
-catch ME
+catch ME5
     ME.stack
     %Close serial object
     fclose(M2USB);
