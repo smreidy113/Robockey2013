@@ -9,7 +9,7 @@
 #define RIGHT 0
 #define LEFT 1
 #define CHANNEL 1
-#define RXADDRESS 0x08
+#define RXADDRESS 0x09
 #define GOALBX 125
 #define GOALBY 0
 #define GOALAX -125
@@ -18,7 +18,6 @@
 #define GOALWIDTH 80
 #define LOCCOUNT 150
 #define REPORTRATE 10
-#define GOAL 0
 #define A 1
 #define B 0
 
@@ -35,6 +34,7 @@
 
 char iHaveThePuck = 0;
 char play = 0;
+char goal = 0;
 
 volatile char changedState = 0;
 char rx_buffer;
@@ -279,8 +279,8 @@ void rotate(int dir, float speed) {
 void turn(int dir,float speed, float degree) {
     set(PORTB,2);
     set(PORTB,3);
-    if(iHaveThePuck && degree < 0.23) {
-        degree = 0.23;
+    if(iHaveThePuck && degree < 0.27) {
+        degree = 0.27;
     }
     if (dir == LEFT) {
         OCR3A = (unsigned int) ((float)ICR3 * speed);
@@ -329,7 +329,7 @@ void drive_to_puck() {
             case 0:
                 puckdistance = (log(((double) ADCarr[0])) * -1.0 * 89.64) + 664.58;
                 diff = ADCarr[0] - ADCarr[6];
-                deg = exp(-1.0*(fabs((float)diff))/30.0);
+                deg = exp(-1.0*(fabs((float)diff))/40.0);
                 turn(RIGHT,1.0,deg);
                 //m_green(ON);
                 //m_red(OFF);
@@ -338,13 +338,16 @@ void drive_to_puck() {
                 if (ADCarr[1] > 800 && ADCarr[2] > 800) {
                     rotate(LEFT,1);
                 }else {
-                turn(RIGHT,1.0,0.09);
+                turn(RIGHT,1.0,0.05);
                 }
                 break;
             case 2:
-                    turn(RIGHT,1.0,0.05);
-               
-                break;
+				if (ADCarr[1] > 800 && ADCarr[2] > 800) {
+					rotate(LEFT,1);
+					}else {
+					turn(RIGHT,1.0,0);
+				}
+				break;
             case 3:
                 if (ADCarr[2] > ADCarr[4]) {
                     rotate(RIGHT, 1);
@@ -354,17 +357,24 @@ void drive_to_puck() {
                 }
                 break;
             case 4:
-                    turn(LEFT,1.0,0.05);
-               
-                break;
+				if (ADCarr[4] > 800 && ADCarr[5] > 800) {
+					rotate(LEFT,1);
+				}
+				else {
+					turn(LEFT,1.0,0);
+				}
+				break;
             case 5:
-                    turn(LEFT,1.0,0.09);
-               
-                break;
+				if (ADCarr[4] > 800 && ADCarr[5] > 800) {
+					rotate(LEFT,1);
+					}else {
+					turn(LEFT,1.0,0.15);
+				}
+				break;
             case 6:
                 puckdistance = (log(((double) ADCarr[0])) * -1.0 * 89.64) + 664.58;
                 diff = ADCarr[6] - ADCarr[0];
-                deg = exp(-1.0*(fabs((float)diff))/30.0);
+                deg = exp(-1.0*(fabs((float)diff))/70.0);
                 turn(LEFT,1.0,deg);
                 //m_green(OFF);
                 //m_red(ON);
@@ -377,7 +387,7 @@ void drive_to_puck() {
     //}
 }
 
-    float speed_cap = 1.0;
+    float speed_cap = 0.5;
     float angle_dif = 0.0;
     float distance = 0.0;
     float spd = 0.0;
@@ -405,10 +415,10 @@ void drive_to_point2(int x, int y) {
         }
        
         //Angle of 180 corresponds to deg of 0; angle of 0 corresponds to deg of 1
-        deg = exp(-1.0* ((double)fabs(angle_dif))/15.0);
+        deg = exp(-1.0* ((double)fabs(angle_dif))/30.0);
         //Set distance
         distance = (int) sqrt(((double)y - data[1])*((double)y - data[1])+((double)x - data[0])*((double)x - data[0]));
-        spd = ((float)distance)/80.0;
+        spd = ((float)distance)/70.0;
         //*****************************************************************************
 //             rx_buffer = m_usb_rx_char();      //grab the computer packet
 //
@@ -538,6 +548,13 @@ float prevy = 0.0;
 */
 int main(void)
 {
+	//goal side
+	clear(DDRB,1);
+	clear(PORTB,1);
+	if (check(PINB,1)) {
+		goal = 1;
+	}
+	
     set(DDRB,0);
     set(PORTB,0);
     set(DDRD,5);
@@ -741,7 +758,8 @@ int main(void)
 			//set(PORTD,5);
             iHaveThePuck = 1;
 			m_green(ON);
-			if (play) state = 3;
+			if (play && goal == A) state = 3;
+			if (play && goal == B) state = 4;
         } else {
             //clear(PORTD,5);
             iHaveThePuck = 0;
@@ -824,7 +842,7 @@ int main(void)
            
             case 3:
 			if (play)
-            drive_to_goalB();
+            drive_to_goalA();
             break;
            
             case 4:
